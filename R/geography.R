@@ -4,6 +4,7 @@
 #'#'
 #' @param Unit_Code is the four-character unit code as designated by NPS.
 #'
+#' @export
 #' @examples
 #' qc_getParkPolygon("OBRI")
 qc_getParkPolygonIRMA<-function(Unit_Code){
