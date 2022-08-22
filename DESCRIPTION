@@ -12,7 +12,7 @@ LazyData: true
 Imports: 
     sf,
     httr
-RoxygenNote: 7.0.0
+RoxygenNote: 7.2.1
 Suggests: 
     knitr,
     rmarkdown
