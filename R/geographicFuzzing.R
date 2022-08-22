@@ -9,6 +9,8 @@
 #' @param coordrefsys coordinate reference system. Either 4326 for decimal degrees / WGS84 datum, or 326xx for UTMs / WGS84 datum, where the xx
 #' is the northern UTM zone. For example 32616 is for UTM zone 16N.
 #' @param fuzzlevel either 100m or 1000m. Use either "Fuzzed - 1km" or "Fuzzed - 100m"
+#' 
+#' @export
 #'
 #' @examples
 #' dp_fuzzLocation(703977, 4035059, 32616,"Fuzzed - 1km")
