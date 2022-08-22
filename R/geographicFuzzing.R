@@ -4,11 +4,11 @@
 #' about sensitive resources for which data are not to be released to the public. This function takes coordinates in either UTM or decimal degrees, converts to UTM (if in decimal degrees), creates a bounding box based on rounding of UTM coordinates to the 100s or 1000s place, and then creating a polygon from the resultant points. The function returns a string in Well-Known-Text
 #' format.
 #'
-#' @lat latitude in either UTMs or decimal degrees.
-#' @lon longitude in either UTMs or decimal degrees
-#' @coordrefsys coordinate reference system. Either 4326 for decimal degrees / WGS84 datum, or 326xx for UTMs / WGS84 datum, where the xx
+#' @param lat latitude in either UTMs or decimal degrees.
+#' @param lon longitude in either UTMs or decimal degrees
+#' @param coordrefsys coordinate reference system. Either 4326 for decimal degrees / WGS84 datum, or 326xx for UTMs / WGS84 datum, where the xx
 #' is the northern UTM zone. For example 32616 is for UTM zone 16N.
-#' @fuzzlevel either 100m or 1000m. Use either "Fuzzed - 1km" or "Fuzzed - 100m"
+#' @param fuzzlevel either 100m or 1000m. Use either "Fuzzed - 1km" or "Fuzzed - 100m"
 #'
 #' @examples
 #' dp_fuzzLocation(703977, 4035059, 32616,"Fuzzed - 1km")
