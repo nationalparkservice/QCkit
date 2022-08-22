@@ -1,6 +1,6 @@
 #' Retrieve the polygon information for the park unit from NPS REST services
 #'
-#' \code{qc_getParkPolygon} retrieves a geojson string for a polygon of a park unit. This is not the official boundary.
+#' \code{qc_getParkPolygon} retrieves a geoJSON string for a polygon of a park unit. This is not the official boundary.
 #'#'
 #' @param Unit_Code is the four-character unit code as designated by NPS.
 #'
@@ -18,7 +18,7 @@ qc_getParkPolygonIRMA<-function(Unit_Code){
 
 }
 
-#' Check wether a coordinate pair is within the polygon of a park unit
+#' Check whether a coordinate pair is within the polygon of a park unit
 #'
 #' \code{qc_ValidateCoordinates} compares a coordinate pair (in decimal degrees) to the polygon for a park unit as provided through the NPS
 #' Units rest services. The function returns a value of TRUE or FALSE.
