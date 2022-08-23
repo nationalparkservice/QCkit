@@ -1,11 +1,25 @@
 Package: IMDQC
 Type: Package
-Title: What the Package Does (Title Case)
+Title: NPS Inventory and Monitoring Quality Control Tools
 Version: 0.1.0
-Author: Joe DeVivo
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Authors@R:
+  c(person(given = "Joe",
+           family = "DeVivo",
+           role = c("aut", "cre")),
+    person(given = "Robert",
+           family = "Baker",
+           role = c("aut"),
+           comment = c(ORCID = "0000-0001-7591-5035")),
+    person(given = "Issac",
+           family = "Quevedo",
+           role = "ctb",
+           comment = c(ORCID = "0000-0003-0129-981X")),
+    person(given = "Amy",
+           family = "Sherman",
+           role = "ctb",
+           comment = c(ORCID = ""))
+Maintainer: The package maintainer <robert_baker@nps.gov>
+Description: This package contains a set of useful functions for data quality control. Functions are contributed by multiple U.S. National Park Service staff, contractors, partners and others. These functions will likely be most useful for quality control of NPS data but may have utility beyond their intended functions.
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
