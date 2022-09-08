@@ -2,7 +2,7 @@
 % Please edit documentation in R/geography.R
 \name{qc_ValidateCooridnates}
 \alias{qc_ValidateCooridnates}
-\title{Check wether a coordinate pair is within the polygon of a park unit}
+\title{Check whether a coordinate pair is within the polygon of a park unit}
 \usage{
 qc_ValidateCooridnates(Unit_Code, lat, lon, validationsource)
 }
@@ -21,5 +21,5 @@ qc_ValidateCooridnates(Unit_Code, lat, lon, validationsource)
 Units rest services. The function returns a value of TRUE or FALSE.
 }
 \examples{
-qc_ValidateCoordinates("OBRI",36.07951,-84.65610,"IRMA")
+qc_ValidateCoordinates("OBRI", 36.07951, -84.65610, "IRMA")
 }

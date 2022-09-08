@@ -10,7 +10,7 @@ qc_getParkPolygonIRMA(Unit_Code)
 \item{Unit_Code}{is the four-character unit code as designated by NPS.}
 }
 \description{
-\code{qc_getParkPolygon} retrieves a geojson string for a polygon of a park unit. This is not the official boundary.
+\code{qc_getParkPolygon} retrieves a geoJSON string for a polygon of a park unit. This is not the official boundary.
 #'
 }
 \examples{
