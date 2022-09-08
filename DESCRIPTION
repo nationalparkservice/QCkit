@@ -25,12 +25,11 @@ Encoding: UTF-8
 LazyData: true
 Imports: 
     sf,
-    httr
-    terra
-    dplyr
-    plyr
-    tibble
-    sf
+    httr,
+    terra,
+    dplyr,
+    plyr,
+    tibble,
 RoxygenNote: 7.2.1
 Suggests: 
     knitr,
