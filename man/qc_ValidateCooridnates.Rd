@@ -21,5 +21,5 @@ qc_ValidateCooridnates(Unit_Code, lat, lon, validationsource)
 Units rest services. The function returns a value of TRUE or FALSE.
 }
 \examples{
-qc_ValidateCoordinates("OBRI",36.07951,-84.65610,"IRMA")
+qc_ValidateCoordinates("OBRI", 36.07951, -84.65610, "IRMA")
 }
