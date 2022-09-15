@@ -24,7 +24,7 @@ The function returns your dataframe, mutated with an additional two columns of d
 UTMtoLL takes your dataframe with UTM coordinates in separate Easting and Northing columns, and adds on an additional two columns with the converted decimalLatitude and decimalLongitude coordinates using the reference coordinate system WGS84.
 }
 \details{
-Define the name of your dataframe, the easting and northing columns within it, the UTM zone within which those coordinates are located, and the reference coordinate system (datum). UTM Northing and Easting columns must be in separate columns prior to running the function. 
+Define the name of your dataframe, the easting and northing columns within it, the UTM zone within which those coordinates are located, and the reference coordinate system (datum). UTM Northing and Easting columns must be in separate columns prior to running the function.
 
 If a datum is not defined, the function will default to "WGS84".
 
@@ -32,4 +32,5 @@ If there are missing coordinates in your dataframe they will be preserved, howev
 }
 \examples{
 UTMtoLL(Data = mydataframe, EastingCol = "EastingCoords", NorthingCol = "NorthingCoords", Zone = "17", Datum = "WGS84")
+
 }
