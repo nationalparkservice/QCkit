@@ -20,10 +20,15 @@ The function returns a list in your global environment called "TorE" with the na
 TECheck creates a subset of the species list you provide, all of which fall under the Federal Conservation List Taxa for Data Protection. These species should be removed from your dataset if your data is to be made public.
 }
 \details{
-Define your species dataset name, column name with the scientific names of your species, and your four letter park code. 
+Define your species dataset name, column name with the scientific names of your species, and your four letter park code.
 
 The function downloads the Federal Conservation list using the IRMA odata API service and matches this species list to the list of scientific names in your dataframe.
+
+Because the Federal Conservation list is not publicaly available (???), you must be logged in to the NPS VPN or in the office to use this function.
 }
 \examples{
+\dontrun{
 TECheck(SpeciesData = my_species_dataframe, SciNameCol = "scientific_names", ParkID = "BICY")
+}
+
 }

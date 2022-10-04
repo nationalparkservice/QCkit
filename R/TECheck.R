@@ -5,6 +5,8 @@
 #' @details Define your species dataset name, column name with the scientific names of your species, and your four letter park code.
 #'
 #' The function downloads the Federal Conservation list using the IRMA odata API service and matches this species list to the list of scientific names in your dataframe.
+#' 
+#' Because the Federal Conservation list is not publicaly available (???), you must be logged in to the NPS VPN or in the office to use this function. 
 #'
 #'
 #' @param SpeciesData - The name of your dataframe containing species observations
@@ -12,10 +14,13 @@
 #' @param ParkID -  The four letter park code
 #'
 #' @return The function returns a list in your global environment called "TorE" with the names of all the species thnat fall under the federal conservation list.
-#'
+#' @importFrom magrittr %>%
 #' @export
 #'
-#' @examples TECheck(SpeciesData = my_species_dataframe, SciNameCol = "scientific_names", ParkID = "BICY")
+#' @examples
+#' \dontrun{
+#' TECheck(SpeciesData = my_species_dataframe, SciNameCol = "scientific_names", ParkID = "BICY")
+#' }
 #'
 TECheck <- function(SpeciesData, SciNameCol, ParkID) { # Specify DF and Scientific Name column name
 

@@ -13,9 +13,10 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' dp_fuzzLocation(703977, 4035059, 32616, "Fuzzed - 1km")
 #' dp_fuzzLocation(36.43909, -84.72429, 4326, "Fuzzed - 1km")
-#'
+#' }
 dp_fuzzLocation <- function(lat, lon, coordrefsys, fuzzlevel) {
   # for decimal degrees, convert to UTM locations and identify proper crs
   if (coordrefsys == 4326) {

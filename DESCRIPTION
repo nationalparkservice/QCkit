@@ -1,8 +1,8 @@
-Package: IMDQC
+Package: QCkit
 Type: Package
-Title: NPS Inventory and Monitoring Quality Control Tools
+Title: NPS Inventory and Monitoring Quality Control toolkit
 Version: 0.1.0
-Authors@R:
+Author:
   c(person(given = "Joe",
            family = "DeVivo",
            role = c("aut", "cre")),
@@ -20,7 +20,7 @@ Authors@R:
            comment = c(ORCID = "0000-0002-9276-0087")))
 Maintainer: Rob Baker <robert_baker@nps.gov>
 Description: This package contains a set of useful functions for data quality control. Functions are contributed by multiple U.S. National Park Service staff, contractors, partners and others. These functions will likely be most useful for quality control of NPS data but may have utility beyond their intended functions.
-License: What license is it under?
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports: 
@@ -30,6 +30,8 @@ Imports:
     dplyr,
     plyr,
     tibble,
+    ODataQuery,
+    magrittr
 RoxygenNote: 7.2.1
 Suggests: 
     knitr,

@@ -17,8 +17,10 @@
 #' @return The function returns your dataframe, mutated with an additional two columns of decimal Longitude and decimal Latitude.
 #' @export
 #'
-#' @examples UTMtoLL(Data = mydataframe, EastingCol = "EastingCoords", NorthingCol = "NorthingCoords", Zone = "17", Datum = "WGS84")
-#'
+#' @examples 
+#' \dontrun{
+#' UTMtoLL(Data = mydataframe, EastingCol = "EastingCoords", NorthingCol = "NorthingCoords", Zone = "17", Datum = "WGS84")
+#' }
 UTMtoLL <- function(Data, EastingCol, NorthingCol, Zone, Datum = "WGS84") {
   Base <- as.data.frame(Data)
   Base <- dplyr::rename(Base, "b" = EastingCol, "a" = NorthingCol)

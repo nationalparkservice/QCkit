@@ -6,7 +6,9 @@
 #'
 #' @export
 #' @examples
+#' \dontrun{
 #' qc_getParkPolygon("OBRI")
+#' }
 qc_getParkPolygonIRMA <- function(Unit_Code) {
   # get geography from NPS Rest Services
   UnitsURL <- paste0("https://irmaservices.nps.gov/v2/rest/unit/", Unit_Code, "/geography")
@@ -31,7 +33,9 @@ qc_getParkPolygonIRMA <- function(Unit_Code) {
 #' "OPBOUNDS" for the park boundary included in the operational boundaries data set (not currently functional).
 #'
 #' @examples
+#' \dontrun{
 #' qc_ValidateCoordinates("OBRI", 36.07951, -84.65610, "IRMA")
+#' }
 qc_ValidateCooridnates <- function(Unit_Code, lat, lon, validationsource) {
 
   # get geography from NPS Rest Services

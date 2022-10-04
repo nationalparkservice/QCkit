@@ -14,5 +14,7 @@ qc_getParkPolygonIRMA(Unit_Code)
 #'
 }
 \examples{
+\dontrun{
 qc_getParkPolygon("OBRI")
+}
 }
