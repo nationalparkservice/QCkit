@@ -1,6 +1,6 @@
-Package: IMDQC
+Package: QCkit
 Type: Package
-Title: NPS Inventory and Monitoring Quality Control Tools
+Title: NPS Inventory and Monitoring Quality Control toolkit
 Version: 0.1.0
 Author:
   c(person(given = "Joe",
