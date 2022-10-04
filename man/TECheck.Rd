@@ -27,6 +27,8 @@ The function downloads the Federal Conservation list using the IRMA odata API se
 Because the Federal Conservation list is not publicaly available (???), you must be logged in to the NPS VPN or in the office to use this function.
 }
 \examples{
+\dontrun{
 TECheck(SpeciesData = my_species_dataframe, SciNameCol = "scientific_names", ParkID = "BICY")
+}
 
 }

@@ -31,6 +31,7 @@ If a datum is not defined, the function will default to "WGS84".
 If there are missing coordinates in your dataframe they will be preserved, however they will be moved to the end of your dataframe.
 }
 \examples{
+\dontrun{
 UTMtoLL(Data = mydataframe, EastingCol = "EastingCoords", NorthingCol = "NorthingCoords", Zone = "17", Datum = "WGS84")
-
+}
 }

@@ -22,7 +22,8 @@ about sensitive resources for which data are not to be released to the public. T
 format.
 }
 \examples{
+\dontrun{
 dp_fuzzLocation(703977, 4035059, 32616, "Fuzzed - 1km")
 dp_fuzzLocation(36.43909, -84.72429, 4326, "Fuzzed - 1km")
-
+}
 }

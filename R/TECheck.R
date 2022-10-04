@@ -14,10 +14,13 @@
 #' @param ParkID -  The four letter park code
 #'
 #' @return The function returns a list in your global environment called "TorE" with the names of all the species thnat fall under the federal conservation list.
-#'
+#' @importFrom magrittr %>%
 #' @export
 #'
-#' @examples TECheck(SpeciesData = my_species_dataframe, SciNameCol = "scientific_names", ParkID = "BICY")
+#' @examples
+#' \dontrun{
+#' TECheck(SpeciesData = my_species_dataframe, SciNameCol = "scientific_names", ParkID = "BICY")
+#' }
 #'
 TECheck <- function(SpeciesData, SciNameCol, ParkID) { # Specify DF and Scientific Name column name
 

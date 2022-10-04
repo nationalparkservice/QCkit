@@ -19,6 +19,7 @@ DCColCheck checks to see if the column names in your dataframe match the standar
 A dataframe is created with all the simple DarwinCore terms, drawn from Darwin Core reference guide: https://dwc.tdwg.org/terms/ last updated 07-15-2021. We have chosen to align ourselves mostly with the simple Darwin Core rules: https://dwc.tdwg.org/simple/. The function runs through each of the column names in your working dataframe to see if they match 1. A standard simple DarwinCore name 2. A name with a pattern of strings matching "custom_", indicating a custom made column  or 3. A name with a pattern of strings matching "_DQ", indicating a data quality flag. If the column name does not fit within any of the three categories, a "Fix me" statement is printed alongside the column name. The function then counts all of the names fitting within each category and prints a summary table.
 }
 \examples{
-# "DCColCheck(yourdataframe)"
-
+\dontrun{
+"DCColCheck(yourdataframe)"
+}
 }

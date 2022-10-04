@@ -30,7 +30,8 @@ Imports:
     dplyr,
     plyr,
     tibble,
-    ODataQuery
+    ODataQuery,
+    magrittr
 RoxygenNote: 7.2.1
 Suggests: 
     knitr,
