@@ -19,7 +19,11 @@
 #'
 #' @examples 
 #' \dontrun{
-#' UTMtoLL(Data = mydataframe, EastingCol = "EastingCoords", NorthingCol = "NorthingCoords", Zone = "17", Datum = "WGS84")
+#' UTMtoLL(Data = mydataframe, 
+#'         EastingCol = "EastingCoords", 
+#'         NorthingCol = "NorthingCoords", 
+#'         Zone = "17", 
+#'         Datum = "WGS84")
 #' }
 UTMtoLL <- function(Data, EastingCol, NorthingCol, Zone, Datum = "WGS84") {
   Base <- as.data.frame(Data)
