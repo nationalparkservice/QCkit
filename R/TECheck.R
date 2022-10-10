@@ -32,10 +32,10 @@ TECheck <- function(SpeciesData, SciNameCol, ParkID) { # Specify DF and Scientif
   fedlist <- plyr::rename(fedlist, c("fedlist$value$ProtectedSci" = SciNameCol))
 
   Species <- tibble::tibble(SpeciesData) %>%
-    select(SciNameCol)
+    dplyr::select(SciNameCol)
 
-  TorE <<- dplyr::semi_join(Species, fedlist, by = SciNameCol) %>%
-    select("Remove Me!" = SciNameCol)
+  TorE <- dplyr::semi_join(Species, fedlist, by = SciNameCol) %>%
+    dplyr::select("Remove Me!" = SciNameCol)
 
-  Return(TorE)
+  return(TorE)
 }

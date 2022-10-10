@@ -31,9 +31,9 @@ dp_fuzzLocation <- function(lat, lon, coordrefsys, fuzzlevel) {
       long2UTM(lon) + 32700
     }
 
-    point <- st_point(c(lon, lat))
-    point <- st_sfc(point, crs = 4326)
-    pointutm <- st_transform(x = point, crs = tempcrs)
+    point <- sf::st_point(c(lon, lat))
+    point <- sf::st_sfc(point, crs = 4326)
+    pointutm <- sf::st_transform(x = point, crs = tempcrs)
     locationlat <- pointutm[[1]][1]
     locationlon <- pointutm[[1]][2]
   } else {
@@ -75,8 +75,8 @@ dp_fuzzLocation <- function(lat, lon, coordrefsys, fuzzlevel) {
   }
 
   # convert polygon to decimal degrees
-  wkt <- st_transform(x = utmsfc, crs = 4326)
-  wkt <- st_as_text(wkt)
+  wkt <- sf::st_transform(x = utmsfc, crs = 4326)
+  wkt <- sf::st_as_text(wkt)
 
   # return WKT string
   return(wkt)
