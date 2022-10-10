@@ -39,4 +39,3 @@ UTMtoLL(Data = mydataframe,
         Datum = "WGS84")
 }
 }
-}
