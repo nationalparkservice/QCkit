@@ -3,20 +3,20 @@ Type: Package
 Title: NPS Inventory and Monitoring Quality Control toolkit
 Version: 0.1.0
 Authors@R:
-  c(person(given = "Joe",
-           family = "DeVivo",
-           role = c("aut", "cre")),
-    person(given = "Robert",
+  c(person(given = "Robert",
            family = "Baker",
-           role = c("aut"),
+           role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-7591-5035")),
+    person(given = "Joe",
+           family = "DeVivo",
+           role = "aut"),
     person(given = "Issac",
            family = "Quevedo",
-           role = "ctb",
+           role = "aut",
            comment = c(ORCID = "0000-0003-0129-981X")),
     person(given = "Amy",
            family = "Sherman",
-           role = "ctb",
+           role = "aut",
            comment = c(ORCID = "0000-0002-9276-0087")))
 Description: This package contains a set of useful functions for data quality control. Functions are contributed by multiple U.S. National Park Service staff, contractors, partners and others. These functions will likely be most useful for quality control of NPS data but may have utility beyond their intended functions.
 License: MIT + file LICENSE
