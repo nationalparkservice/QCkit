@@ -1,14 +1,36 @@
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
 # QCkit
-QCkit s a collection of quality control functions to check, flag, and correct data collected by the U.S. National Park Service Inventory & Monitoring Division.
 
-Functions are typically user generated and so may not have been thoroughly tested for all use cases.
+QCkit s a collection of quality control functions to check, flag, and
+correct data collected by the U.S. National Park Service Inventory &
+Monitoring Division.
 
-If you would like to contribute useful functions please initiate a pull request.
+Functions are typically user generated and so may not have been
+thoroughly tested for all use cases.
 
-Please request enhancements and bug fixes through [Issues](https://github.com/nationalparkservice/QCkit/issues).
+If you would like to contribute useful functions please initiate a pull
+request.
 
-## Install from GitHub
+Please request enhancements and bug fixes through
+[Issues](https://github.com/nationalparkservice/QCkit/issues).
+
+# Installation
+
+Stand-alone installation:
+
 ``` r
 # install.packages("devtools")
 devtools::install_github("nationalparkservice/QCkit")
+library(QCkit)
+```
+
+QCkit is also part of the
+[NPSdataverse](https://nationalparkservice.github.io/NPSdataverse/) and
+can be installed along with the other components of NPSdataverse:
+
+``` r
+devtools::install_github("nationalparkservice/NPSdataverse)
+library(NPSdataverse)
 ```
