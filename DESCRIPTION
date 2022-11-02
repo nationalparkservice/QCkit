@@ -2,7 +2,7 @@ Package: QCkit
 Type: Package
 Title: NPS Inventory and Monitoring Quality Control toolkit
 Version: 0.1.0
-Author:
+Authors@R:
   c(person(given = "Joe",
            family = "DeVivo",
            role = c("aut", "cre")),
@@ -18,7 +18,6 @@ Author:
            family = "Sherman",
            role = "ctb",
            comment = c(ORCID = "0000-0002-9276-0087")))
-Maintainer: Rob Baker <robert_baker@nps.gov>
 Description: This package contains a set of useful functions for data quality control. Functions are contributed by multiple U.S. National Park Service staff, contractors, partners and others. These functions will likely be most useful for quality control of NPS data but may have utility beyond their intended functions.
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -37,3 +36,5 @@ Suggests:
     knitr,
     rmarkdown
 VignetteBuilder: knitr
+URL: https://github.com/RobLBaker/QCkit
+BugReports: https://github.com/RobLBaker/QCkit/issues
