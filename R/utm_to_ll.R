@@ -1,6 +1,6 @@
 #' Coordinate Conversion from UTM to Latitude and Longitude
 #'
-#' @description UTMtoLL takes your dataframe with UTM coordinates in separate Easting and Northing columns, and adds on an additional two columns with the converted decimalLatitude and decimalLongitude coordinates using the reference coordinate system WGS84.
+#' @description utm_to_ll takes your dataframe with UTM coordinates in separate Easting and Northing columns, and adds on an additional two columns with the converted decimalLatitude and decimalLongitude coordinates using the reference coordinate system WGS84.
 #'
 #' @details Define the name of your dataframe, the easting and northing columns within it, the UTM zone within which those coordinates are located, and the reference coordinate system (datum). UTM Northing and Easting columns must be in separate columns prior to running the function.
 #'
@@ -19,13 +19,13 @@
 #'
 #' @examples 
 #' \dontrun{
-#' UTMtoLL(Data = mydataframe, 
+#' utm_to_ll(Data = mydataframe, 
 #'         EastingCol = "EastingCoords", 
 #'         NorthingCol = "NorthingCoords", 
 #'         Zone = "17", 
 #'         Datum = "WGS84")
 #' }
-UTMtoLL <- function(Data, EastingCol, NorthingCol, Zone, Datum = "WGS84") {
+utm_to_ll <- function(Data, EastingCol, NorthingCol, Zone, Datum = "WGS84") {
   Base <- as.data.frame(Data)
   Base <- dplyr::rename(Base, "b" = EastingCol, "a" = NorthingCol)
 
