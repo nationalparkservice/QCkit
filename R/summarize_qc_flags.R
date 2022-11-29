@@ -93,7 +93,7 @@ get_df_flags <- function(directory = here::here(), force=FALSE){
     #get total number of datapoints in each csv:
     Cell_count <- (nrow(dfList[[i]]) * ncol(dfList[[i]]))
 
-    flags <- assign(paste0(names(dfList)[i]), 
+    flags <- assign(paste0(base::basename(names(dfList)[i])), 
                       data.frame(names(dfList)[i],
                       A_flag, AE_flag, R_flag, P_flag, Cell_count))
     df_flags <- rbind(df_flags, flags)
@@ -153,7 +153,7 @@ get_dc_flags <- function(directory = here::here(), force=FALSE){
         P_flag <- sum(stringr::str_count(get(fileList[i])[[j]], 
                                        "\\bP\\b"), na.rm=TRUE)
         cell_count <- nrow(get(fileList[i])[j])
-        filename <- fileList[i]
+        filename <- base::basename(fileList[i])
         flagged_col <- colnames(get(fileList[i]))[j]
         
         #create a dataframe
