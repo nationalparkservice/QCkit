@@ -21,7 +21,7 @@
 #'
 get_dp_flags <- function(directory = here::here(), force=FALSE){
   
-  fileList <- list.files(path = directory, pattern = "csv", full.names=TRUE)
+  fileList <- list.files(path = directory, pattern = "\\.csv$", full.names=TRUE)
   
   dfList <- sapply(fileList, read.csv)
   
@@ -74,7 +74,7 @@ get_dp_flags <- function(directory = here::here(), force=FALSE){
 #'
 get_df_flags <- function(directory = here::here(), force=FALSE){
   
-  fileList <- list.files(path = directory, pattern = "csv", full.names=TRUE)
+  fileList <- list.files(path = directory, pattern = "\\.csv$", full.names=TRUE)
   
   dfList <- sapply(fileList, read.csv)
   
@@ -129,7 +129,7 @@ get_df_flags <- function(directory = here::here(), force=FALSE){
 #'
 get_dc_flags <- function(directory = here::here(), force=FALSE){
   
-  fileList <- list.files(path = directory, pattern = "csv", full.names=TRUE)
+  fileList <- list.files(path = directory, pattern = "\\.csv$", full.names=TRUE)
   
   dfList <- sapply(fileList, read.csv)
   
