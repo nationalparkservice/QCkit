@@ -25,24 +25,33 @@
     <loc>/news/index.html</loc>
   </url>
   <url>
-    <loc>/reference/DCColCheck.html</loc>
+    <loc>/reference/DC_col_check.html</loc>
   </url>
   <url>
-    <loc>/reference/dp_fuzzLocation.html</loc>
+    <loc>/reference/fuzz_location.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_dc_flags.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_df_flags.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_dp_flags.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_park_polygon.html</loc>
   </url>
   <url>
     <loc>/reference/index.html</loc>
   </url>
   <url>
-    <loc>/reference/qc_getParkPolygonIRMA.html</loc>
+    <loc>/reference/te_check.html</loc>
   </url>
   <url>
-    <loc>/reference/qc_ValidateCooridnates.html</loc>
+    <loc>/reference/utm_to_ll.html</loc>
   </url>
   <url>
-    <loc>/reference/TECheck.html</loc>
-  </url>
-  <url>
-    <loc>/reference/UTMtoLL.html</loc>
+    <loc>/reference/validate_coord.html</loc>
   </url>
 </urlset>
