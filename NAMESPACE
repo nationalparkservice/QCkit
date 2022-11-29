@@ -2,7 +2,11 @@
 
 export(DC_col_check)
 export(fuzz_location)
+export(get_dc_flags)
+export(get_df_flags)
+export(get_dp_flags)
 export(get_park_polygon)
 export(te_check)
 export(utm_to_ll)
 importFrom(magrittr,"%>%")
+importFrom(utils,read.csv)
