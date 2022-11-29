@@ -1,8 +1,8 @@
 Package: QCkit
 Type: Package
 Title: NPS Inventory and Monitoring Quality Control Toolkit
-Version: 0.1.0
-Author:
+Version: 0.1.0.1
+Authors@R:
   c(person(given = "Robert",
            family = "Baker",
            email = "robert_baker@nps.gov",
@@ -12,7 +12,7 @@ Author:
            family = "Patterson",
            email = "judd_patterson@nps.gov",
            role = "aut",
-           comment = c(ORCID = "0000-0002-0951-7917"))
+           comment = c(ORCID = "0000-0002-0951-7917")),
     person(given = "Joe",
            family = "DeVivo",
            role = "aut"),
@@ -37,7 +37,8 @@ Imports:
     plyr,
     tibble,
     ODataQuery,
-    magrittr
+    magrittr,
+    stringr
 RoxygenNote: 7.2.1
 Suggests: 
     knitr,
