@@ -78,6 +78,8 @@ get_df_flags <- function(directory = here::here(), force=FALSE){
   
   dfList <- sapply(fileList, read.csv)
   
+  names(dfList) <- base::basename(names(dfList))
+  
   #count all instances of each flag in each .csv:
   df_flags<-NULL
   for(i in seq_along(dfList)){
@@ -93,9 +95,10 @@ get_df_flags <- function(directory = here::here(), force=FALSE){
     #get total number of datapoints in each csv:
     Cell_count <- (nrow(dfList[[i]]) * ncol(dfList[[i]]))
 
-    flags <- assign(paste0(base::basename(names(dfList)[i])), 
+    flags <- assign(paste0(names(dfList)[i]), 
                       data.frame(names(dfList)[i],
                       A_flag, AE_flag, R_flag, P_flag, Cell_count))
+    
     df_flags <- rbind(df_flags, flags)
   }
   #rename column
@@ -133,6 +136,8 @@ get_dc_flags <- function(directory = here::here(), force=FALSE){
   
   dfList <- sapply(fileList, read.csv)
   
+  names(dfList) <- base::basename(names(dfList))
+  
   dc_flags <- NULL
   for(i in seq_along(dfList)){
     #if there are columns ending in "_flag" do the following:
@@ -153,12 +158,12 @@ get_dc_flags <- function(directory = here::here(), force=FALSE){
         P_flag <- sum(stringr::str_count(get(fileList[i])[[j]], 
                                        "\\bP\\b"), na.rm=TRUE)
         cell_count <- nrow(get(fileList[i])[j])
-        filename <- base::basename(fileList[i])
+        filename <- names(dfList)[i]
         flagged_col <- colnames(get(fileList[i]))[j]
         
         #create a dataframe
         flags <- data.frame(filename, flagged_col, 
-                            A_flag, AE_flag, R_flag, P_flag, cell_count)
+                            A_flag, AE_flag, R_flag, P_flag, Cell_count)
         
         #add to existing dataframe
         dc_flags <- rbind (dc_flags, flags)
@@ -167,13 +172,13 @@ get_dc_flags <- function(directory = here::here(), force=FALSE){
     # if there's no flagged columns, generate NAs
     if (length(dfList[[i]][, grepl("_flag", names(dfList[[i]]))]) <= 0){
       flags<-NULL  
-      filename <-fileList[i]
+      filename <-names(dfList)[i]
       flagged_col <- "No columns flagged"
       A_flag <- NA
       AE_flag <- NA
       R_flag <- NA
       P_flag <- NA
-      cell_count <- NA
+      Cell_count <- NA
       #generate dataframe
       flags <- data.frame(filename, flagged_col, A_flag, AE_flag, 
                           R_flag, P_flag, cell_count)
