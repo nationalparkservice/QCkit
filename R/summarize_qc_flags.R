@@ -157,7 +157,7 @@ get_dc_flags <- function(directory = here::here(), force=FALSE){
                                        "\\bR\\b"), na.rm=TRUE)
         P_flag <- sum(stringr::str_count(get(fileList[i])[[j]], 
                                        "\\bP\\b"), na.rm=TRUE)
-        cell_count <- nrow(get(fileList[i])[j])
+        Cell_count <- nrow(get(fileList[i])[j])
         filename <- names(dfList)[i]
         flagged_col <- colnames(get(fileList[i]))[j]
         
@@ -181,7 +181,7 @@ get_dc_flags <- function(directory = here::here(), force=FALSE){
       Cell_count <- NA
       #generate dataframe
       flags <- data.frame(filename, flagged_col, A_flag, AE_flag, 
-                          R_flag, P_flag, cell_count)
+                          R_flag, P_flag, Cell_count)
       #add to existing dataframe
       dc_flags <- rbind (dc_flags, flags)
     }
