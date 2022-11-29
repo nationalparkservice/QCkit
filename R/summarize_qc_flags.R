@@ -21,7 +21,7 @@
 #'
 get_dp_flags <- function(directory = here::here(), force=FALSE){
   
-  fileList <- list.files(path = directory, pattern = "csv")
+  fileList <- list.files(path = directory, pattern = "csv", full.names=TRUE)
   
   dfList <- sapply(fileList, read.csv)
   
@@ -47,6 +47,7 @@ get_dp_flags <- function(directory = here::here(), force=FALSE){
   if(force == FALSE){
   print(dp_flags)
   }
+  
   return(dp_flags)
 }
 
@@ -73,7 +74,7 @@ get_dp_flags <- function(directory = here::here(), force=FALSE){
 #'
 get_df_flags <- function(directory = here::here(), force=FALSE){
   
-  fileList <- list.files(path = directory, pattern = "csv")
+  fileList <- list.files(path = directory, pattern = "csv", full.names=TRUE)
   
   dfList <- sapply(fileList, read.csv)
   
@@ -90,7 +91,7 @@ get_df_flags <- function(directory = here::here(), force=FALSE){
                                  "\\bP\\b"), na.rm=TRUE)
   
     #get total number of datapoints in each csv:
-    Cell_count<-Cell_count + (nrow(dfList[[i]]) * ncol(dfList[[i]]))
+    Cell_count <- (nrow(dfList[[i]]) * ncol(dfList[[i]]))
 
     flags <- assign(paste0(names(dfList)[i]), 
                       data.frame(names(dfList)[i],
@@ -103,6 +104,7 @@ get_df_flags <- function(directory = here::here(), force=FALSE){
   if(force == FALSE){
   print(df_flags)
   }
+  
   return(df_flags)
 }
   
@@ -127,12 +129,11 @@ get_df_flags <- function(directory = here::here(), force=FALSE){
 #'
 get_dc_flags <- function(directory = here::here(), force=FALSE){
   
-  fileList <- list.files(path = directory, pattern = "csv")
+  fileList <- list.files(path = directory, pattern = "csv", full.names=TRUE)
   
   dfList <- sapply(fileList, read.csv)
   
   dc_flags <- NULL
-  print(seq_along(dfList))
   for(i in seq_along(dfList)){
     #if there are columns ending in "_flag" do the following:
     if(length(dfList[[i]][, grepl("_flag", names(dfList[[i]]))])>0){
