@@ -35,14 +35,15 @@ get_dp_flags <- function(directory = here::here(), force=FALSE){
   P_flag<-sum(stringr::str_count(unlist(dfList), 
                                  "\\bP\\b"), na.rm=TRUE)
   
-  #get total number of datapoints across entire data package:
+  #get total number of datapoints across entire data package, exclude NAs:
   Cell_count<-0
   for(i in seq_along(dfList)){
-    Cell_count<-Cell_count + 
-                       (nrow(dfList[[i]]) * 
-                       ncol(dfList[[i]]))
+    Cell_count<-(Cell_count + sum(!is.na(dfList[[i]])))
   }
-  dp_flags <- data.frame(A_flag, AE_flag, R_flag, P_flag, Cell_count)
+  
+  RRU <- (Cell_count - R_flag - P_flag)/Cell_count
+  
+  dp_flags <- data.frame(A_flag, AE_flag, R_flag, P_flag, Cell_count, RRU)
   
   if(force == FALSE){
   print(dp_flags)
@@ -92,12 +93,17 @@ get_df_flags <- function(directory = here::here(), force=FALSE){
     P_flag<-sum(stringr::str_count(unlist(dfList[[i]]), 
                                  "\\bP\\b"), na.rm=TRUE)
   
-    #get total number of datapoints in each csv:
-    Cell_count <- (nrow(dfList[[i]]) * ncol(dfList[[i]]))
+    #get total number of datapoints in each csv (exclude NAs):
+    Cell_count <- sum(!is.na(dfList[[i]]))
 
     flags <- assign(paste0(names(dfList)[i]), 
                       data.frame(names(dfList)[i],
                       A_flag, AE_flag, R_flag, P_flag, Cell_count))
+    
+    flags$RRU<-((flags$Cell_count - flags$R_flag - flags$P_flag)/
+                  flags$Cell_count)
+    
+    
     
     df_flags <- rbind(df_flags, flags)
   }
@@ -148,7 +154,7 @@ get_dc_flags <- function(directory = here::here(), force=FALSE){
       
       flags<-NULL
       #for each column, generate a list of flag counts and a list of all cells
-      for(j in 1:ncol(get(fileList[i]))){
+      for(j in 1:seq_along(ncol(get(fileList[i])))){
         A_flag <- sum(stringr::str_count(get(fileList[i])[[j]],
                                        "\\bA\\b"), na.rm=TRUE)
         AE_flag <- sum(stringr::str_count(get(fileList[i])[[j]], 
@@ -157,13 +163,16 @@ get_dc_flags <- function(directory = here::here(), force=FALSE){
                                        "\\bR\\b"), na.rm=TRUE)
         P_flag <- sum(stringr::str_count(get(fileList[i])[[j]], 
                                        "\\bP\\b"), na.rm=TRUE)
-        Cell_count <- nrow(get(fileList[i])[j])
+        Cell_count <- sum(!is.na(get(fileList[i])[j]))
         filename <- names(dfList)[i]
         flagged_col <- colnames(get(fileList[i]))[j]
         
         #create a dataframe
         flags <- data.frame(filename, flagged_col, 
                             A_flag, AE_flag, R_flag, P_flag, Cell_count)
+        
+        flags$RRU<-((flags$Cell_count - flags$R_flag - flags$P_flag)/
+                      flags$Cell_count)
         
         #add to existing dataframe
         dc_flags <- rbind (dc_flags, flags)
@@ -179,9 +188,10 @@ get_dc_flags <- function(directory = here::here(), force=FALSE){
       R_flag <- NA
       P_flag <- NA
       Cell_count <- NA
+      RRU <- NA
       #generate dataframe
       flags <- data.frame(filename, flagged_col, A_flag, AE_flag, 
-                          R_flag, P_flag, Cell_count)
+                          R_flag, P_flag, Cell_count, RRU)
       #add to existing dataframe
       dc_flags <- rbind (dc_flags, flags)
     }
