@@ -14,7 +14,8 @@ knitr::opts_chunk$set(
 ```
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
-[![CodeFactor](https://www.codefactor.io/repository/github/roblbaker/qckit/badge/master)](https://www.codefactor.io/repository/github/roblbaker/qckit/overview/master)
+[![CodeFactor](https://www.codefactor.io/repository/github/roblbaker/qckit/badge/master)]
+[![Downloads](https://img.shields.io/github/downloads/nationalparkservice/QCkit/total)]
 <!-- badges: end -->
 
 # QCkit
