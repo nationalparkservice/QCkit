@@ -95,7 +95,7 @@ get_dp_flags <- function(directory = here::here(), force = FALSE) {
 #' @return a dataframe named df_flag that contains a row for each .csv file in the directory with the file name, the count of each flag and total number of data points in each .csv (including data flagging columns).
 #'
 #' @export
-#' @import
+#' @importFrom magrittr %>%
 #'
 #' @examples
 #' \dontrun{
@@ -302,7 +302,7 @@ get_dc_flags <- function(directory = here::here(), force = FALSE) {
 #' @inheritParams get_dp_flags
 #' @param cols A comma delimited list of column names.
 #'
-#' @return
+#' @return a dataframe named cust_flag that contains a row for each column indicated in each .csv file in the directory with the file name, the count of each flag and total number of data points in each .csv (including data flagging columns) and RRU.
 #' @export
 #'
 #' @examples
@@ -327,7 +327,7 @@ get_custom_flags <- function(directory = here::here(),
 
   names(dfList) <- base::basename(names(dfList))
 
-  dc_flags <- NULL
+  cust_flags <- NULL
   for (i in seq_along(dfList)) {
     print(paste0("i=", i))
 
@@ -361,7 +361,7 @@ get_custom_flags <- function(directory = here::here(),
         colnames(flags)[1] <- "filename"
 
         # add to df_flags dataframe:
-        dc_flags <- rbind(dc_flags, flags)
+        cust_flags <- rbind(cust_flags, flags)
       }
     }
 
@@ -427,7 +427,7 @@ get_custom_flags <- function(directory = here::here(),
         colnames(flags)[1] <- "filename"
 
         # add to df_flags dataframe:
-        dc_flags <- rbind(dc_flags, flags)
+        cust_flags <- rbind(cust_flags, flags)
       }
     }
 
@@ -447,12 +447,12 @@ get_custom_flags <- function(directory = here::here(),
         Cell_count, RRU
       )
 
-      dc_flags <- rbind(dc_flags, flags)
+      cust_flags <- rbind(cust_flags, flags)
     }
   }
-  colnames(dc_flags)[7] <- "Flagged Data Totals"
+  colnames(cust_flags)[7] <- "Flagged Data Totals"
   if (force == FALSE) {
-    print(dc_flags)
+    print(cust_flags)
   }
-  return(dc_flags)
+  return(cust_flags)
 }
