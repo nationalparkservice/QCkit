@@ -358,18 +358,13 @@ get_dc_flags <- function(directory = here::here(), force = FALSE) {
 #'
 #' @examples
 #' \dontrun{
-#' # specify path and columns by hand:
+#' 
 #' get_custom_flags("~/my_data_package_directory", cols = c(
 #'   "scientificName",
 #'   "locality"
 #' ))
-#'
-#' # get custom column names from your csv, use default working directory. Note
-#' that in this example column names come from a single .csv but all the .csvs
-#' in the directory will be checked for these column names:
 #' cols <- colnames(read.csv("mydata.csv"))[c(1:4, 7, 10)]
-#' get_custom_flags(cols = cols) # if your current working directory IS the data
-#' package directory.
+#' get_custom_flags(cols = cols) 
 #' }
 get_custom_flags <- function(directory = here::here(),
                              cols = (""),
