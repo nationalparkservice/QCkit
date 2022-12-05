@@ -28,11 +28,12 @@ Define the name of your dataframe, the easting and northing columns within it, t
 }
 \examples{
 \dontrun{
-utm_to_ll(df = mydataframe, 
-          EastingCol = "EastingCoords", 
-          NorthingCol = "NorthingCoords", 
-          zone = "17", 
-          datum = "WGS84"
-          )
+utm_to_ll(
+  df = mydataframe,
+  EastingCol = "EastingCoords",
+  NorthingCol = "NorthingCoords",
+  zone = "17",
+  datum = "WGS84"
+)
 }
 }
