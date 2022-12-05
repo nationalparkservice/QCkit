@@ -1,14 +1,29 @@
 #' Create Table of Data Quality Flags Found in a Data Package
 #'
-#' @description get_dp_flags (dp=data package) returns a data frame that list the number of cells in the entire data package with relevant flags (A, AE, R, P) as well as the total number of non-NA cells in the data package (including data flagging columns). Unweighted Relative Response (RRU) is calculated as the total number of accepted data points (A, AE, and data that are not flagged).
+#' @description get_dp_flags (dp=data package) returns a data frame that list
+#' the number of cells in the entire data package with relevant flags (A, AE,
+#' R, P) as well as the total number of non-NA cells in the data package
+#' (including data flagging columns). Unweighted Relative Response (RRU) is
+#' calculated as the total number of accepted data points (A, AE, and data that
+#' are not flagged).
 #'
-#' @details The function can be run from within the working directory where the data package is, or the directory can be specified. The function only supports .csv files and assumes that all .csv files in the folder are part of the data package. It also assumes that the values A, AE, R, and P have only been used for flagging. It assumes that there are no additional characters in the flagging cells (such as leading or trailing white spaces). NAs are assumed to be empty cells or missing data.
+#' @details The function can be run from within the working directory where the
+#'  data package is, or the directory can be specified. The function only
+#'  supports .csv files and assumes that all .csv files in the folder are part
+#'  of the data package. It also assumes that the values A, AE, R, and P have
+#'  only been used for flagging. It assumes that there are no additional
+#'  characters in the flagging cells (such as leading or trailing white
+#'  spaces). NAs are assumed to be empty cells or missing data.
 #'
-#' @param directory is the path to the data package .csv files (defaults to the current working directory).
+#' @param directory is the path to the data package .csv files (defaults to the
+#' current working directory).
 #'
-#' @param force is a logical. Defaults to `FALSE`. When `force = FALSE` the function prints the resulting dataframe to the screen. setting `force = TRUE` suppresses output to the screen.
+#' @param force is a logical. Defaults to `FALSE`. When `force = FALSE` the
+#' function prints the resulting dataframe to the screen. setting
+#' `force = TRUE` suppresses output to the screen.
 #'
-#' @return a dataframe named dp_flag that contains the four flags, the count of each flag and total number of data points in the entire data package.
+#' @return a dataframe named dp_flag that contains the four flags, the count of
+#' each flag and total number of data points in the entire data package.
 #'
 #' @importFrom utils read.csv
 #' @export
@@ -16,8 +31,8 @@
 #' @examples
 #' \dontrun{
 #' get_dp_flags("~/my_data_package_directory")
-#' get_dp_flags() # if your current working directory IS the data package directory.
-#' }
+#' get_dp_flags() # if your current working directory IS the data package
+#' directory.}
 #'
 get_dp_flags <- function(directory = here::here(), force = FALSE) {
   fileList <- list.files(path = directory, pattern = "\\.csv$",
@@ -38,10 +53,10 @@ get_dp_flags <- function(directory = here::here(), force = FALSE) {
     # count each flag type; don't count NAs. Should count all cells that
     # start with the flagging letter and ignore anything (i.e. Quality
     # Assessment codes)
-    A <- suppressWarnings(sum(stringr::str_count(flags_only, "\\bA"), 
+    A <- suppressWarnings(sum(stringr::str_count(flags_only, "\\bA"),
                               na.rm = TRUE))
     AE <- suppressWarnings(sum(stringr::str_count(flags_only, "\\bAE"),
-                               na.rm = TRUE))
+                              na.rm = TRUE))
     R <- suppressWarnings(sum(stringr::str_count(flags_only, "\\bR"),
                               na.rm = TRUE))
     P <- suppressWarnings(sum(stringr::str_count(flags_only, "\\bP"),
@@ -85,14 +100,26 @@ get_dp_flags <- function(directory = here::here(), force = FALSE) {
 
 #' Create Table of Data Quality Flags Found in Data Files within a Data Package
 #'
-#' @description get_df_flags (df = data files) returns a data frame that lists the number of cells in each data file in the entire data package (excluding NAs) with relevant flags (A, AE, R, P) as well as the total number of data points in each .csv (including data flagging columns, but excluding NAs). Unweighted Relative Response (RRU) is calculated as the total number of accepted data points (A, AE, and data that are not flagged).
+#' @description get_df_flags (df = data files) returns a data frame that lists
+#' the number of cells in each data file in the entire data package (excluding
+#' NAs) with relevant flags (A, AE, R, P) as well as the total number of data
+#' points in each .csv (including data flagging columns, but excluding NAs).
+#' Unweighted Relative Response (RRU) is calculated as the total number of
+#' accepted data points (A, AE, and data that are not flagged).
 #'
-#' @details The function can be run from within the working directory where the data package is, or the directory can be specified. The function only supports .csv files and assumes that all .csv files in the folder are part of the data package. It also assumes that the values A, AE, R, and P have only been used for flagging. It assumes that there are no additional characters in the flagging cells (such as leading or trailing white spaces).
+#' @details The function can be run from within the working directory where the
+#' data package is, or the directory can be specified. The function only
+#' supports .csv files and assumes that all .csv files in the folder are part
+#' of the data package. It also assumes that the values A, AE, R, and P have
+#' only been used for flagging. It assumes that there are no additional
+#' characters in the flagging cells (such as leading or trailing white spaces).
 #'
 #'
 #' @inheritParams get_dp_flags
 #'
-#' @return a dataframe named df_flag that contains a row for each .csv file in the directory with the file name, the count of each flag and total number of data points in each .csv (including data flagging columns).
+#' @return a dataframe named df_flag that contains a row for each .csv file in
+#' the directory with the file name, the count of each flag and total number of
+#' data points in each .csv (including data flagging columns).
 #'
 #' @export
 #' @importFrom magrittr %>%
@@ -100,12 +127,13 @@ get_dp_flags <- function(directory = here::here(), force = FALSE) {
 #' @examples
 #' \dontrun{
 #' get_df_flags("~/my_data_package_directory")
-#' get_df_flags() # if your current working directory IS the data package directory.
+#' get_df_flags() # if your current working directory IS the data package
+#' directory.
 #' }
 #'
 get_df_flags <- function(directory = here::here(), force = FALSE) {
   # get list of .csv files in the specified directory
-  fileList <- list.files(path = directory, pattern = "\\.csv$", 
+  fileList <- list.files(path = directory, pattern = "\\.csv$",
                          full.names = TRUE)
 
   # import all data from all files
@@ -177,26 +205,40 @@ get_df_flags <- function(directory = here::here(), force = FALSE) {
 }
 
 
-#' Create Table of Data Quality Flags in Flagging Columns within individual data columns
+#' Create Table of Data Quality Flags in Flagging Columns within individual
+#' data columns
 #'
-#' @description get_dc_flags (dc=data columns) returns a data frame that, for each data file in a data package lists the name of each data flagging column and the number of each flag type within that column (A, AE, R, P) as well as the total number of data points in the data flagging columns for each .csv, excluding NAs. Unweighted Relative Response (RRU) is calculated as the total number of accepted data points (A, AE, and data that are not flagged).
+#' @description get_dc_flags (dc=data columns) returns a data frame that, for
+#' each data file in a data package lists the name of each data flagging column
+#' and the number of each flag type within that column (A, AE, R, P) as well as
+#' the total number of data points in the data flagging columns for each .csv,
+#' excluding NAs. Unweighted Relative Response (RRU) is calculated as the total
+#' number of accepted data points (A, AE, and data that are not flagged).
 #'
-#' @details The function can be run from within the working directory where the data package is, or the directory can be specified. The function only supports .csv files and assumes that all data flagging columns have column names ending in "_flag". It assumes that there are no additional characters (other than A, AE, R, P) in the flagging cells (such as leading or trailing white spaces).
+#' @details The function can be run from within the working directory where the
+#' data package is, or the directory can be specified. The function only
+#' supports .csv files and assumes that all data flagging columns have column
+#' names ending in "_flag". It assumes that there are no additional characters
+#' (other than A, AE, R, P) in the flagging cells (such as leading or trailing
+#' white spaces).
 #'
 #' @inheritParams get_dp_flags
 #'
-#' @return a dataframe named dc_flag that contains a row for each .csv file in the directory with the file name, the count of each flag and total number of data points in each .csv (including data flagging columns).
+#' @return a dataframe named dc_flag that contains a row for each .csv file in
+#' the directory with the file name, the count of each flag and total number of
+#' data points in each .csv (including data flagging columns).
 #'
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' get_df_flags("~/my_data_package_directory")
-#' get_df_flags() # if your current working directory IS the data package directory.
+#' get_df_flags() # if your current working directory IS the data package
+#' directory.
 #' }
 #'
 get_dc_flags <- function(directory = here::here(), force = FALSE) {
-  fileList <- list.files(path = directory, pattern = "\\.csv$", 
+  fileList <- list.files(path = directory, pattern = "\\.csv$",
                          full.names = TRUE)
 
   dfList <- suppressMessages(sapply(fileList, readr::read_csv))
@@ -218,23 +260,18 @@ get_dc_flags <- function(directory = here::here(), force = FALSE) {
         # count each flag type; don't count NAs. Should count all cells that
         # start with the flagging letter and ignore anything (i.e. Quality
         # Assessment codes)
-        A_flag <- suppressWarnings(sum(stringr::str_count(flags_only[j], 
+        A_flag <- suppressWarnings(sum(stringr::str_count(flags_only[j],
                                                           "\\bA"),
                                                           na.rm = TRUE))
         AE_flag <- suppressWarnings(sum(stringr::str_count(flags_only[j],
                                                            "\\bAE"),
                                                           na.rm = TRUE))
-        R_flag <- suppressWarnings(sum(stringr::str_count(flags_only[j], 
+        R_flag <- suppressWarnings(sum(stringr::str_count(flags_only[j],
                                                           "\\bR"),
                                                           na.rm = TRUE))
         P_flag <- suppressWarnings(sum(stringr::str_count(flags_only[j],
                                                           "\\bP"),
                                                           na.rm = TRUE))
-        # do some math:
-        accepted_flags <- sum(A_flag, AE_flag)
-        not_accepted <- sum(R_flag, P_flag)
-        all_flags <- sum(accepted_flags, not_accepted)
-
         # get cell count in file, exclude NAs and flags:
         Cell_count <- sum(!is.na(flags_only[j]))
 
@@ -293,16 +330,30 @@ get_dc_flags <- function(directory = here::here(), force = FALSE) {
   return(dc_flags)
 }
 
-#' Create a table of Data Quality Flags based on a custom set of user defined columns headings.
+#' Create a table of Data Quality Flags based on a custom set of user defined
+#' columns headings.
 #'
-#' @description get_custom_flags returns a data frame that, for each data file in a data package lists the name of each column selected by the user. By default, any flagged columns are automatically included. The number of each flag type for each column (A, AE, R, P) are reported. Unflagged columns are assumed to have only accepted data. The total number of data points in the specified columns (and data flagging columns for) each .csv are also reported. NAs are excluded. An Unweighted Relative Response (RRU) is calculated as the total number of accepted data points (A, AE, and data that are not flagged) devided by the total number of data points in all specified columns (and the flagged columns).
+#' @description get_custom_flags returns a data frame that, for each data file
+#' in a data package lists the name of each column selected by the user. By
+#' default, any flagged columns are automatically included. The number of each
+#' flag type for each column (A, AE, R, P) are reported. Unflagged columns are
+#' assumed to have only accepted data. The total number of data points in the
+#' specified columns (and data flagging columns for) each .csv are also
+#' reported. NAs are excluded. An Unweighted Relative Response (RRU) is
+#' calculated as the total number of accepted data points (A, AE, and data that
+#' are not flagged) devided by the total number of data points in all specified
+#' columns (and the flagged columns).
 #'
-#' @details Flagged columns must have names ending in "*_flag". Missing values must be specified as NA.
+#' @details Flagged columns must have names ending in "*_flag". Missing values
+#' must be specified as NA.
 #'
 #' @inheritParams get_dp_flags
 #' @param cols A comma delimited list of column names.
 #'
-#' @return a dataframe named cust_flag that contains a row for each column indicated in each .csv file in the directory with the file name, the count of each flag and total number of data points in each .csv (including data flagging columns) and RRU.
+#' @return a dataframe named cust_flag that contains a row for each column
+#' indicated in each .csv file in the directory with the file name, the count of
+#' each flag and total number of data points in each .csv (including data
+#' flagging columns) and RRU.
 #' @export
 #'
 #' @examples
@@ -313,14 +364,17 @@ get_dc_flags <- function(directory = here::here(), force = FALSE) {
 #'   "locality"
 #' ))
 #'
-#' # get custom column names from your csv, use default working directory. Note that in this example column names come from a single .csv but all the .csvs in the directory will be checked for these column names:
+#' # get custom column names from your csv, use default working directory. Note
+#' that in this example column names come from a single .csv but all the .csvs
+#' in the directory will be checked for these column names:
 #' cols <- colnames(read.csv("mydata.csv"))[c(1:4, 7, 10)]
-#' get_custom_flags(cols = cols) # if your current working directory IS the data package directory.
+#' get_custom_flags(cols = cols) # if your current working directory IS the data
+#' package directory.
 #' }
 get_custom_flags <- function(directory = here::here(),
-                             cols = c(""),
+                             cols = (""),
                              force = FALSE) {
-  fileList <- list.files(path = directory, pattern = "\\.csv$", 
+  fileList <- list.files(path = directory, pattern = "\\.csv$",
                          full.names = TRUE)
 
   dfList <- suppressMessages(sapply(fileList, readr::read_csv))
@@ -391,10 +445,6 @@ get_custom_flags <- function(directory = here::here(),
           flags_only[j],
           "\\bP"
         ), na.rm = TRUE))
-        # do some math:
-        accepted_flags <- sum(A_flag, AE_flag)
-        not_accepted <- sum(R_flag, P_flag)
-        all_flags <- sum(accepted_flags, not_accepted)
 
         # get cell count in file, exclude NAs and flags:
         Cell_count <- sum(!is.na(flags_only[j]))
