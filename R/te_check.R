@@ -5,12 +5,12 @@
 #' @details Define your species dataset name, column name with the scientific names of your species, and your four letter park code.
 #'
 #' The function downloads the Federal Conservation list using the IRMA odata API service and matches this species list to the list of scientific names in your dataframe.
-#' 
+#'
 #' Keep in mind that this is a Federal list, not a state list. Changes in taxa names may also cause some species to be missed.
-#' 
+#'
 #' Because the Federal Conservation list is not publicly available (???), you must be logged in to the NPS VPN or in the office to use this function.
-#' 
-#'  
+#'
+#'
 #'
 #'
 #' @param df - The name of your dataframe containing species observations
@@ -27,7 +27,6 @@
 #' }
 #'
 te_check <- function(df, species_col, park_code) {
-
   fedlist <- ODataQuery::retrieve_data(paste0("https://irmadev.nps.gov/PrototypeCSVtoAPI/odata/FederalConservationListTaxaforDataProtection2272462?$filter=ParkCode%20eq%20%27", park_code, "%27%20or%20ParkCode%20eq%20%27All%27"))
 
   fedlist <- as.data.frame(fedlist$value$ProtectedSci)

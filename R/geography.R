@@ -35,7 +35,6 @@ get_park_polygon <- function(unit_code) {
 #' qc_ValidateCoordinates("OBRI", 36.07951, -84.65610)
 #' }
 validate_coord <- function(unit_code, lat, lon) {
-
   # get geography from NPS Rest Services
   park <- get_park_polygon(unit_code)
 
@@ -75,13 +74,13 @@ fuzz_location <- function(lat, lon, coord_ref_sys, fuzz_level) {
       ## Function to get the UTM zone for a given longitude
       (floor((long + 180) / 6) %% 60) + 1
     }
-    
+
     tempcrs <- if (lat > 0) {
       long2UTM(lon) + 32600
     } else {
       long2UTM(lon) + 32700
     }
-    
+
     point <- sf::st_point(c(lon, lat))
     point <- sf::st_sfc(point, crs = 4326)
     pointutm <- sf::st_transform(x = point, crs = tempcrs)
@@ -91,7 +90,7 @@ fuzz_location <- function(lat, lon, coord_ref_sys, fuzz_level) {
     locationlat <- lat
     locationlon <- lon
   }
-  
+
   # do rounding of UTMs based on fuzz_level
   if (fuzz_level == "Fuzzed - 1km") {
     fuzzfactor <- 1000
@@ -100,14 +99,14 @@ fuzz_location <- function(lat, lon, coord_ref_sys, fuzz_level) {
   } else {
     fuzzfactor <- 1
   }
-  
+
   locationlat <- locationlat / fuzzfactor
   locationlon <- locationlon / fuzzfactor
   locationlathi <- ceiling(locationlat) * fuzzfactor
   locationlatlo <- floor(locationlat) * fuzzfactor
   locationlonhi <- ceiling(locationlon) * fuzzfactor
   locationlonlo <- floor(locationlon) * fuzzfactor
-  
+
   # construct simple feature geometry polygon from UTM points
   polygon_list <- list(rbind(
     c(locationlatlo, locationlonlo),
@@ -117,18 +116,18 @@ fuzz_location <- function(lat, lon, coord_ref_sys, fuzz_level) {
     c(locationlatlo, locationlonlo)
   ))
   utmsfg <- sf::st_polygon(polygon_list)
-  
+
   # convert sfg to sfc with appropriate crs
   if (coord_ref_sys == 4326) {
     utmsfc <- sf::st_sfc(utmsfg, crs = tempcrs)
   } else {
     utmsfc <- sf::st_sfc(utmsfg, crs = coord_ref_sys)
   }
-  
+
   # convert polygon to decimal degrees
   wkt <- sf::st_transform(x = utmsfc, crs = 4326)
   wkt <- sf::st_as_text(wkt)
-  
+
   # return WKT string
   return(wkt)
 }
@@ -148,14 +147,15 @@ fuzz_location <- function(lat, lon, coord_ref_sys, fuzz_level) {
 #' @return The function returns your dataframe, mutated with an additional two columns of decimal Longitude and decimal Latitude.
 #' @export
 #'
-#' @examples 
+#' @examples
 #' \dontrun{
-#' utm_to_ll(df = mydataframe, 
-#'           EastingCol = "EastingCoords", 
-#'           NorthingCol = "NorthingCoords", 
-#'           zone = "17", 
-#'           datum = "WGS84"
-#'           )
+#' utm_to_ll(
+#'   df = mydataframe,
+#'   EastingCol = "EastingCoords",
+#'   NorthingCol = "NorthingCoords",
+#'   zone = "17",
+#'   datum = "WGS84"
+#' )
 #' }
 utm_to_ll <- function(df, EastingCol, NorthingCol, zone, datum = "WGS84") {
   Base <- as.data.frame(df)
@@ -166,24 +166,26 @@ utm_to_ll <- function(df, EastingCol, NorthingCol, zone, datum = "WGS84") {
   Final[1:2] <- lapply(Final[1:2], FUN = function(z) {
     as.numeric(z)
   })
-  
+
   Final <- cbind(Final$b, Final$a)
-  
-  v <- terra::vect(Final, crs = paste0("+proj=utm +zone=",
-                                       zone, 
-                                       " +datum=", 
-                                       datum, "
-                                       +units=m"))
-  
+
+  v <- terra::vect(Final, crs = paste0(
+    "+proj=utm +zone=",
+    zone,
+    " +datum=",
+    datum, "
+                                       +units=m"
+  ))
+
   converted <- terra::project(v, "+proj=longlat +datum=WGS84")
-  
+
   lonlat <- terra::geom(converted)[, c("x", "y")]
 
   df <- cbind(Mid, lonlat)
   df <- plyr::rbind.fill(df, Mid2)
-  df <- dplyr::rename(df, EastingCol = "b", NorthingCol = "a",
-                      "decimalLongitude" = x, "decimalLatitude" = y)
+  df <- dplyr::rename(df,
+    EastingCol = "b", NorthingCol = "a",
+    "decimalLongitude" = x, "decimalLatitude" = y
+  )
   return(df)
 }
-
-
