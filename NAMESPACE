@@ -2,6 +2,7 @@
 
 export(DC_col_check)
 export(fuzz_location)
+export(get_custom_flags)
 export(get_dc_flags)
 export(get_df_flags)
 export(get_dp_flags)

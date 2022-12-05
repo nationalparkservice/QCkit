@@ -7,23 +7,39 @@
 get_df_flags(directory = here::here(), force = FALSE)
 }
 \arguments{
-\item{directory}{is the path to the data package .csv files (defaults to the current working directory).}
+\item{directory}{is the path to the data package .csv files (defaults to the
+current working directory).}
 
-\item{force}{is a logical. Defaults to `FALSE`. When `force = FALSE` the function prints the resulting dataframe to the screen. setting `force = TRUE` suppresses output to the screen.}
+\item{force}{is a logical. Defaults to `FALSE`. When `force = FALSE` the
+function prints the resulting dataframe to the screen. setting
+`force = TRUE` suppresses output to the screen.}
 }
 \value{
-a dataframe named df_flag that contains a row for each .csv file in the directory with the file name, the count of each flag and total number of data points in each .csv (including data flagging columns).
+a dataframe named df_flag that contains a row for each .csv file in
+the directory with the file name, the count of each flag and total number of
+data points in each .csv (including data flagging columns).
 }
 \description{
-get_df_flags (df = data files) returns a data frame that lists the number of cells in each data file in the entire data package with relevant flags (A, AE, R, P) as well as the total number of data points in each .csv (including data flagging columns).
+get_df_flags (df = data files) returns a data frame that lists
+the number of cells in each data file in the entire data package (excluding
+NAs) with relevant flags (A, AE, R, P) as well as the total number of data
+points in each .csv (including data flagging columns, but excluding NAs).
+Unweighted Relative Response (RRU) is calculated as the total number of
+accepted data points (A, AE, and data that are not flagged).
 }
 \details{
-The function can be run from within the working directory where the data package is, or the directory can be specified. The function only supports .csv files and assumes that all .csv files in the folder are part of the data package. It also assumes that the values A, AE, R, and P have only been used for flagging. It assumes that there are no additional characters in the flagging cells (such as leading or trailing white spaces).
+The function can be run from within the working directory where the
+data package is, or the directory can be specified. The function only
+supports .csv files and assumes that all .csv files in the folder are part
+of the data package. It also assumes that the values A, AE, R, and P have
+only been used for flagging. It assumes that there are no additional
+characters in the flagging cells (such as leading or trailing white spaces).
 }
 \examples{
 \dontrun{
 get_df_flags("~/my_data_package_directory")
-get_df_flags() #if your current working directory IS the data package directory.
+get_df_flags() # if your current working directory IS the data package
+directory.
 }
 
 }
