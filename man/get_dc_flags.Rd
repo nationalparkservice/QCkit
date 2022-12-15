@@ -5,15 +5,11 @@
 \title{Create Table of Data Quality Flags in Flagging Columns within individual
 data columns}
 \usage{
-get_dc_flags(directory = here::here(), force = FALSE)
+get_dc_flags(directory = here::here())
 }
 \arguments{
 \item{directory}{is the path to the data package .csv files (defaults to the
 current working directory).}
-
-\item{force}{is a logical. Defaults to `FALSE`. When `force = FALSE` the
-function prints the resulting dataframe to the screen. setting
-`force = TRUE` suppresses output to the screen.}
 }
 \value{
 a dataframe named dc_flag that contains a row for each .csv file in
@@ -32,9 +28,9 @@ number of accepted data points (A, AE, and data that are not flagged).
 The function can be run from within the working directory where the
 data package is, or the directory can be specified. The function only
 supports .csv files and assumes that all data flagging columns have column
-names ending in "_flag". It assumes that there are no additional characters
-(other than A, AE, R, P) in the flagging cells (such as leading or trailing
-white spaces).
+names ending in "_flag". It counts cells within those columns that start with
+one of the flagging characters (A, AE, R, P) and ignores trailing characters
+and whitespaces.
 }
 \examples{
 \dontrun{

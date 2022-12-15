@@ -4,15 +4,11 @@
 \alias{get_dp_flags}
 \title{Create Table of Data Quality Flags Found in a Data Package}
 \usage{
-get_dp_flags(directory = here::here(), force = FALSE)
+get_dp_flags(directory = here::here())
 }
 \arguments{
 \item{directory}{is the path to the data package .csv files (defaults to the
 current working directory).}
-
-\item{force}{is a logical. Defaults to `FALSE`. When `force = FALSE` the
-function prints the resulting dataframe to the screen. setting
-`force = TRUE` suppresses output to the screen.}
 }
 \value{
 a dataframe named dp_flag that contains the four flags, the count of
@@ -30,10 +26,10 @@ are not flagged).
 The function can be run from within the working directory where the
  data package is, or the directory can be specified. The function only
  supports .csv files and assumes that all .csv files in the folder are part
- of the data package. It also assumes that the values A, AE, R, and P have
- only been used for flagging. It assumes that there are no additional
- characters in the flagging cells (such as leading or trailing white
- spaces). NAs are assumed to be empty cells or missing data.
+ of the data package. The function counts cells within "*_flag" 
+ columns that start with one of the flagging characters (A, AE, R, P) and 
+ ignores trailing characters and whitespaces. NAs are assumed to be empty
+ cells or missing data.
 }
 \examples{
 \dontrun{

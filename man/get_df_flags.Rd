@@ -4,15 +4,11 @@
 \alias{get_df_flags}
 \title{Create Table of Data Quality Flags Found in Data Files within a Data Package}
 \usage{
-get_df_flags(directory = here::here(), force = FALSE)
+get_df_flags(directory = here::here())
 }
 \arguments{
 \item{directory}{is the path to the data package .csv files (defaults to the
 current working directory).}
-
-\item{force}{is a logical. Defaults to `FALSE`. When `force = FALSE` the
-function prints the resulting dataframe to the screen. setting
-`force = TRUE` suppresses output to the screen.}
 }
 \value{
 a dataframe named df_flag that contains a row for each .csv file in

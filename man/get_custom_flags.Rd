@@ -5,23 +5,30 @@
 \title{Create a table of Data Quality Flags based on a custom set of user defined
 columns headings.}
 \usage{
-get_custom_flags(directory = here::here(), cols = (""), force = FALSE)
+get_custom_flags(
+  directory = here::here(),
+  cols = (""),
+  output = c("all", "package", "files", "columns")
+)
 }
 \arguments{
 \item{directory}{is the path to the data package .csv files (defaults to the
 current working directory).}
 
-\item{cols}{A comma delimited list of column names.}
+\item{cols}{A comma delimited list of column names. If left unspecified,
+defaults to just flagged columns.}
 
-\item{force}{is a logical. Defaults to `FALSE`. When `force = FALSE` the
-function prints the resulting dataframe to the screen. setting
-`force = TRUE` suppresses output to the screen.}
+\item{output}{A string indicating what output should be provided. "columns"
+returns a summary table of QC flags and RRU values in each specified column
+for every data file. "files" returns a summary table of total QC flags and
+mean and standard deviations across each data file. "package" provides a
+summary table with total, mean (per file) and standard deviation values
+for flagged data across the entire data package. "all" will return all three
+data frames in a single list.}
 }
 \value{
-a dataframe named cust_flag that contains a row for each column
-indicated in each .csv file in the directory with the file name, the count of
-each flag and total number of data points in each .csv (including data
-flagging columns) and RRU.
+a dataframe with quality control summary information summarized at
+ the specified level(s).
 }
 \description{
 get_custom_flags returns a data frame that, for each data file
@@ -32,21 +39,24 @@ assumed to have only accepted data. The total number of data points in the
 specified columns (and data flagging columns for) each .csv are also
 reported. NAs are excluded. An Unweighted Relative Response (RRU) is
 calculated as the total number of accepted data points (A, AE, and data that
-are not flagged) devided by the total number of data points in all specified
+are not flagged) divided by the total number of data points in all specified
 columns (and the flagged columns).
 }
 \details{
 Flagged columns must have names ending in "*_flag". Missing values
-must be specified as NA.
+must be specified as NA.  The function counts cells within "*_flag" columns
+that start with one of the flagging characters (A, AE, R, P) and ignores
+trailing characters and whitespaces. For custom columns that do not include
+a specific flagging column, all non-missing (NA) values are considere
+Accepted (A).
 }
 \examples{
 \dontrun{
 
-get_custom_flags("~/my_data_package_directory", cols = c(
-  "scientificName",
-  "locality"
-))
+get_custom_flags("~/my_data_package_directory", cols = c("scientificName",
+                                                         "locality"), 
+                                                         output="all")
 cols <- colnames(read.csv("mydata.csv"))[c(1:4, 7, 10)]
-get_custom_flags(cols = cols) 
+get_custom_flags(cols = cols, output="package") 
 }
 }
