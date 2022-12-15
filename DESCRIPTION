@@ -44,7 +44,9 @@ Imports:
 RoxygenNote: 7.2.1
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    testthat (>= 3.0.0)
 VignetteBuilder: knitr
 URL: https://github.com/RobLBaker/QCkit
 BugReports: https://github.com/RobLBaker/QCkit/issues
+Config/testthat/edition: 3
