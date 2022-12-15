@@ -10,8 +10,8 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 # QCkit
 
 QCkit is a collection of quality control functions to munge, check,
-flag, correct, and summarize for reporting data collected by the U.S.
-National Park Service Inventory & Monitoring Division.
+flag, correct, and summarize data collected by the U.S. National Park
+Service Inventory & Monitoring Division.
 
 Functions are typically user generated and so may not have been
 thoroughly tested for all use cases.
