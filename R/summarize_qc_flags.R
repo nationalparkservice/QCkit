@@ -10,17 +10,13 @@
 #' @details The function can be run from within the working directory where the
 #'  data package is, or the directory can be specified. The function only
 #'  supports .csv files and assumes that all .csv files in the folder are part
-#'  of the data package. It also assumes that the values A, AE, R, and P have
-#'  only been used for flagging. It assumes that there are no additional
-#'  characters in the flagging cells (such as leading or trailing white
-#'  spaces). NAs are assumed to be empty cells or missing data.
+#'  of the data package. The function counts cells within "*_flag" 
+#'  columns that start with one of the flagging characters (A, AE, R, P) and 
+#'  ignores trailing characters and whitespaces. NAs are assumed to be empty
+#'  cells or missing data.
 #'
 #' @param directory is the path to the data package .csv files (defaults to the
 #' current working directory).
-#'
-#' @param force is a logical. Defaults to `FALSE`. When `force = FALSE` the
-#' function prints the resulting dataframe to the screen. setting
-#' `force = TRUE` suppresses output to the screen.
 #'
 #' @return a dataframe named dp_flag that contains the four flags, the count of
 #' each flag and total number of data points in the entire data package.
@@ -34,7 +30,7 @@
 #' get_dp_flags() # if your current working directory IS the data package
 #' directory.}
 #'
-get_dp_flags <- function(directory = here::here(), force = FALSE) {
+get_dp_flags <- function(directory = here::here()) {
   fileList <- list.files(path = directory, pattern = "\\.csv$",
                          full.names = TRUE)
 
@@ -61,7 +57,6 @@ get_dp_flags <- function(directory = here::here(), force = FALSE) {
                               na.rm = TRUE))
     P <- suppressWarnings(sum(stringr::str_count(flags_only, "\\bP"),
                               na.rm = TRUE))
-
     # Increment flag counts:
     A_flag <- sum(A_flag + A)
     AE_flag <- sum(AE_flag + AE)
@@ -88,10 +83,6 @@ get_dp_flags <- function(directory = here::here(), force = FALSE) {
   RRU <- (A_count) / Cell_count
 
   dp_flags <- data.frame(A_flag, AE_flag, R_flag, P_flag, Cell_count, RRU)
-
-  if (force == FALSE) {
-    print(dp_flags)
-  }
 
   return(dp_flags)
 }
@@ -131,7 +122,7 @@ get_dp_flags <- function(directory = here::here(), force = FALSE) {
 #' directory.
 #' }
 #'
-get_df_flags <- function(directory = here::here(), force = FALSE) {
+get_df_flags <- function(directory = here::here()) {
   # get list of .csv files in the specified directory
   fileList <- list.files(path = directory, pattern = "\\.csv$",
                          full.names = TRUE)
@@ -197,10 +188,6 @@ get_df_flags <- function(directory = here::here(), force = FALSE) {
   # rename column
   colnames(df_flags)[1] <- "filename"
 
-  if (force == FALSE) {
-    print(df_flags)
-  }
-
   return(df_flags)
 }
 
@@ -218,9 +205,9 @@ get_df_flags <- function(directory = here::here(), force = FALSE) {
 #' @details The function can be run from within the working directory where the
 #' data package is, or the directory can be specified. The function only
 #' supports .csv files and assumes that all data flagging columns have column
-#' names ending in "_flag". It assumes that there are no additional characters
-#' (other than A, AE, R, P) in the flagging cells (such as leading or trailing
-#' white spaces).
+#' names ending in "_flag". It counts cells within those columns that start with
+#' one of the flagging characters (A, AE, R, P) and ignores trailing characters
+#' and whitespaces.
 #'
 #' @inheritParams get_dp_flags
 #'
@@ -237,7 +224,7 @@ get_df_flags <- function(directory = here::here(), force = FALSE) {
 #' directory.
 #' }
 #'
-get_dc_flags <- function(directory = here::here(), force = FALSE) {
+get_dc_flags <- function(directory = here::here()) {
   fileList <- list.files(path = directory, pattern = "\\.csv$",
                          full.names = TRUE)
 
@@ -324,9 +311,6 @@ get_dc_flags <- function(directory = here::here(), force = FALSE) {
 
   colnames(dc_flags)[7] <- "Flagged Data Totals"
 
-  if (force == FALSE) {
-    print(dc_flags)
-  }
   return(dc_flags)
 }
 
@@ -341,34 +325,49 @@ get_dc_flags <- function(directory = here::here(), force = FALSE) {
 #' specified columns (and data flagging columns for) each .csv are also
 #' reported. NAs are excluded. An Unweighted Relative Response (RRU) is
 #' calculated as the total number of accepted data points (A, AE, and data that
-#' are not flagged) devided by the total number of data points in all specified
+#' are not flagged) divided by the total number of data points in all specified
 #' columns (and the flagged columns).
 #'
 #' @details Flagged columns must have names ending in "*_flag". Missing values
-#' must be specified as NA.
+#' must be specified as NA.  The function counts cells within "*_flag" columns
+#' that start with one of the flagging characters (A, AE, R, P) and ignores
+#' trailing characters and whitespaces. For custom columns that do not include
+#' a specific flagging column, all non-missing (NA) values are considere
+#' Accepted (A).
 #'
 #' @inheritParams get_dp_flags
-#' @param cols A comma delimited list of column names.
+#' @param cols A comma delimited list of column names. If left unspecified,
+#' defaults to just flagged columns.
+#' @param output A string indicating what output should be provided. "columns"
+#' returns a summary table of QC flags and RRU values in each specified column
+#' for every data file. "files" returns a summary table of total QC flags and
+#' mean and standard deviations across each data file. "package" provides a
+#' summary table with total, mean (per file) and standard deviation values
+#' for flagged data across the entire data package. "all" will return all three
+#' data frames in a single list.
 #'
-#' @return a dataframe named cust_flag that contains a row for each column
-#' indicated in each .csv file in the directory with the file name, the count of
-#' each flag and total number of data points in each .csv (including data
-#' flagging columns) and RRU.
+#' @return a dataframe with quality control summary information summarized at
+#'  the specified level(s).
+#' 
+#' @importFrom stats sd
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' 
-#' get_custom_flags("~/my_data_package_directory", cols = c(
-#'   "scientificName",
-#'   "locality"
-#' ))
+#' get_custom_flags("~/my_data_package_directory", cols = c("scientificName",
+#'                                                          "locality"), 
+#'                                                          output="all")
 #' cols <- colnames(read.csv("mydata.csv"))[c(1:4, 7, 10)]
-#' get_custom_flags(cols = cols) 
+#' get_custom_flags(cols = cols, output="package") 
 #' }
 get_custom_flags <- function(directory = here::here(),
                              cols = (""),
-                             force = FALSE) {
+                             output = c("all",
+                                        "package",
+                                        "files",
+                                        "columns")) {
+  
   fileList <- list.files(path = directory, pattern = "\\.csv$",
                          full.names = TRUE)
 
@@ -378,9 +377,6 @@ get_custom_flags <- function(directory = here::here(),
 
   cust_flags <- NULL
   for (i in seq_along(dfList)) {
-    print(paste0("i=", i))
-
-
     # get custom columns and flagging columns:
     cust_cols <- dfList[[i]] %>% dplyr::select(any_of(cols))
     if (ncol(cust_cols) > 0) {
@@ -392,6 +388,8 @@ get_custom_flags <- function(directory = here::here(),
         RRU <- 1.0
 
         Cell_count <- A_flag
+        percent_missing <- (sum(is.na(cust_cols[j])))/nrow(cust_cols[j])
+        
         filename <- names(dfList)[i]
         column <- colnames(cust_cols)[j]
         flags <- assign(
@@ -404,6 +402,7 @@ get_custom_flags <- function(directory = here::here(),
             R_flag,
             P_flag,
             Cell_count,
+            percent_missing,
             RRU
           )
         )
@@ -420,7 +419,6 @@ get_custom_flags <- function(directory = here::here(),
     if (ncol(flags_only) > 0) {
       # for each column in data and each data flags:
       for (j in seq_along(flags_only)) {
-        print(paste0("j=", j))
         # count each flag type; don't count NAs. Should count all cells that
         # start with the flagging letter and ignore anything (i.e. Quality
         # Assessment codes)
@@ -443,6 +441,8 @@ get_custom_flags <- function(directory = here::here(),
 
         # get cell count in file, exclude NAs and flags:
         Cell_count <- sum(!is.na(flags_only[j]))
+        
+        percent_missing <- (sum(is.na(flags_only[j])))/nrow(flags_only[j])
 
         filename <- names(dfList)[i]
         column <- colnames(flags_only)[j]
@@ -457,7 +457,8 @@ get_custom_flags <- function(directory = here::here(),
             AE_flag,
             R_flag,
             P_flag,
-            Cell_count
+            Cell_count,
+            percent_missing
           )
         )
 
@@ -479,25 +480,82 @@ get_custom_flags <- function(directory = here::here(),
     # if there are no flagging columns:
     if (ncol(flags_only) == 0 && ncol(cust_cols) == 0) {
       filename <- names(dfList)[i]
-      column <- "No columns selected"
+      column <- NA
       A_flag <- NA
       AE_flag <- NA
       R_flag <- NA
       P_flag <- NA
       Cell_count <- NA
+      percent_missing <-NA
       RRU <- NA
 
       flags <- data.frame(
         filename, column, A_flag, AE_flag, R_flag, P_flag,
-        Cell_count, RRU
+        Cell_count, percent_missing, RRU
       )
 
       cust_flags <- rbind(cust_flags, flags)
     }
   }
-  colnames(cust_flags)[7] <- "Flagged Data Totals"
-  if (force == FALSE) {
-    print(cust_flags)
+  colnames(cust_flags)[7] <- "Data Totals"
+  
+  #generate summary statistics for each column:
+  data_file_summaries <- cust_flags %>% 
+    group_by(filename) %>% 
+    summarize(A_total=sum(A_flag),
+              A_mean=mean(A_flag),
+              A_sd=stats::sd(A_flag),
+              AE_total=sum(AE_flag),
+              AE_mean=mean(AE_flag),
+              AE_sd=stats::sd(AE_flag),
+              P_total=sum(P_flag),
+              P_mean=mean(P_flag),
+              P_sd=stats::sd(P_flag),
+              R_total=sum(R_flag),
+              R_mean=mean(R_flag),
+              R_sd=stats::sd(R_flag),
+              missing_mean=mean(percent_missing),
+              missing_sd=stats::sd(percent_missing),
+              RRU_mean=mean(RRU),
+              RRU_sd=stats::sd(RRU))
+  
+  #generate data package level summaries
+  data_package_summary<- cust_flags %>%
+    summarize(A_total=sum(A_flag, na.rm=TRUE),
+              A_mean=mean(A_flag, na.rm = TRUE),
+              A_sd=sd(A_flag, na.rm = TRUE),
+              AE_total=sum(AE_flag, na.rm=TRUE),
+              AE_mean=mean(AE_flag, na.rm=TRUE),
+              AE_sd=sd(AE_flag, na.rm=TRUE),
+              P_total=sum(P_flag, na.rm=TRUE),
+              P_mean=mean(P_flag, na.rm=TRUE),
+              P_sd=sd(P_flag, na.rm=TRUE),
+              R_total=sum(R_flag, na.rm=TRUE),
+              R_mean=mean(R_flag, na.rm=TRUE),
+              R_sd=sd(R_flag, na.rm=TRUE),
+              missing_mean=mean(percent_missing, na.rm=TRUE),
+              missing_sd=sd(percent_missing, na.rm=TRUE),
+              RRU_mean=mean(RRU, na.rm=TRUE),
+              RRU_sd=sd(RRU, na.rm=TRUE))
+  
+  qc_summary <- list(cust_flags,
+                     data_file_summaries,
+                     data_package_summary)
+  
+  names(qc_summary)<-c("Column Level QC Summaries",
+                       "Data File Level QC Summaries",
+                       "Data Package Level QC Summaries")
+  
+  if(output == "package"){
+    return(qc_summary[[3]])
   }
-  return(cust_flags)
+  if(output == "files"){
+    return(qc_summary[[2]])
+  }
+  if(output == "columns"){
+    return(qc_summary[[1]])
+  }
+  if(output == "all"){
+    return(qc_summary)
+  }
 }
