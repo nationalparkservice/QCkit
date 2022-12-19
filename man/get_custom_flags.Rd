@@ -2,8 +2,7 @@
 % Please edit documentation in R/summarize_qc_flags.R
 \name{get_custom_flags}
 \alias{get_custom_flags}
-\title{Create a table of Data Quality Flags based on a custom set of user defined
-columns headings.}
+\title{Creates dataframe(s) summarizing data quality}
 \usage{
 get_custom_flags(
   directory = here::here(),
@@ -28,27 +27,40 @@ data frames in a single list.}
 }
 \value{
 a dataframe with quality control summary information summarized at
- the specified level(s).
+the specified level(s).
 }
 \description{
-get_custom_flags returns a data frame that, for each data file
-in a data package lists the name of each column selected by the user. By
-default, any flagged columns are automatically included. The number of each
-flag type for each column (A, AE, R, P) are reported. Unflagged columns are
-assumed to have only accepted data. The total number of data points in the
-specified columns (and data flagging columns for) each .csv are also
-reported. NAs are excluded. An Unweighted Relative Response (RRU) is
-calculated as the total number of accepted data points (A, AE, and data that
-are not flagged) divided by the total number of data points in all specified
-columns (and the flagged columns).
+get_custom_flags returns data frames that that summarize data
+quality control flags (one that summarizes at the data package level, one at
+the data file level, and one for each column). The summaries include all data
+with quality control flagging (a column name that ends in "_flag") and
+optionally any additional custom columns the user specifies, either by column
+name or number.
+
+The use can specify which of the 3 data frames (or all 3, as a list of 
+dataframes) should be returned.
+
+The number of each flag type for each column (A, AE, R, P) is reported. 
+Unflagged columns are assumed to have only accepted (or missing) data. The 
+total number of data points in the specified columns (and data flagging 
+columns for) each .csv are also reported. NAs considered missign data. An
+Unweighted Relative Response (RRU) is calculated as the total number of 
+accepted data points (A, AE, and data that are not flagged) divided by the
+total number of data points (excluding missing values) in all specified
+columns (and the flagged columns). Standard deviations are reported for RRU.
+The geometric mean of percent missing and the standard deviation of percent
+missing are also reported.
 }
 \details{
-Flagged columns must have names ending in "*_flag". Missing values
+Flagged columns must have names ending in "_flag". Missing values
 must be specified as NA.  The function counts cells within "*_flag" columns
 that start with one of the flagging characters (A, AE, R, P) and ignores
-trailing characters and whitespaces. For custom columns that do not include
-a specific flagging column, all non-missing (NA) values are considere
+trailing characters and white spaces. For custom columns that do not include
+a specific flagging column, all non-missing (non-NA) values are considered
 Accepted (A).
+
+The intent of get_custom_flags is for integration into reports on data
+quality, such as Data Release Reports (DRRs).
 }
 \examples{
 \dontrun{
