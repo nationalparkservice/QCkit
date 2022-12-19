@@ -7,15 +7,25 @@
 utm_to_ll(df, EastingCol, NorthingCol, zone, datum = "WGS84")
 }
 \arguments{
-\item{df}{- The dataframe with UTM coordinates you would like to convert. Input the name of your dataframe.}
+\item{df}{\itemize{
+\item The dataframe with UTM coordinates you would like to convert. Input the name of your dataframe.
+}}
 
-\item{EastingCol}{- The name of your Easting UTM column. Input the name in quotations, ie. "EastingCol".}
+\item{EastingCol}{\itemize{
+\item The name of your Easting UTM column. Input the name in quotations, ie. "EastingCol".
+}}
 
-\item{NorthingCol}{- The name of your Northing UTM column. Input the name in quotations, ie. "NorthingCol".}
+\item{NorthingCol}{\itemize{
+\item The name of your Northing UTM column. Input the name in quotations, ie. "NorthingCol".
+}}
 
-\item{zone}{- The UTM Zone. Input the zone number in quotations, ie. "17".}
+\item{zone}{\itemize{
+\item The UTM Zone. Input the zone number in quotations, ie. "17".
+}}
 
-\item{datum}{- The datum used in the coordinate reference system of your coordinates. Input in quotations, ie. "WGS84"}
+\item{datum}{\itemize{
+\item The datum used in the coordinate reference system of your coordinates. Input in quotations, ie. "WGS84"
+}}
 }
 \value{
 The function returns your dataframe, mutated with an additional two columns of decimal Longitude and decimal Latitude.

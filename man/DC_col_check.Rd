@@ -7,10 +7,14 @@
 DC_col_check(working_df)
 }
 \arguments{
-\item{working_df}{- This is the dataframe you want to run against the function. To call, simply write working_df = "the name of your dataframe".}
+\item{working_df}{\itemize{
+\item This is the dataframe you want to run against the function. To call, simply write working_df = "the name of your dataframe".
+}}
 }
 \value{
-- The function returns a list of the column names you should fix (not fitting with simple Darwin Core terms, custom name formatting, data quality flagging formatting). Additionally, a small summary table is printed with the counts of the columns falling under each category (DarwinCore, Custom, DQ, Fix Me).
+\itemize{
+\item The function returns a list of the column names you should fix (not fitting with simple Darwin Core terms, custom name formatting, data quality flagging formatting). Additionally, a small summary table is printed with the counts of the columns falling under each category (DarwinCore, Custom, DQ, Fix Me).
+}
 }
 \description{
 DC_col_check checks to see if the column names in your dataframe match the standardized simple Darwin Core names established by the Taxonomic Databases Working Group
