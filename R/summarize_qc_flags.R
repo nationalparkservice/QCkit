@@ -1,6 +1,8 @@
 #' Create Table of Data Quality Flags Found in a Data Package
 #'
-#' @description get_dp_flags (dp=data package) returns a data frame that list
+#' @description 
+#' `r lifecycle::badge("deprecated")`
+#' get_dp_flags (dp=data package) returns a data frame that list
 #' the number of cells in the entire data package with relevant flags (A, AE,
 #' R, P) as well as the total number of non-NA cells in the data package
 #' (including data flagging columns). Unweighted Relative Response (RRU) is
@@ -14,6 +16,8 @@
 #'  columns that start with one of the flagging characters (A, AE, R, P) and 
 #'  ignores trailing characters and whitespaces. NAs are assumed to be empty
 #'  cells or missing data.
+#'  
+#' @keywords internal
 #'
 #' @param directory is the path to the data package .csv files (defaults to the
 #' current working directory).
@@ -28,9 +32,15 @@
 #' \dontrun{
 #' get_dp_flags("~/my_data_package_directory")
 #' get_dp_flags() # if your current working directory IS the data package
-#' directory.}
+#' directory.
+#' # ->
+#' get_custom_flags(output="package")
+#' }
 #'
 get_dp_flags <- function(directory = here::here()) {
+  
+  lifecycle::deprecate_warn("1.0.1", "get_dp_flags()", "get_custom_flags()")
+  
   fileList <- list.files(path = directory, pattern = "\\.csv$",
                          full.names = TRUE)
 
@@ -91,7 +101,9 @@ get_dp_flags <- function(directory = here::here()) {
 
 #' Create Table of Data Quality Flags Found in Data Files within a Data Package
 #'
-#' @description get_df_flags (df = data files) returns a data frame that lists
+#' @description 
+#' `r lifecycle::badge("deprecated")`
+#' get_df_flags (df = data files) returns a data frame that lists
 #' the number of cells in each data file in the entire data package (excluding
 #' NAs) with relevant flags (A, AE, R, P) as well as the total number of data
 #' points in each .csv (including data flagging columns, but excluding NAs).
@@ -105,8 +117,9 @@ get_dp_flags <- function(directory = here::here()) {
 #' only been used for flagging. It assumes that there are no additional
 #' characters in the flagging cells (such as leading or trailing white spaces).
 #'
-#'
 #' @inheritParams get_dp_flags
+#'
+#' @keywords internal
 #'
 #' @return a dataframe named df_flag that contains a row for each .csv file in
 #' the directory with the file name, the count of each flag and total number of
@@ -120,9 +133,14 @@ get_dp_flags <- function(directory = here::here()) {
 #' get_df_flags("~/my_data_package_directory")
 #' get_df_flags() # if your current working directory IS the data package
 #' directory.
+#' # ->
+#' get_custom_flags(output="files")
 #' }
 #'
 get_df_flags <- function(directory = here::here()) {
+  
+  lifecycle::deprecate_warn("1.0.1", "get_dp_flags()", "get_custom_flags()")
+  
   # get list of .csv files in the specified directory
   fileList <- list.files(path = directory, pattern = "\\.csv$",
                          full.names = TRUE)
@@ -195,7 +213,9 @@ get_df_flags <- function(directory = here::here()) {
 #' Create Table of Data Quality Flags in Flagging Columns within individual
 #' data columns
 #'
-#' @description get_dc_flags (dc=data columns) returns a data frame that, for
+#' @description 
+#' `r lifecycle::badge("deprecated")`
+#' get_dc_flags (dc=data columns) returns a data frame that, for
 #' each data file in a data package lists the name of each data flagging column
 #' and the number of each flag type within that column (A, AE, R, P) as well as
 #' the total number of data points in the data flagging columns for each .csv,
@@ -210,6 +230,8 @@ get_df_flags <- function(directory = here::here()) {
 #' and whitespaces.
 #'
 #' @inheritParams get_dp_flags
+#' 
+#' @keywords internal
 #'
 #' @return a dataframe named dc_flag that contains a row for each .csv file in
 #' the directory with the file name, the count of each flag and total number of
@@ -222,9 +244,14 @@ get_df_flags <- function(directory = here::here()) {
 #' get_df_flags("~/my_data_package_directory")
 #' get_df_flags() # if your current working directory IS the data package
 #' directory.
+#' # ->
+#' get_custom_flags(output="columns")
 #' }
 #'
 get_dc_flags <- function(directory = here::here()) {
+  
+  lifecycle::deprecate_warn("1.0.1", "get_dp_flags()", "get_custom_flags()")
+  
   fileList <- list.files(path = directory, pattern = "\\.csv$",
                          full.names = TRUE)
 
@@ -316,7 +343,9 @@ get_dc_flags <- function(directory = here::here()) {
 
 #' Creates dataframe(s) summarizing data quality
 #'
-#' @description get_custom_flags returns data frames that that summarize data
+#' @description 
+#' `r lifecycle::badge("experimental")`
+#' get_custom_flags returns data frames that that summarize data
 #' quality control flags (one that summarizes at the data package level, one at
 #' the data file level, and one for each column). The summaries include all data
 #' with quality control flagging (a column name that ends in "_flag") and

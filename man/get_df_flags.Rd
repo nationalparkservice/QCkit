@@ -16,6 +16,7 @@ the directory with the file name, the count of each flag and total number of
 data points in each .csv (including data flagging columns).
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 get_df_flags (df = data files) returns a data frame that lists
 the number of cells in each data file in the entire data package (excluding
 NAs) with relevant flags (A, AE, R, P) as well as the total number of data
@@ -36,6 +37,9 @@ characters in the flagging cells (such as leading or trailing white spaces).
 get_df_flags("~/my_data_package_directory")
 get_df_flags() # if your current working directory IS the data package
 directory.
+# ->
+get_custom_flags(output="files")
 }
 
 }
+\keyword{internal}

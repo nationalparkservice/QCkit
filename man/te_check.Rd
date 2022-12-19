@@ -7,11 +7,17 @@
 te_check(df, species_col, park_code)
 }
 \arguments{
-\item{df}{- The name of your dataframe containing species observations}
+\item{df}{\itemize{
+\item The name of your dataframe containing species observations
+}}
 
-\item{species_col}{- The name of the column within your dataframe containing the scientific names of the species}
+\item{species_col}{\itemize{
+\item The name of the column within your dataframe containing the scientific names of the species
+}}
 
-\item{park_code}{-  The four letter park code}
+\item{park_code}{\itemize{
+\item The four letter park code
+}}
 }
 \value{
 The function returns a list in your global environment called "TorE" with the names of all the species that fall under the federal conservation list.

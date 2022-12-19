@@ -30,6 +30,7 @@ a dataframe with quality control summary information summarized at
 the specified level(s).
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 get_custom_flags returns data frames that that summarize data
 quality control flags (one that summarizes at the data package level, one at
 the data file level, and one for each column). The summaries include all data
@@ -37,14 +38,14 @@ with quality control flagging (a column name that ends in "_flag") and
 optionally any additional custom columns the user specifies, either by column
 name or number.
 
-The use can specify which of the 3 data frames (or all 3, as a list of 
+The use can specify which of the 3 data frames (or all 3, as a list of
 dataframes) should be returned.
 
-The number of each flag type for each column (A, AE, R, P) is reported. 
-Unflagged columns are assumed to have only accepted (or missing) data. The 
-total number of data points in the specified columns (and data flagging 
+The number of each flag type for each column (A, AE, R, P) is reported.
+Unflagged columns are assumed to have only accepted (or missing) data. The
+total number of data points in the specified columns (and data flagging
 columns for) each .csv are also reported. NAs considered missign data. An
-Unweighted Relative Response (RRU) is calculated as the total number of 
+Unweighted Relative Response (RRU) is calculated as the total number of
 accepted data points (A, AE, and data that are not flagged) divided by the
 total number of data points (excluding missing values) in all specified
 columns (and the flagged columns). Standard deviations are reported for RRU.

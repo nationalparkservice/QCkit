@@ -62,15 +62,16 @@
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>working_df</dt>
-<dd><p>- This is the dataframe you want to run against the function. To call, simply write working_df = "the name of your dataframe".</p></dd>
+<dd><ul><li><p>This is the dataframe you want to run against the function. To call, simply write working_df = "the name of your dataframe".</p></li>
+</ul></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
     
 
-<p>- The function returns a list of the column names you should fix (not fitting with simple Darwin Core terms, custom name formatting, data quality flagging formatting). Additionally, a small summary table is printed with the counts of the columns falling under each category (DarwinCore, Custom, DQ, Fix Me).</p>
-    </div>
+<ul><li><p>The function returns a list of the column names you should fix (not fitting with simple Darwin Core terms, custom name formatting, data quality flagging formatting). Additionally, a small summary table is printed with the counts of the columns falling under each category (DarwinCore, Custom, DQ, Fix Me).</p></li>
+</ul></div>
     <div id="details">
     <h2>Details</h2>
     <p>A dataframe is created with all the simple DarwinCore terms, drawn from Darwin Core reference guide: https://dwc.tdwg.org/terms/ last updated 07-15-2021. We have chosen to align ourselves mostly with the simple Darwin Core rules: https://dwc.tdwg.org/simple/. The function runs through each of the column names in your working dataframe to see if they match 1. A standard simple DarwinCore name 2. A name with a pattern of strings matching "custom_", indicating a custom made column  or 3. A name with a pattern of strings matching "_DQ", indicating a data quality flag. If the column name does not fit within any of the three categories, a "Fix me" statement is printed alongside the column name. The function then counts all of the names fitting within each category and prints a summary table.</p>
