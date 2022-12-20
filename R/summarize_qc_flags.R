@@ -421,7 +421,7 @@ get_custom_flags <- function(directory = here::here(),
 
   cust_flags <- NULL
   for (i in seq_along(dfList)) {
-    # get custom columns and flagging columns:
+    # get custom columns:
     cust_cols <- dfList[[i]] %>% dplyr::select(any_of(cols))
     if (ncol(cust_cols) > 0) {
       for (j in seq_along(cust_cols)) {
@@ -429,8 +429,7 @@ get_custom_flags <- function(directory = here::here(),
         AE_flag <- 0
         R_flag <- 0
         P_flag <- 0
-        RRU <- 1.0
-
+        RRU <- A_flag/(nrow(cust_cols[j]))
         Cell_count <- A_flag
         percent_missing <- (sum(is.na(cust_cols[j])))/nrow(cust_cols[j])
         
@@ -487,6 +486,8 @@ get_custom_flags <- function(directory = here::here(),
         Cell_count <- sum(!is.na(flags_only[j]))
         
         percent_missing <- (sum(is.na(flags_only[j])))/nrow(flags_only[j])
+        
+        RRU <- (A_flag + AE_flag) / nrow(flags_only[j])
 
         filename <- names(dfList)[i]
         column <- colnames(flags_only)[j]
@@ -502,17 +503,10 @@ get_custom_flags <- function(directory = here::here(),
             R_flag,
             P_flag,
             Cell_count,
-            percent_missing
+            percent_missing,
+            RRU
           )
         )
-
-        # Accepted count: remove provisional and rejected data proxies from
-        # Cell_count (using proxies because it is assumed that for each R or P
-        # there is a corresponding data point that should be removed):
-        A_count <- (Cell_count - R_flag - P_flag)
-
-        # Calculate RRU as accepted data/all data
-        flags$RRU <- (A_count / Cell_count)
 
         colnames(flags)[1] <- "filename"
 
