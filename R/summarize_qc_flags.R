@@ -559,7 +559,7 @@ get_custom_flags <- function(directory = here::here(),
               #R_mean=mean(R_flag),
               #R_sd=stats::sd(R_flag),
               missing_mean=mean(percent_missing),
-              missing_sd=stats::sd(percent_missing),
+              #missing_sd=stats::sd(percent_missing),
               RRU_mean=mean(RRU),
               RRU_sd=stats::sd(RRU))
   
@@ -578,7 +578,7 @@ get_custom_flags <- function(directory = here::here(),
               #R_mean=mean(R_flag, na.rm=TRUE),
               #R_sd=sd(R_flag, na.rm=TRUE),
               missing_mean=mean(percent_missing, na.rm=TRUE),
-              missing_sd=sd(percent_missing, na.rm=TRUE),
+              #missing_sd=sd(percent_missing, na.rm=TRUE),
               RRU_mean=mean(RRU, na.rm=TRUE),
               RRU_sd=sd(RRU, na.rm=TRUE))
   
