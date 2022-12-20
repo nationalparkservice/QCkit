@@ -1,8 +1,10 @@
-# QCkit 0.1.0.1
+# QCkit 0.1.0.2
 
 * deprecated `get_dp_flags()`, `get_df_flags()`, and `get_dc_flags` in favor of `get_custom_flags()`. The new `get_custom_flags()` function returns 1-3 data frames, depending on user input that contain the output of the 3 previous functions. It also allows the user to specify additional non-flagged columns to be included in the QC summary.
   * Marked `get_custom_flags()` as experimental.
   * Removed "force" option and removed final print statement
+  * Reduced number of summary columns reported
+  * fixed RRU calculation to be (A+AE)/(A+AE+P+R+NA) instead of (A+E)/(A+AE+P+R)
 
 # QCkit 0.1.0.1
 
