@@ -28,16 +28,43 @@
 #'
 te_check <- function(df, species_col, park_code) {
   fedlist <- ODataQuery::retrieve_data(paste0("https://irmadev.nps.gov/PrototypeCSVtoAPI/odata/FederalConservationListTaxaforDataProtection2272462?$filter=ParkCode%20eq%20%27", park_code, "%27%20or%20ParkCode%20eq%20%27All%27"))
-
-  fedlist <- as.data.frame(fedlist$value$ProtectedSci)
-
-  fedlist <- plyr::rename(fedlist, c("fedlist$value$ProtectedSci" = species_col))
-
+  
+  #subset incoming data:
+  fedspp <- as.data.frame(fedlist$value$ProtectedSci)
+  fedspp <- cbind(fedspp, fedlist$value$MatchListStatus)
+  
+  #rename columns
+  colnames(fedspp)<-c("species_col", "status_code")
+  
+  #get just species from user data frame:
   Species <- tibble::tibble(df) %>%
-    dplyr::select(species_col)
-
-  TorE <- dplyr::semi_join(Species, fedlist, by = species_col) %>%
-    dplyr::select("Remove Me!" = species_col)
+    dplyr::select(all_of(species_col))
+  colnames(Species)<-"species_col"
+  
+  #find all T&E species
+  TorE <- dplyr::inner_join(Species, fedspp, by = "species_col")
+  
+  #keep just those with status code T, E, or C
+  TorE <- TorE[which(TorE$status_code == "Fed-E" |
+                       TorE$status_code == "Fed-C" |
+                       TorE$status_code == "Fed-T"),]
+  
+  #If no species of concern, state that an exit function.
+  if(nrow(TorE)*ncol(TorE)==0){
+    cat("No T&E species found in your dataset")
+    return()
+  }
+  
+  #if species of concern, define the status codes
+  else{
+    TorE %>% mutate(status = case_when(
+      status_code %in% "Fed-E" ~ "Endangered",
+      status_code %in% "Fed-T" ~ "Threatened",
+      status_code %in% "Fec-D" ~ "Considered for Listing"
+    ))
+  }
+  #rename columns
+  colnames(TorE)<-c("Consider removing", "status code", "status explanation")
 
   return(TorE)
 }
