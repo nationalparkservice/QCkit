@@ -57,7 +57,7 @@ te_check <- function(df, species_col, park_code) {
   
   #if species of concern, define the status codes
   else{
-    TorE %>% mutate(status = case_when(
+    TorE<-TorE %>% mutate(status = case_when(
       status_code %in% "Fed-E" ~ "Endangered",
       status_code %in% "Fed-T" ~ "Threatened",
       status_code %in% "Fec-D" ~ "Considered for Listing"
