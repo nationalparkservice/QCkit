@@ -27,11 +27,21 @@
 #' }
 #'
 te_check <- function(df, species_col, park_code) {
-  fedlist <- ODataQuery::retrieve_data(paste0("https://irmadev.nps.gov/PrototypeCSVtoAPI/odata/FederalConservationListTaxaforDataProtection2272462?$filter=ParkCode%20eq%20%27", park_code, "%27%20or%20ParkCode%20eq%20%27All%27"))
+  
+  odata_url <- paste0paste0("https://irmadev.nps.gov/PrototypeCSVtoAPI/odata/FederalConservationListTaxaforDataProtection2272462?$filter=ParkCode%20eq%20%27", park_code, "%27%20or%20ParkCode%20eq%20%27All%27")
+  
+  fedlist <- ODataQuery::retrieve_data(odata_url)
   
   #subset incoming data:
   fedspp <- as.data.frame(fedlist$value$ProtectedSci)
   fedspp <- cbind(fedspp, fedlist$value$MatchListStatus)
+  
+  #get date data were pulled from FWS:
+  fed_date <- fedlist$value$DateListImported[1]
+  fed_date <- substr(fed_date, 1, 10)
+  
+  #get URL data were accessed from:
+  url <- fedlist$value$DataSource[1]
   
   #rename columns
   colnames(fedspp)<-c("species_col", "status_code")
@@ -51,7 +61,11 @@ te_check <- function(df, species_col, park_code) {
   
   #If no species of concern, state that an exit function.
   if(nrow(TorE)*ncol(TorE)==0){
-    cat("No T&E species found in your dataset")
+    cat("No T&E species found in your dataset.\n")
+    #print date and source of data:
+    cat("Your T&E check used data pulled from: ",
+        crayon::bold$red(url), " on ", crayon::bold$red(fed_date), ".", sep="")
+    
     return()
   }
   
@@ -65,6 +79,10 @@ te_check <- function(df, species_col, park_code) {
   }
   #rename columns
   colnames(TorE)<-c("Consider removing", "status code", "status explanation")
-
+  
+  #print date and source of data:
+  cat("Your T&E check used data pulled from: ",
+      crayon::bold$red(url), " on ", crayon::bold$red(fed_date), ".", sep="")
+  
   return(TorE)
 }
