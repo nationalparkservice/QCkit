@@ -21,7 +21,8 @@
 #'
 #' @examples
 #' \dontrun{
-#' te_check(df = my_species_dataframe, species_col = "scientificNames", park_code = "BICY")
+#' te_check(x = my_species_dataframe, species_col = "scientificName", park_code = "BICY")
+#' list<-te_check(data, "scientificName", "ROMO", expansion=TRUE)
 #' }
 #'
 te_check <- function(x, species_col, park_code, expansion=FALSE) {
@@ -145,6 +146,11 @@ te_check <- function(x, species_col, park_code, expansion=FALSE) {
   if(expansion == FALSE){
     #find all T&E species
     TorE <- dplyr::inner_join(Species, fedspp, by = "species_col")
+    #keep only rows with Fed-E, Fed-T, Fed-C and Fed-C2 status codes
+    TorE <- TorE[which(TorE$status_code == "Fed-C" |
+                         TorE$status_code == "Fed-T" |
+                         TorE$status_code == "Fed-E" |
+                         TorE$status_code == "Fed-C2"),]
     #If no species of concern, state that and exit function.
     if(nrow(TorE)*ncol(TorE)==0){
       cat("No T&E species found in your dataset.\n")

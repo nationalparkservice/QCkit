@@ -40,7 +40,8 @@ Because the odata API service is not publicly available, you must be logged in t
 }
 \examples{
 \dontrun{
-te_check(df = my_species_dataframe, species_col = "scientificNames", park_code = "BICY")
+te_check(x = my_species_dataframe, species_col = "scientificName", park_code = "BICY")
+list<-te_check(data, "scientificName", "ROMO", expansion=TRUE)
 }
 
 }
