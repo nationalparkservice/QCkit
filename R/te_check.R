@@ -117,7 +117,8 @@ te_check <- function(x, species_col, park_code, expansion=FALSE) {
       cat("No T&E species found in your dataset.\n")
       #print date and source of data:
       cat("Your T&E check used data pulled from: ",
-          crayon::bold$red(url), " on ", crayon::bold$red(fed_date), ".", sep="")
+          crayon::bold$red(url), " on ",
+          crayon::bold$red(fed_date), ".", sep="")
       return()
     }
     #if there are species returned:
@@ -134,11 +135,13 @@ te_check <- function(x, species_col, park_code, expansion=FALSE) {
                           "status_explanation")
       #format output for easy digestion:
       TorE<-huxtable::as_hux(TorE)
-      TorE<-huxtable::map_text_color(TorE, by_values("In your Data" = "red"))
+      TorE<-huxtable::map_text_color(TorE,
+                      huxtable::by_values("In your Data" = "red"))
       TorE<-huxtable::theme_basic(TorE)
       #print data source and date:
       cat("Your T&E check used data pulled from: ",
-          crayon::bold$red(url), " on ", crayon::bold$red(fed_date), ".", sep="")
+          crayon::bold$red(url), " on ",
+          crayon::bold$red(fed_date), ".", sep="")
       return(TorE)
     }
   }
@@ -156,7 +159,8 @@ te_check <- function(x, species_col, park_code, expansion=FALSE) {
       cat("No T&E species found in your dataset.\n")
       #print date and source of data:
       cat("Your T&E check used data pulled from: ",
-        crayon::bold$red(url), " on ", crayon::bold$red(fed_date), ".\n", sep="")
+        crayon::bold$red(url), " on ",
+        crayon::bold$red(fed_date), ".\n", sep="")
       return(TorE)
     }
     #if there are species in the list, return list (and data source/date):
