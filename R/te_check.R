@@ -1,24 +1,21 @@
 #' Threatened Or Endangered Species Checker Function
 #'
-#' @description te_check creates a subset of the species list you provide, all of which fall under the Federal Conservation List Taxa for Data Protection. These species should be removed from your dataset if your data is to be made public.
+#' @description `te_check()` creates a subset of the species list you provide, all of which fall under the Federal Conservation List Taxa for Data Protection. These species should be removed from your data set if your data is to be made public.
 #'
-#' @details Define your species dataset name, column name with the scientific names of your species, and your four letter park code.
+#' @details Define your species data set name, column name with the scientific names of your species, and your four letter park code.
 #'
-#' The function downloads the Federal Conservation list using the IRMA odata API service and matches this species list to the list of scientific names in your dataframe.
+#' The function downloads the Federal Conservation list using the IRMA odata API service and matches this species list to the list of scientific names in your data frame.
 #'
 #' Keep in mind that this is a Federal list, not a state list. Changes in taxa names may also cause some species to be missed.
 #'
-#' Because the Federal Conservation list is not publicly available (???), you must be logged in to the NPS VPN or in the office to use this function.
+#' Because the odata API service is not publicly available, you must be logged in to the NPS VPN or in the office to use this function.
 #'
+#' @param x - The name of your data frame containing species observations
+#' @param species_col - The name of the column within your data frame containing the scientific names of the species (genus and specific epithet).
+#' @param park_code -  A four letter park code.
+#' @param expansion - Logical. Defaults to FALSE. The default setting will return only exact matches between your the scientific binomial (genera and specific epithet) in your data set and the federal match list. Setting expansion = TRUE will expand the list of matches to return all species (and subspecies) that from the match list that match any genera listed in your data set, regardless of whether a given species is actually in your data set. An additional column indicating whether the species returned is in your data set ("In Data") or has been expanded to ("Expansion") is generated.
 #'
-#'
-#'
-#' @param x - The name of your dataframe containing species observations
-#' @param species_col - The name of the column within your dataframe containing the scientific names of the species
-#' @param park_code -  The four letter park code
-#' @param expansion - Logical. Defaults to FALSE. The default setting will return only exact matches between your the scientific binomial (genera and specific epithet) in your dataset and the federal matchlist. Setting expansion = TRUE will expand the list of matches to return all species (and subspecies) that from the matchlist that match any genera listed in your dataset, regardless of whether a given species is actually in your dataset. An addtional column indicating whether the species returned is in your dataset ("In Data") or has been exapnded to ("Expansion") is generated.
-#'
-#' @return The function returns a list in your global environment called "TorE" with the names of all the species that fall under the federal conservation list.
+#' @return The function returns a (modified) data frame with the names of all the species that fall under the federal conservation list. Technically it is a huxtable, but it should function identically to a data frame for downstream purposes.
 #' @importFrom magrittr %>%
 #' @export
 #'
