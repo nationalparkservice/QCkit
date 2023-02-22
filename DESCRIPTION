@@ -1,7 +1,7 @@
 Package: QCkit
 Type: Package
 Title: NPS Inventory and Monitoring Quality Control Toolkit
-Version: 0.1.0.2
+Version: 0.1.0.3
 Authors@R:
   c(person(given = "Robert",
            family = "Baker",
@@ -35,13 +35,14 @@ Imports:
     terra,
     dplyr,
     plyr,
-    tibble,
     ODataQuery,
     magrittr,
     stringr,
     base,
     readr,
-    lifecycle
+    lifecycle,
+    huxtable,
+    crayon
 RoxygenNote: 7.2.1
 Suggests: 
     knitr,
