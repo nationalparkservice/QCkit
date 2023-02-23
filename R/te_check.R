@@ -12,22 +12,30 @@
 #'
 #' @param x - The name of your data frame containing species observations
 #' @param species_col - The name of the column within your data frame containing the scientific names of the species (genus and specific epithet).
-#' @param park_code -  A four letter park code.
+#' @param park_code -  A four letter park code. Or a list of park codes.
 #' @param expansion - Logical. Defaults to FALSE. The default setting will return only exact matches between your the scientific binomial (genera and specific epithet) in your data set and the federal match list. Setting expansion = TRUE will expand the list of matches to return all species (and subspecies) that from the match list that match any genera listed in your data set, regardless of whether a given species is actually in your data set. An additional column indicating whether the species returned is in your data set ("In Data") or has been expanded to ("Expansion") is generated.
 #'
-#' @return The function returns a (modified) data frame with the names of all the species that fall under the federal conservation list. Technically it is a huxtable, but it should function identically to a data frame for downstream purposes.
+#' @return The function returns a (modified) data frame with the names of all the species that fall under the federal conservation list. The resulting data frame may have multiple instances of a given species if it is listed in multiple parks (park codes for each listing are supplied). Technically it is a huxtable, but it should function identically to a data frame for downstream purposes.
 #' @importFrom magrittr %>%
 #' @export
 #'
 #' @examples
 #' \dontrun{
+#' #for individual parks:
 #' te_check(x = my_species_dataframe, species_col = "scientificName", park_code = "BICY")
 #' list<-te_check(data, "scientificName", "ROMO", expansion=TRUE)
+#' # for a list of parks:
+#' park_code<-c("ROMO", "YELL", "SAGU")
+#' list<-te_check(data, "scientificName", park_code, expansion=TRUE)
 #' }
 #'
 te_check <- function(x, species_col, park_code, expansion=FALSE) {
   #generate URL for odata services:
-  odata_url <- paste0("https://irmadev.nps.gov/PrototypeCSVtoAPI/odata/FederalConservationListTaxaforDataProtection2272462?$filter=ParkCode%20eq%20%27", park_code, "%27%20or%20ParkCode%20eq%20%27All%27")
+  url<-"https://irmadev.nps.gov/PrototypeCSVtoAPI/odata/FederalConservationListTaxaforDataProtection2272462?$filter=ParkCode%20eq%20%27"
+  for(i in seq_along(park_code)){
+    url <- paste0(url, park_code[i], "%27%20or%20ParkCode%20eq%20%27")
+  }
+  odata_url <- paste0(url, "All%27")
  #trycatch for VPN connections: 
   tryCatch(
     {
@@ -43,8 +51,9 @@ te_check <- function(x, species_col, park_code, expansion=FALSE) {
   #subset incoming data:
   fedspp <- as.data.frame(fedlist$value$ProtectedSci)
   fedspp <- cbind(fedspp, fedlist$value$MatchListStatus)
+  fedspp <- cbind(fedspp, fedlist$value$ParkCode)
   #rename columns
-  colnames(fedspp)<-c("species_col", "status_code")
+  colnames(fedspp)<-c("species_col", "status_code", "park_code")
   # add column explaining Fed T and E codes. From:
   # https://ecos.fws.gov/ecp0/html/db-status.html
   #---- code folding ----
@@ -128,20 +137,25 @@ te_check <- function(x, species_col, park_code, expansion=FALSE) {
         dplyr::mutate(InData = ifelse(species_col.x == species_col.y,
             "In your Data", "Expansion"))
       #clean up dataframe:    
-      TorE<-TorE[, c(3,6,4,5)]    
-      colnames(TorE) <- c("Species",
-                          "InData",
+      TorE<-TorE[, c(5,3,7,4,6)]    
+      colnames(TorE) <- c("Park_code",
+                          "Species",
+                          "In_data",
                           "status_code",
                           "status_explanation")
       #format output for easy digestion:
       TorE<-huxtable::as_hux(TorE)
       TorE<-huxtable::map_text_color(TorE,
-                      huxtable::by_values("In your Data" = "red"))
+                      huxtable::by_values("In your Data" = "green",
+                                          "Threatened" = "darkorange2",
+                                          "Endangered" = "red",
+                                          "Concern" = "yellow3",
+                                          "Candidate" = "yellow3"))
       TorE<-huxtable::theme_basic(TorE)
       #print data source and date:
       cat("Your T&E check used data pulled from: ",
           crayon::bold$red(url), " on ",
-          crayon::bold$red(fed_date), ".", sep="")
+          crayon::bold$red(fed_date), ".\n", sep="")
       return(TorE)
     }
   }
@@ -165,12 +179,19 @@ te_check <- function(x, species_col, park_code, expansion=FALSE) {
     }
     #if there are species in the list, return list (and data source/date):
     if(nrow(TorE)*ncol(TorE) > 0){
-      colnames(TorE)<-c("Species", "status_code", "status_explanation")
+      TorE<-TorE[, c(3,1,2,4)]
+      colnames(TorE)<-c("Park_code", "Species", "status_code", "status_explanation")
       TorE<-huxtable::as_hux(TorE)
+      TorE<-huxtable::map_text_color(TorE,
+                          huxtable::by_values("Threatened" = "darkorange2",
+                                              "Endangered" = "red",
+                                              "Concern" = "yellow3",
+                                              "Candidate" = "yellow3"))
       TorE<-huxtable::theme_basic(TorE)
       #print date and source of data:
       cat("Your T&E check used data pulled from: ",
-        crayon::bold$red(url), " on ", crayon::bold$red(fed_date), ".", sep="")
+        crayon::bold$red(url), " on ",
+        crayon::bold$red(fed_date), ".\n", sep="")
       return(TorE)
     }
   }

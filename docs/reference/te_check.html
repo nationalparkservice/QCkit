@@ -72,7 +72,7 @@
 
 
 <dt>park_code</dt>
-<dd><ul><li><p>A four letter park code.</p></li>
+<dd><ul><li><p>A four letter park code. Or a list of park codes.</p></li>
 </ul></dd>
 
 
@@ -85,7 +85,7 @@
     <h2>Value</h2>
     
 
-<p>The function returns a (modified) data frame with the names of all the species that fall under the federal conservation list. Technically it is a huxtable, but it should function identically to a data frame for downstream purposes.</p>
+<p>The function returns a (modified) data frame with the names of all the species that fall under the federal conservation list. The resulting data frame may have multiple instances of a given species if it is listed in multiple parks (park codes for each listing are supplied). Technically it is a huxtable, but it should function identically to a data frame for downstream purposes.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -98,8 +98,12 @@
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co">#for individual parks:</span></span></span>
 <span class="r-in"><span><span class="fu">te_check</span><span class="op">(</span>x <span class="op">=</span> <span class="va">my_species_dataframe</span>, species_col <span class="op">=</span> <span class="st">"scientificName"</span>, park_code <span class="op">=</span> <span class="st">"BICY"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">list</span><span class="op">&lt;-</span><span class="fu">te_check</span><span class="op">(</span><span class="va">data</span>, <span class="st">"scientificName"</span>, <span class="st">"ROMO"</span>, expansion<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># for a list of parks:</span></span></span>
+<span class="r-in"><span><span class="va">park_code</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ROMO"</span>, <span class="st">"YELL"</span>, <span class="st">"SAGU"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">list</span><span class="op">&lt;-</span><span class="fu">te_check</span><span class="op">(</span><span class="va">data</span>, <span class="st">"scientificName"</span>, <span class="va">park_code</span>, expansion<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
