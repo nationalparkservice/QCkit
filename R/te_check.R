@@ -12,17 +12,21 @@
 #'
 #' @param x - The name of your data frame containing species observations
 #' @param species_col - The name of the column within your data frame containing the scientific names of the species (genus and specific epithet).
-#' @param park_code -  A four letter park code.
+#' @param park_code -  A four letter park code. Or a list of park codes.
 #' @param expansion - Logical. Defaults to FALSE. The default setting will return only exact matches between your the scientific binomial (genera and specific epithet) in your data set and the federal match list. Setting expansion = TRUE will expand the list of matches to return all species (and subspecies) that from the match list that match any genera listed in your data set, regardless of whether a given species is actually in your data set. An additional column indicating whether the species returned is in your data set ("In Data") or has been expanded to ("Expansion") is generated.
 #'
-#' @return The function returns a (modified) data frame with the names of all the species that fall under the federal conservation list. Technically it is a huxtable, but it should function identically to a data frame for downstream purposes.
+#' @return The function returns a (modified) data frame with the names of all the species that fall under the federal conservation list. The resulting data frame may have multiple instances of a given species if it is listed in multiple parks (park codes for each listing are supplied). Technically it is a huxtable, but it should function identically to a data frame for downstream purposes.
 #' @importFrom magrittr %>%
 #' @export
 #'
 #' @examples
 #' \dontrun{
+#' #for individual parks:
 #' te_check(x = my_species_dataframe, species_col = "scientificName", park_code = "BICY")
 #' list<-te_check(data, "scientificName", "ROMO", expansion=TRUE)
+#' # for a list of parks:
+#' park_code<-c("ROMO", "YELL", "SAGU")
+#' list<-te_check(data, "scientificName", park_code, expansion=TRUE)
 #' }
 #'
 te_check <- function(x, species_col, park_code, expansion=FALSE) {
