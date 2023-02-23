@@ -16,7 +16,7 @@ te_check(x, species_col, park_code, expansion = FALSE)
 }}
 
 \item{park_code}{\itemize{
-\item A four letter park code.
+\item A four letter park code. Or a list of park codes.
 }}
 
 \item{expansion}{\itemize{
@@ -24,7 +24,7 @@ te_check(x, species_col, park_code, expansion = FALSE)
 }}
 }
 \value{
-The function returns a (modified) data frame with the names of all the species that fall under the federal conservation list. Technically it is a huxtable, but it should function identically to a data frame for downstream purposes.
+The function returns a (modified) data frame with the names of all the species that fall under the federal conservation list. The resulting data frame may have multiple instances of a given species if it is listed in multiple parks (park codes for each listing are supplied). Technically it is a huxtable, but it should function identically to a data frame for downstream purposes.
 }
 \description{
 \code{te_check()} creates a subset of the species list you provide, all of which fall under the Federal Conservation List Taxa for Data Protection. These species should be removed from your data set if your data is to be made public.
@@ -40,8 +40,12 @@ Because the odata API service is not publicly available, you must be logged in t
 }
 \examples{
 \dontrun{
+#for individual parks:
 te_check(x = my_species_dataframe, species_col = "scientificName", park_code = "BICY")
 list<-te_check(data, "scientificName", "ROMO", expansion=TRUE)
+# for a list of parks:
+park_code<-c("ROMO", "YELL", "SAGU")
+list<-te_check(data, "scientificName", park_code, expansion=TRUE)
 }
 
 }
