@@ -106,12 +106,12 @@ fuzz_location <- function(lat, lon, coord_ref_sys = 4326, fuzz_level = "Fuzzed -
   }
   #not decimal degrees WGS84 or UTM, so we don't have a path forward
   else {
-    # throw an error
+    #throw an error
     cat("ERROR: CRS is not decimal degree WGS84 or UTM/WGS84. Please provide coordinates in either of these systems.", sep="")
     stop()
   }
 
-  # do rounding of UTMs based on fuzz_level
+  #do rounding of UTMs based on fuzz_level
   if (fuzz_level == "Fuzzed - 10km") {
     fuzzfactor <- 10000
   } else if (fuzz_level == "Fuzzed - 1km") {
@@ -139,18 +139,18 @@ fuzz_location <- function(lat, lon, coord_ref_sys = 4326, fuzz_level = "Fuzzed -
   ))
   utmsfg <- sf::st_polygon(polygon_list)
 
-  # convert sfg to sfc with appropriate crs
+  #convert sfg to sfc with appropriate crs
   if (coord_ref_sys == 4326) {
     utmsfc <- sf::st_sfc(utmsfg, crs = tempcrs)
   } else {
     utmsfc <- sf::st_sfc(utmsfg, crs = coord_ref_sys)
   }
 
-  # convert polygon to decimal degrees
+  #convert polygon to decimal degrees
   wkt <- sf::st_transform(x = utmsfc, crs = 4326)
   wkt <- sf::st_as_text(wkt)
 
-  # return WKT string
+  #return WKT string
   return(wkt)
 }
 
