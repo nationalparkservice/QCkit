@@ -65,7 +65,7 @@ validate_coord <- function(unit_code, lat, lon) {
 #' fuzz_location(703977, 4035059, 32616, "Fuzzed - 1km")
 #' fuzz_location(36.43909, -84.72429, 4326, "Fuzzed - 1km")
 #' }
-fuzz_location <- function(lat, lon, coord_ref_sys, fuzz_level) {
+fuzz_location <- function(lat, lon, coord_ref_sys = 4326, fuzz_level = "Fuzzed - 1km") {
   # for decimal degrees, convert to UTM locations and identify proper CRS
   if (coord_ref_sys == 4326) {
     long2UTM <- function(long) {
