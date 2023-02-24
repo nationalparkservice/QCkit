@@ -82,14 +82,14 @@ long2UTM <- function(lon) {
 #' fuzz_location(36.43909, -84.72429, 4326, "Fuzzed - 1km")
 #' }
 fuzz_location <- function(lat, lon, coord_ref_sys = 4326, fuzz_level = "Fuzzed - 1km") {
-  # for decimal degrees, convert to UTM locations and identify proper CRS
+  #for decimal degrees, convert to UTM locations and identify proper CRS
   if (coord_ref_sys == 4326) {
-    # coordinates are in decimal degrees WGS84 and we need to convert to UTM; find the appropriate UTM EPSG code
+    #coordinates are in decimal degrees WGS84 and we need to convert to UTM; find the appropriate UTM EPSG code
     tempcrs <- if (lat > 0) {
-      # northern hemisphere (N) UTM zones start at 32601 and go to 32660
+      #northern hemisphere (N) UTM zones start at 32601 and go to 32660
       long2UTM(lon) + 32600
     } else {
-      # southern hemisphere (S) UTM zones start at 32701 and go to 32760
+      #southern hemisphere (S) UTM zones start at 32701 and go to 32760
       long2UTM(lon) + 32700
     }
 
@@ -99,13 +99,14 @@ fuzz_location <- function(lat, lon, coord_ref_sys = 4326, fuzz_level = "Fuzzed -
     pointutm <- sf::st_transform(x = point, crs = tempcrs)
     locationlat <- pointutm[[1]][1]
     locationlon <- pointutm[[1]][2]
-  #
+  #for UTM, no need to convert to UTM, we can proceed
   } elseif (coord_ref_sys >= 32601 && coord_ref_sys <= 32760) {
     locationlat <- lat
     locationlon <- lon
   }
+  #not decimal degrees WGS84 or UTM, so we don't have a path forward
   else {
-    #throw an error
+    # throw an error
     cat("ERROR: CRS is not decimal degree WGS84 or UTM/WGS84. Please provide coordinates in either of these systems.", sep="")
     stop()
   }
