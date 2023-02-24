@@ -71,7 +71,7 @@ long2UTM <- function(lon) {
 #' 
 #' @param lat - The latitude in either UTMs or decimal degrees.
 #' @param lon - The longitude in either UTMs or decimal degrees
-#' @param coord_ref_sys - The EPSG coordinate system of the latitude and longitude coordinates. Either 4326 for decimal degrees/WGS84 datum, or 326xx for UTM/WGS84 datum, where the xx is the northern UTM zone. For example 32616 is for UTM zone 16N.
+#' @param coord_ref_sys - The EPSG coordinate system of the latitude and longitude coordinates. Either 4326 for decimal degrees/WGS84 datum, 4269 for decimal degrees/NAD83, or 326xx for UTM/WGS84 datum (where the xx is the northern UTM zone). For example 32616 is for UTM zone 16N.
 #' @param fuzz_level - Use "Fuzzed - 10km", "Fuzzed - 1km", or "Fuzzed - 100m"
 #'
 #' @export
@@ -83,8 +83,8 @@ long2UTM <- function(lon) {
 #' }
 fuzz_location <- function(lat, lon, coord_ref_sys = 4326, fuzz_level = "Fuzzed - 1km") {
   #for decimal degrees, convert to UTM locations and identify proper CRS
-  if (coord_ref_sys == 4326) {
-    #coordinates are in decimal degrees WGS84 and we need to convert to UTM; find the appropriate UTM EPSG code
+  if (coord_ref_sys == 4326 || coord_ref_sys = 4269) {
+    #coordinates are in decimal degrees WGS84 or NAD83 and we need to convert to UTM; find the appropriate UTM EPSG code
     tempcrs <- if (lat > 0) {
       #northern hemisphere (N) UTM zones start at 32601 and go to 32660
       long2UTM(lon) + 32600
@@ -93,7 +93,7 @@ fuzz_location <- function(lat, lon, coord_ref_sys = 4326, fuzz_level = "Fuzzed -
       long2UTM(lon) + 32700
     }
 
-    #convert the points
+    #convert the points to UTM given their existing CRS (decimal degree WGS84 or NAD83)
     point <- sf::st_point(c(lon, lat))
     point <- sf::st_sfc(point, crs = coord_ref_sys)
     pointutm <- sf::st_transform(x = point, crs = tempcrs)
@@ -104,7 +104,7 @@ fuzz_location <- function(lat, lon, coord_ref_sys = 4326, fuzz_level = "Fuzzed -
     locationlat <- lat
     locationlon <- lon
   }
-  #not decimal degrees WGS84 or UTM, so we don't have a path forward
+  #not decimal degrees WGS84/NAD83 or UTM, so we don't have a path forward
   else {
     #throw an error
     cat("ERROR: CRS is not decimal degree WGS84 or UTM/WGS84. Please provide coordinates in either of these systems.", sep="")
