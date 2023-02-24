@@ -84,12 +84,16 @@ long2UTM <- function(lon) {
 fuzz_location <- function(lat, lon, coord_ref_sys = 4326, fuzz_level = "Fuzzed - 1km") {
   # for decimal degrees, convert to UTM locations and identify proper CRS
   if (coord_ref_sys == 4326) {
+    # coordinates are in decimal degrees WGS84 and we need to convert to UTM; find the appropriate UTM EPSG code
     tempcrs <- if (lat > 0) {
+      # northern hemisphere (N) UTM zones start at 32601 and go to 32660
       long2UTM(lon) + 32600
     } else {
+      # southern hemisphere (S) UTM zones start at 32701 and go to 32760
       long2UTM(lon) + 32700
     }
 
+    #convert the points
     point <- sf::st_point(c(lon, lat))
     point <- sf::st_sfc(point, crs = coord_ref_sys)
     pointutm <- sf::st_transform(x = point, crs = tempcrs)
