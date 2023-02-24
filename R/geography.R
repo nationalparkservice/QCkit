@@ -91,7 +91,7 @@ fuzz_location <- function(lat, lon, coord_ref_sys = 4326, fuzz_level = "Fuzzed -
     }
 
     point <- sf::st_point(c(lon, lat))
-    point <- sf::st_sfc(point, crs = 4326)
+    point <- sf::st_sfc(point, crs = coord_ref_sys)
     pointutm <- sf::st_transform(x = point, crs = tempcrs)
     locationlat <- pointutm[[1]][1]
     locationlon <- pointutm[[1]][2]
