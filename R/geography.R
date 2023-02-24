@@ -96,7 +96,9 @@ fuzz_location <- function(lat, lon, coord_ref_sys = 4326, fuzz_level = "Fuzzed -
   }
 
   # do rounding of UTMs based on fuzz_level
-  if (fuzz_level == "Fuzzed - 1km") {
+  if (fuzz_level == "Fuzzed - 10km") {
+    fuzzfactor <- 10000
+  } else if (fuzz_level == "Fuzzed - 1km") {
     fuzzfactor <- 1000
   } else if (fuzz_level == "Fuzzed - 100m") {
     fuzzfactor <- 100
