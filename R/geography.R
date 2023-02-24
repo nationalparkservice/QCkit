@@ -66,7 +66,7 @@ validate_coord <- function(unit_code, lat, lon) {
 #' fuzz_location(36.43909, -84.72429, 4326, "Fuzzed - 1km")
 #' }
 fuzz_location <- function(lat, lon, coord_ref_sys, fuzz_level) {
-  # for decimal degrees, convert to UTM locations and identify proper crs
+  # for decimal degrees, convert to UTM locations and identify proper CRS
   if (coord_ref_sys == 4326) {
     long2UTM <- function(long) {
       ## Function to get the UTM zone for a given longitude
@@ -84,9 +84,15 @@ fuzz_location <- function(lat, lon, coord_ref_sys, fuzz_level) {
     pointutm <- sf::st_transform(x = point, crs = tempcrs)
     locationlat <- pointutm[[1]][1]
     locationlon <- pointutm[[1]][2]
-  } else {
+  #
+  } elseif (coord_ref_sys >= 32601 && coord_ref_sys <= 32760) {
     locationlat <- lat
     locationlon <- lon
+  }
+  else {
+    #throw an error
+    cat("ERROR: CRS is not decimal degree WGS84 or UTM/WGS84. Please provide coordinates in either of these systems.", sep="")
+    stop()
   }
 
   # do rounding of UTMs based on fuzz_level
