@@ -47,10 +47,6 @@ validate_coord <- function(unit_code, lat, lon) {
   return(result)
 }
 
-QCkit::fuzz_location()
-QCkit::te_check()
-
-
 #' Convert Coordinates Into a Polygon to Obscure Specific Location
 #'
 #' @description `fuzz_location()` "fuzzes" a specific location to something less precise prior to public release of information about sensitive resources for which data are not to be released to the public. This function takes coordinates in either UTM or decimal degrees, converts to UTM (if in decimal degrees), creates a bounding box based on rounding of UTM coordinates, and then creates a polygon from the resultant points. The function returns a string in Well-Known-Text format.
@@ -61,9 +57,9 @@ QCkit::te_check()
 #' 
 #' @param lat latitude in either UTMs or decimal degrees.
 #' @param lon longitude in either UTMs or decimal degrees
-#' @param coord_ref_sys coordinate reference system. Either 4326 for decimal degrees / WGS84 datum, or 326xx for UTMs / WGS84 datum, where the xx
+#' @param coord_ref_sys coordinate reference system. Either 4326 for decimal degrees/WGS84 datum, or 326xx for UTM/WGS84 datum, where the xx
 #' is the northern UTM zone. For example 32616 is for UTM zone 16N.
-#' @param fuzz_level either 100m or 1000m. Use either "Fuzzed - 1km" or "Fuzzed - 100m"
+#' @param fuzz_level Use "Fuzzed - 10km", "Fuzzed - 1km", or "Fuzzed - 100m"
 #'
 #' @export
 #'
