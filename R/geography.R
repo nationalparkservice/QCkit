@@ -47,6 +47,22 @@ validate_coord <- function(unit_code, lat, lon) {
   return(result)
 }
 
+
+#' Return UTM Zone
+#'
+#' @description `long2UTM()` take a longitude coordinate and returns the corresponding UTM zone.
+#'
+#' @details Input a longitude (decimal degree) coordinate and this simple function returns the number of the UTM zone where that point falls.
+#'
+#' @param lon - Decimal degree longitude value
+#'
+#' @return The function returns a numeric UTM zone (between 1 and 60).
+#' @export
+long2UTM <- function(lon) {
+  ## Function to get the UTM zone for a given longitude
+  return((floor((lon + 180) / 6) %% 60) + 1)
+}
+
 #' Convert Coordinates Into a Polygon to Obscure Specific Location
 #'
 #' @description `fuzz_location()` "fuzzes" a specific location to something less precise prior to public release of information about sensitive resources for which data are not to be released to the public. This function takes coordinates in either UTM or decimal degrees, converts to UTM (if in decimal degrees), creates a bounding box based on rounding of UTM coordinates, and then creates a polygon from the resultant points. The function returns a string in Well-Known-Text format.
@@ -68,11 +84,6 @@ validate_coord <- function(unit_code, lat, lon) {
 fuzz_location <- function(lat, lon, coord_ref_sys = 4326, fuzz_level = "Fuzzed - 1km") {
   # for decimal degrees, convert to UTM locations and identify proper CRS
   if (coord_ref_sys == 4326) {
-    long2UTM <- function(long) {
-      ## Function to get the UTM zone for a given longitude
-      (floor((long + 180) / 6) %% 60) + 1
-    }
-
     tempcrs <- if (lat > 0) {
       long2UTM(lon) + 32600
     } else {
