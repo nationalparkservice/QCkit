@@ -217,3 +217,62 @@ utm_to_ll <- function(df, EastingCol, NorthingCol, zone, datum = "WGS84") {
   )
   return(df)
 }
+
+#' Map WKT geometry (points and polygons)
+#'
+#' @description `map_WKT()` creates a subset of the species list you provide, all of which fall under the Federal Conservation List Taxa for Data Protection. These species should be removed from your data set if your data is to be made public.
+#'
+#' @details Define your species data set name, column name with the scientific names of your species, and your four letter park code.
+#'
+#' @param df - The name of your data frame containing species observations
+#' @param wellknowntext - The name of the column within your data frame containing the scientific names of the species (genus and specific epithet).
+#' @param type -  A four letter park code. Or a list of park codes.
+#'
+#' @return The function returns a (modified) data frame with the names of all the species that fall under the federal conservation list. The resulting data frame may have multiple instances of a given species if it is listed in multiple parks (park codes for each listing are supplied). Technically it is a huxtable, but it should function identically to a data frame for downstream purposes.
+#' @importFrom magrittr %>%
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' #for individual parks:
+#' te_check(x = my_species_dataframe, species_col = "scientificName", park_code = "BICY")
+#' list<-te_check(data, "scientificName", "ROMO", expansion=TRUE)
+#' # for a list of parks:
+#' park_code<-c("ROMO", "YELL", "SAGU")
+#' list<-te_check(data, "scientificName", park_code, expansion=TRUE)
+#' }
+#'
+map_WKT <- function(df, wellknowntext = "footprintWKT", type = "all") {
+  #convert to spatial data frame
+  df <- df %>%
+  filter(!is.na(footprintWKT)) %>%
+  st_as_sf(wkt = "footprintWKT")
+
+  #new column in data frame for the geometry type
+  df$geometry_types <- st_geometry_type(df)
+
+  #use the geometry_type column to filter only for POINT
+  df_pts <- df[df$geometry_types == "POINT",]
+  #use the geometry_type column to filter only for POLYGON
+  df_polys <- df[df$geometry_types == "POLYGON",]
+  
+  ## Make a cool map!
+  map <- leaflet(df, options = leafletOptions(preferCanvas = TRUE)) %>%
+    #addTiles(group = "OSM (default)") %>%
+    
+    addProviderTiles(providers$Esri.WorldGrayCanvas, options = providerTileOptions(
+      updateWhenZooming = FALSE,      # map won't update tiles until zoom is done
+      updateWhenIdle = TRUE           # map won't load new tiles when panning
+    )) %>%
+    
+    addCircles(
+      data = df_pts, # data source is the filtered vector we created called all.point.geometry
+      color = "blue",
+    ) %>% 
+    
+    addPolygons(
+      data = df_polys, # data source is the filtered vector we created called all.polygons.geometry
+      color = "red",
+    )
+  return(map)
+}
