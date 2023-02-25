@@ -2,24 +2,32 @@
 % Please edit documentation in R/geography.R
 \name{fuzz_location}
 \alias{fuzz_location}
-\title{Convert coordinates for a location into a polygon to obscure specific location}
+\title{Convert Coordinates Into a Polygon to Obscure Specific Location}
 \usage{
-fuzz_location(lat, lon, coord_ref_sys, fuzz_level)
+fuzz_location(lat, lon, coord_ref_sys = 4326, fuzz_level = "Fuzzed - 1km")
 }
 \arguments{
-\item{lat}{latitude in either UTMs or decimal degrees.}
+\item{lat}{\itemize{
+\item The latitude in either UTMs or decimal degrees.
+}}
 
-\item{lon}{longitude in either UTMs or decimal degrees}
+\item{lon}{\itemize{
+\item The longitude in either UTMs or decimal degrees
+}}
 
-\item{coord_ref_sys}{coordinate reference system. Either 4326 for decimal degrees / WGS84 datum, or 326xx for UTMs / WGS84 datum, where the xx
-is the northern UTM zone. For example 32616 is for UTM zone 16N.}
+\item{coord_ref_sys}{\itemize{
+\item The EPSG coordinate system of the latitude and longitude coordinates. Either 4326 for decimal degrees/WGS84 datum, 4269 for decimal degrees/NAD83, or 326xx for UTM/WGS84 datum (where the xx is the northern UTM zone). For example 32616 is for UTM zone 16N.
+}}
 
-\item{fuzz_level}{either 100m or 1000m. Use either "Fuzzed - 1km" or "Fuzzed - 100m"}
+\item{fuzz_level}{\itemize{
+\item Use "Fuzzed - 10km", "Fuzzed - 1km", or "Fuzzed - 100m"
+}}
 }
 \description{
-\code{fuzz_location} "fuzzes" a specific location to something less precise prior to public release of information
-about sensitive resources for which data are not to be released to the public. This function takes coordinates in either UTM or decimal degrees, converts to UTM (if in decimal degrees), creates a bounding box based on rounding of UTM coordinates to the 100s or 1000s place, and then creating a polygon from the resultant points. The function returns a string in Well-Known-Text
-format.
+\code{fuzz_location()} "fuzzes" a specific location to something less precise prior to public release of information about sensitive resources for which data are not to be released to the public. This function takes coordinates in either UTM or decimal degrees, converts to UTM (if in decimal degrees), creates a bounding box based on rounding of UTM coordinates, and then creates a polygon from the resultant points. The function returns a string in Well-Known-Text format.
+}
+\details{
+Details will be defined later.
 }
 \examples{
 \dontrun{
