@@ -220,26 +220,22 @@ utm_to_ll <- function(df, EastingCol, NorthingCol, zone, datum = "WGS84") {
 
 #' Map WKT geometry (points and polygons)
 #'
-#' @description `map_WKT()` creates a subset of the species list you provide, all of which fall under the Federal Conservation List Taxa for Data Protection. These species should be removed from your data set if your data is to be made public.
+#' @description `map_WKT()` takes a well-known text (WKT) geometry column and maps points and polygons onto a gray leaflet map. All NA geometry is dropped before mapping.
 #'
-#' @details Define your species data set name, column name with the scientific names of your species, and your four letter park code.
+#' @details Define your dataframe, the column that contains WKT, and an option to map specific geometry types.
 #'
-#' @param df - The name of your data frame containing species observations
-#' @param wellknowntext - The name of the column within your data frame containing the scientific names of the species (genus and specific epithet).
-#' @param type -  A four letter park code. Or a list of park codes.
+#' @param df - The name of your data frame contained WKT geometry.
+#' @param wellknowntext - The name of the column within your data frame containing the WKT geometry.
+#' @param type -  Pick one from "points", "polygons", or "all" to map specific geometry types.
 #'
-#' @return The function returns a (modified) data frame with the names of all the species that fall under the federal conservation list. The resulting data frame may have multiple instances of a given species if it is listed in multiple parks (park codes for each listing are supplied). Technically it is a huxtable, but it should function identically to a data frame for downstream purposes.
+#' @return The function returns a dynamic, zoomable leaflet map with the specific geometry plotted.
 #' @importFrom magrittr %>%
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' #for individual parks:
-#' te_check(x = my_species_dataframe, species_col = "scientificName", park_code = "BICY")
-#' list<-te_check(data, "scientificName", "ROMO", expansion=TRUE)
-#' # for a list of parks:
-#' park_code<-c("ROMO", "YELL", "SAGU")
-#' list<-te_check(data, "scientificName", park_code, expansion=TRUE)
+#' #map species observations:
+#' map_WKT(my_NPS_species_obs, "footprintWKT")
 #' }
 #'
 map_WKT <- function(df, wellknowntext = "footprintWKT", type = "all") {
