@@ -82,6 +82,12 @@ long2UTM <- function(lon) {
 #' fuzz_location(36.43909, -84.72429, 4326, "Fuzzed - 1km")
 #' }
 fuzz_location <- function(lat, lon, coord_ref_sys = 4326, fuzz_level = "Fuzzed - 1km") {
+  #ensure require inputs are there
+  if (is.numeric(lat) == FALSE || is.numeric(lon) == FALSE) {
+    cat("ERROR: Latitude or longitude are missing or non-numeric.")
+    return("")
+    #stop()
+  }
   #for decimal degrees, convert to UTM locations and identify proper CRS
   if (coord_ref_sys == 4326 || coord_ref_sys == 4269) {
     #coordinates are in decimal degrees WGS84 or NAD83 and we need to convert to UTM; find the appropriate UTM EPSG code
@@ -107,7 +113,8 @@ fuzz_location <- function(lat, lon, coord_ref_sys = 4326, fuzz_level = "Fuzzed -
   } else {
     #throw an error
     cat("ERROR: CRS is not decimal degree WGS84 or UTM/WGS84. Please provide coordinates in either of these systems.", sep="")
-    stop()
+    return("")
+    #stop()
   }
 
   #do rounding of UTMs based on fuzz_level
