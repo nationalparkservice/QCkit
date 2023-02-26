@@ -254,13 +254,12 @@ map_WKT <- function(df, wellknowntext = "footprintWKT", type = "all") {
   df_polys <- df[df$geometry_types == "POLYGON",]
   
   #only map what is requested
-  if(type = "points") {
+  if(type == "points") {
     df_polys <- vector()
-  }
-  else if(type = "polygons") {
+  } else if(type == "polygons") {
     df_pts <- vector()
   }
-  
+
   #make a cool map!
   map <- leaflet(df, options = leafletOptions(preferCanvas = TRUE)) %>%
     #addTiles(group = "OSM (default)") %>%
