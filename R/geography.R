@@ -253,7 +253,15 @@ map_WKT <- function(df, wellknowntext = "footprintWKT", type = "all") {
   #use the geometry_type column to filter only for POLYGON
   df_polys <- df[df$geometry_types == "POLYGON",]
   
-  ## Make a cool map!
+  #only map what is requested
+  if(type = "points") {
+    df_polys <- vector()
+  }
+  else if(type = "polygons") {
+    df_pts <- vector()
+  }
+  
+  #make a cool map!
   map <- leaflet(df, options = leafletOptions(preferCanvas = TRUE)) %>%
     #addTiles(group = "OSM (default)") %>%
     
@@ -261,15 +269,15 @@ map_WKT <- function(df, wellknowntext = "footprintWKT", type = "all") {
       updateWhenZooming = FALSE,      # map won't update tiles until zoom is done
       updateWhenIdle = TRUE           # map won't load new tiles when panning
     )) %>%
-    
+  
     addCircles(
       data = df_pts, # data source is the filtered vector we created called all.point.geometry
       color = "blue",
-    ) %>% 
-    
+    ) %>%
+
     addPolygons(
       data = df_polys, # data source is the filtered vector we created called all.polygons.geometry
       color = "red",
-    )
+    ) 
   return(map)
 }
