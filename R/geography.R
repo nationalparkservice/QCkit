@@ -233,10 +233,11 @@ utm_to_ll <- function(df, EastingCol, NorthingCol, zone, datum = "WGS84") {
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' #map species observations:
-#' map_WKT(my_NPS_species_obs, "footprintWKT")
-#' }
+#' #map species observations
+#' map_WKT(my_NPS_species_obs)
+#' 
+#' #map species observations - points only
+#' map_WKT(my_NPS_species_obs, wellknowntext = "footprintWKT", type = "points")
 #'
 map_WKT <- function(df, wellknowntext = "footprintWKT", type = "all") {
   #convert to spatial data frame
