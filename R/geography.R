@@ -255,28 +255,49 @@ map_WKT <- function(df, wellknowntext = "footprintWKT", type = "all") {
   
   #only map what is requested
   if(type == "points") {
-    df_polys <- vector()
+    map <- leaflet(df, options = leafletOptions(preferCanvas = TRUE)) %>%
+      #addTiles(group = "OSM (default)") %>%
+      
+      addProviderTiles(providers$Esri.WorldGrayCanvas, options = providerTileOptions(
+        updateWhenZooming = FALSE,      # map won't update tiles until zoom is done
+        updateWhenIdle = TRUE           # map won't load new tiles when panning
+      )) %>%
+      
+      addCircles(
+        data = df_pts, # data source is the filtered vector we created called all.point.geometry
+        color = "blue",
+      )
   } else if(type == "polygons") {
-    df_pts <- vector()
+    map <- leaflet(df, options = leafletOptions(preferCanvas = TRUE)) %>%
+      #addTiles(group = "OSM (default)") %>%
+      
+      addProviderTiles(providers$Esri.WorldGrayCanvas, options = providerTileOptions(
+        updateWhenZooming = FALSE,      # map won't update tiles until zoom is done
+        updateWhenIdle = TRUE           # map won't load new tiles when panning
+      )) %>%
+      
+      addPolygons(
+        data = df_polys, # data source is the filtered vector we created called all.polygons.geometry
+        color = "red",
+      ) 
+  } else if(type == "all") {
+    map <- leaflet(df, options = leafletOptions(preferCanvas = TRUE)) %>%
+      #addTiles(group = "OSM (default)") %>%
+      
+      addProviderTiles(providers$Esri.WorldGrayCanvas, options = providerTileOptions(
+        updateWhenZooming = FALSE,      # map won't update tiles until zoom is done
+        updateWhenIdle = TRUE           # map won't load new tiles when panning
+      )) %>%
+      
+      addCircles(
+        data = df_pts, # data source is the filtered vector we created called all.point.geometry
+        color = "blue",
+      ) %>%
+      
+      addPolygons(
+        data = df_polys, # data source is the filtered vector we created called all.polygons.geometry
+        color = "red",
+      )
   }
-
-  #make a cool map!
-  map <- leaflet(df, options = leafletOptions(preferCanvas = TRUE)) %>%
-    #addTiles(group = "OSM (default)") %>%
-    
-    addProviderTiles(providers$Esri.WorldGrayCanvas, options = providerTileOptions(
-      updateWhenZooming = FALSE,      # map won't update tiles until zoom is done
-      updateWhenIdle = TRUE           # map won't load new tiles when panning
-    )) %>%
-  
-    addCircles(
-      data = df_pts, # data source is the filtered vector we created called all.point.geometry
-      color = "blue",
-    ) %>%
-
-    addPolygons(
-      data = df_polys, # data source is the filtered vector we created called all.polygons.geometry
-      color = "red",
-    ) 
   return(map)
 }
