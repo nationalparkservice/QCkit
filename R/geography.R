@@ -224,8 +224,8 @@ utm_to_ll <- function(df, EastingCol, NorthingCol, zone, datum = "WGS84") {
 #'
 #' @details Define your dataframe, the column that contains WKT, and an option to map specific geometry types.
 #'
-#' @param df - The name of your data frame contained WKT geometry.
-#' @param wellknowntext - The name of the column within your data frame containing the WKT geometry.
+#' @param df - The name of the data frame that contains WKT geometry.
+#' @param wellknowntext - The name of the specific column within the data frame that contains the WKT geometry. This parameter is currently not fully implemented and defaults to the Darwin Core 'footprintsWKT'.
 #' @param type -  Pick one from "points", "polygons", or "all" to map specific geometry types.
 #'
 #' @return The function returns a dynamic, zoomable leaflet map with the specific geometry plotted.
