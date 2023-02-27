@@ -243,10 +243,10 @@ map_WKT <- function(df, wellknowntext = "footprintWKT", type = "all") {
   #convert to spatial data frame
   df <- df %>%
   filter(!is.na(footprintWKT)) %>%
-  st_as_sf(wkt = "footprintWKT")
+  sf::st_as_sf(wkt = "footprintWKT")
 
   #new column in data frame for the geometry type
-  df$geometry_types <- st_geometry_type(df)
+  df$geometry_types <- sf::st_geometry_type(df)
 
   #use the geometry_type column to filter only for POINT
   df_pts <- df[df$geometry_types == "POINT",]
@@ -255,46 +255,46 @@ map_WKT <- function(df, wellknowntext = "footprintWKT", type = "all") {
   
   #only map what is requested
   if(type == "points") {
-    map <- leaflet(df, options = leafletOptions(preferCanvas = TRUE)) %>%
+    map <- leaflet::leaflet(df, options = leafletOptions(preferCanvas = TRUE)) %>%
       #addTiles(group = "OSM (default)") %>%
       
-      addProviderTiles(providers$Esri.WorldGrayCanvas, options = providerTileOptions(
+      leaflet::addProviderTiles(providers$Esri.WorldGrayCanvas, options = providerTileOptions(
         updateWhenZooming = FALSE,      # map won't update tiles until zoom is done
         updateWhenIdle = TRUE           # map won't load new tiles when panning
       )) %>%
       
-      addCircles(
+      leaflet::addCircles(
         data = df_pts, # data source is the filtered vector we created called all.point.geometry
         color = "blue",
       )
   } else if(type == "polygons") {
-    map <- leaflet(df, options = leafletOptions(preferCanvas = TRUE)) %>%
+    map <- leaflet::leaflet(df, options = leafletOptions(preferCanvas = TRUE)) %>%
       #addTiles(group = "OSM (default)") %>%
       
-      addProviderTiles(providers$Esri.WorldGrayCanvas, options = providerTileOptions(
+      leaflet::addProviderTiles(providers$Esri.WorldGrayCanvas, options = providerTileOptions(
         updateWhenZooming = FALSE,      # map won't update tiles until zoom is done
         updateWhenIdle = TRUE           # map won't load new tiles when panning
       )) %>%
       
-      addPolygons(
+      leaflet::addPolygons(
         data = df_polys, # data source is the filtered vector we created called all.polygons.geometry
         color = "red",
       ) 
   } else if(type == "all") {
-    map <- leaflet(df, options = leafletOptions(preferCanvas = TRUE)) %>%
+    map <- leaflet::leaflet(df, options = leafletOptions(preferCanvas = TRUE)) %>%
       #addTiles(group = "OSM (default)") %>%
       
-      addProviderTiles(providers$Esri.WorldGrayCanvas, options = providerTileOptions(
+      leaflet::addProviderTiles(providers$Esri.WorldGrayCanvas, options = providerTileOptions(
         updateWhenZooming = FALSE,      # map won't update tiles until zoom is done
         updateWhenIdle = TRUE           # map won't load new tiles when panning
       )) %>%
       
-      addCircles(
+      leaflet::addCircles(
         data = df_pts, # data source is the filtered vector we created called all.point.geometry
         color = "blue",
       ) %>%
       
-      addPolygons(
+      leaflet::addPolygons(
         data = df_polys, # data source is the filtered vector we created called all.polygons.geometry
         color = "red",
       )
