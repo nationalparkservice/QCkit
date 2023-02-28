@@ -20,23 +20,23 @@ te_check(x, species_col, park_code, expansion = FALSE)
 }}
 
 \item{expansion}{\itemize{
-\item Logical. Defaults to FALSE. The default setting will return only exact matches between your the scientific binomial (genera and specific epithet) in your data set and the federal match list. Setting expansion = TRUE will expand the list of matches to return all species (and subspecies) that from the match list that match any genera listed in your data set, regardless of whether a given species is actually in your data set. An additional column indicating whether the species returned is in your data set ("In Data") or has been expanded to ("Expansion") is generated.
+\item Logical. Defaults to FALSE. The default setting will return only exact matches between your the scientific binomial (genera and specific epithet) in your data set and the federal match list. Setting expansion = TRUE will expand the list of matches to return all species (and subspecies) that from the match list that match any genera listed in your data set, regardless of whether a given species is actually in your data set. An additional column indicating whether the species returned is in your data set ("In your Data") or has been expanded to ("Expansion") is generated.
 }}
 }
 \value{
 The function returns a (modified) data frame with the names of all the species that fall under the federal conservation list. The resulting data frame may have multiple instances of a given species if it is listed in multiple parks (park codes for each listing are supplied). Technically it is a huxtable, but it should function identically to a data frame for downstream purposes.
 }
 \description{
-\code{te_check()} creates a subset of the species list you provide, all of which fall under the Federal Conservation List Taxa for Data Protection. These species should be removed from your data set if your data is to be made public.
+\code{te_check()} generates a list of species you should consider removing from your dataset before making it public by matching the scientific names within your data set to the Federal Conservation List.
 }
 \details{
 Define your species data set name, column name with the scientific names of your species, and your four letter park code.
 
-The function downloads the Federal Conservation list using the IRMA odata API service and matches this species list to the list of scientific names in your data frame.
+The \code{te_check()} function downloads the Federal Conservation list using the IRMA odata API service and matches this species list to the list of scientific names in your data frame. Keep in mind that this is a Federal list, not a state list. Changes in taxa names may also cause some species to be missed. Because the odata API service is not publicly available, you must be logged in to the NPS VPN or in the office to use this function.
 
-Keep in mind that this is a Federal list, not a state list. Changes in taxa names may also cause some species to be missed.
+For the default, expansion = FALSE, the function will perform an exact match between the taxa in your scientificName column and the federal Conservation List and then filter the results to keep only species that are listed as endangered, threatened, or considered for listing. If your scientificName column contains information other than the binomial (genus and species), no matches will be returned. For instance, if you have an Order or just a genus listed, these will not be matched to the Federal Conservation List.
 
-Because the odata API service is not publicly available, you must be logged in to the NPS VPN or in the office to use this function.
+If you set expansion = TRUE, the function will truncate each item in your scientificName column to the first word in an attempt to extract a genus name. If you only have genera listed, these will be retained. If you have have higher-order taxa listed such as Family, Order, or Phyla again the first word will be retained. This first word (typically a genus) will be matched to just the generic name of species from the Federal Conservation List. All matches, regardless of listing status, are retained. The result is that for a given species in your scientificName column, all species within that genus that are on the Federal Conservation List will be returned (along with their federal conservation listing codes and a column indicating whether the species is actually in your data or is part of the expanded search).
 }
 \examples{
 \dontrun{
