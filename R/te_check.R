@@ -1,6 +1,6 @@
 #' Threatened Or Endangered Species Checker Function
 #'
-#' @description `te_check()` generates a list of species you should consider removing from your dataset before making it public by matching the scientific names within your data set to the Federal Conservation List. 
+#' @description `te_check()` generates a list of species you should consider removing from your dataset before making it public by matching the scientific names within your data set to the Federal Conservation List. `te_check()` should be considered a helpful tool for identifying federally listed endangered and threatened species in your data. Each National Park has a park-specific Protected Data Memo that outlines which data should be restricted. Threatened and endangered species are often - although not always - listed on these Memos. Additional species (from state conservation lists) or non-threatened and non-endangered species of concern or other biological or non-biological resources may be listed on Memos. Consult the relevant park-specific Protected Data Memo prior to making decisions on restricting or releasing data.
 #'
 #' @details Define your species data set name, column name with the scientific names of your species, and your four letter park code.
 #'
