@@ -1,3 +1,7 @@
+16 March 2023
+* Added a new function, `get_taxon_rank()` which takes a column of scientific names and generates a new column with the most specific scientific name rank listed. It does this purely based on recognizing patterns in the scientific naming scheme and not by matching a list of known genera, families, etc.
+* Consolidated `get_taxon_rank()` and `te_check()` into a single file, taxonomy.R.
+
 # QCkit 0.1.0.3
 28 February 2023 `te_check()` bug fix - exact column name filtering allows for multiple columns with similar names in the input data column. Improved documentation for transparency.
 23 February 2023
