@@ -1,3 +1,33 @@
+#' Taxonomic Rank Determination Function
+#'
+#' @description `get_taxon_rank()` generates a new column in your selected data set called taxonRank that will show the taxonomic rank of the most specific name in the given scientific name column. This is a required column in the Simple Darwin Core rule set and guidelines. This function will be useful in creating and auto populating a required Simple Darwin Core field.
+#'
+#' @details Define your species data set name and the column name with the scientific names of your species (if you are following a Simple Darwin Core naming format, this column should be scientificName, but any column name is fine).
+#'
+#' The function will read the various strings in your species name column and identify them as either a family, genus, species, or subspecies. This function only works with cleaned and parsed scientific names. If the scientific name is higher than family, the function will not work correctly. Subfamily and Tribe names (which, similar to family names end in "ae*") will be designated Family.
+#' 
+#' @param df - The name of your data frame containing species observations
+#' @param sciName_col - The name of the column within your data frame containing the scientific names of the species.
+#' 
+#' @return The function returns a new column in the given data frame named taxonRank with the taxonomic rank of the corresponding scientific name in each column. If there is no name in a row, then it returns as NA for that row.
+#' 
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' mydf <- get_taxon_rank(df = mydf, sciName_col = "scientificName")
+#' }
+#'
+get_taxon_rank <- function(df, sciName_col) 
+{
+  sciName_col <- df[[sciName_col]]
+  dplyr::mutate(df, taxonRank = dplyr::case_when(
+    stringr::str_detect(sciName_col, "\\s[^\\s]*\\s") ~ "subspecies", #regex says match a space, followed by any number of characters, followed by another space    
+    stringr::str_detect(sciName_col, "\\s.*") ~ "species", #regex says match a space followed by any number of character     
+    stringr::str_detect(sciName_col, "ae$") ~ "family", #regex says match to any word that has ae at the end of it    
+    stringr::str_detect(sciName_col, "^\\S*$") ~ "genus")) #regex says match to any number of characters that DO NOT have a space in front and then ends   
+}
+
 #' Threatened Or Endangered Species Checker Function
 #'
 #' @description `te_check()` generates a list of species you should consider removing from your dataset before making it public by matching the scientific names within your data set to the Federal Conservation List. `te_check()` should be considered a helpful tool for identifying federally listed endangered and threatened species in your data. Each National Park has a park-specific Protected Data Memo that outlines which data should be restricted. Threatened and endangered species are often - although not always - listed on these Memos. Additional species (from state conservation lists) or non-threatened and non-endangered species of concern or other biological or non-biological resources may be listed on Memos. Consult the relevant park-specific Protected Data Memo prior to making decisions on restricting or releasing data.
@@ -36,7 +66,7 @@ te_check <- function(x, species_col, park_code, expansion=FALSE) {
     url <- paste0(url, park_code[i], "%27%20or%20ParkCode%20eq%20%27")
   }
   odata_url <- paste0(url, "All%27")
- #trycatch for VPN connections: 
+  #trycatch for VPN connections: 
   tryCatch(
     {
       fedlist <- ODataQuery::retrieve_data(odata_url)},
@@ -46,7 +76,7 @@ te_check <- function(x, species_col, park_code, expansion=FALSE) {
           "Make sure you are logged on to the VPN before running ",
           crayon::green$bold("te_check()"),
           ".", sep="")
-          stop()
+      stop()
     })
   #subset incoming data:
   fedspp <- as.data.frame(fedlist$value$ProtectedSci)
@@ -121,7 +151,7 @@ te_check <- function(x, species_col, park_code, expansion=FALSE) {
     fedspp$genus_col <- gsub(" .*$", "", fedspp$species_col)
     #inner join based on genera:
     TorE <- dplyr::inner_join(Species, fedspp, by="genus_col")
-      
+    
     #if no species in the list:
     if(nrow(TorE)*ncol(TorE)==0){
       cat("No T&E species found in your dataset.\n")
@@ -136,7 +166,7 @@ te_check <- function(x, species_col, park_code, expansion=FALSE) {
       #add a column indicating if entry was in the original dataset or just shares genus name)
       TorE <- TorE %>%
         dplyr::mutate(InData = ifelse(species_col.x == species_col.y,
-            "In your Data", "Expansion"))
+                                      "In your Data", "Expansion"))
       #clean up dataframe:    
       TorE<-TorE[, c(5,3,7,4,6)]    
       colnames(TorE) <- c("Park_code",
@@ -147,11 +177,11 @@ te_check <- function(x, species_col, park_code, expansion=FALSE) {
       #format output for easy digestion:
       TorE<-huxtable::as_hux(TorE)
       TorE<-huxtable::map_text_color(TorE,
-                      huxtable::by_values("In your Data" = "green",
-                                          "Threatened" = "darkorange2",
-                                          "Endangered" = "red",
-                                          "Concern" = "yellow3",
-                                          "Candidate" = "yellow3"))
+                                     huxtable::by_values("In your Data" = "green",
+                                                         "Threatened" = "darkorange2",
+                                                         "Endangered" = "red",
+                                                         "Concern" = "yellow3",
+                                                         "Candidate" = "yellow3"))
       TorE<-huxtable::theme_basic(TorE)
       #print data source and date:
       cat("Your T&E check used data pulled from: ",
@@ -174,8 +204,8 @@ te_check <- function(x, species_col, park_code, expansion=FALSE) {
       cat("No T&E species found in your dataset.\n")
       #print date and source of data:
       cat("Your T&E check used data pulled from: ",
-        crayon::bold$red(url), " on ",
-        crayon::bold$red(fed_date), ".\n", sep="")
+          crayon::bold$red(url), " on ",
+          crayon::bold$red(fed_date), ".\n", sep="")
       return(TorE)
     }
     #if there are species in the list, return list (and data source/date):
@@ -184,15 +214,15 @@ te_check <- function(x, species_col, park_code, expansion=FALSE) {
       colnames(TorE)<-c("Park_code", "Species", "status_code", "status_explanation")
       TorE<-huxtable::as_hux(TorE)
       TorE<-huxtable::map_text_color(TorE,
-                          huxtable::by_values("Threatened" = "darkorange2",
-                                              "Endangered" = "red",
-                                              "Concern" = "yellow3",
-                                              "Candidate" = "yellow3"))
+                                     huxtable::by_values("Threatened" = "darkorange2",
+                                                         "Endangered" = "red",
+                                                         "Concern" = "yellow3",
+                                                         "Candidate" = "yellow3"))
       TorE<-huxtable::theme_basic(TorE)
       #print date and source of data:
       cat("Your T&E check used data pulled from: ",
-        crayon::bold$red(url), " on ",
-        crayon::bold$red(fed_date), ".\n", sep="")
+          crayon::bold$red(url), " on ",
+          crayon::bold$red(fed_date), ".\n", sep="")
       return(TorE)
     }
   }
