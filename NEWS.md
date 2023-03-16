@@ -1,17 +1,31 @@
 16 March 2023
+
 * Added a new function, `get_taxon_rank()` which takes a column of scientific names and generates a new column with the most specific scientific name rank listed. It does this purely based on recognizing patterns in the scientific naming scheme and not by matching a list of known genera, families, etc.
 * Consolidated `get_taxon_rank()` and `te_check()` into a single file, taxonomy.R.
+* Deprecated `te_check()` in favor of `check_te()`
+* Deprecated `DC_col_check()` in favor of `check_dc_cols()`
+* Deprecated `utm_to_ll()` in favor of `convert_utm_to_ll()`
+* Deprecated `long2UTM()` in favor of `convert_long_to_utm()`
+
+***
 
 # QCkit 0.1.0.3
-28 February 2023 `te_check()` bug fix - exact column name filtering allows for multiple columns with similar names in the input data column. Improved documentation for transparency.
+28 February 2023 
+
+* `te_check()` bug fix - exact column name filtering allows for multiple columns with similar names in the input data column. Improved documentation for transparency.
+
 23 February 2023
+
 * updated `te_check()`. It now supports searching multiple park units.
 22 February 2023
+
 * updated `te_check()`. Now prints the source of the federal match list data and the date it was accessed to the console. Made the output format prettier. Added an "expansion" option to the function. Defaults to expansion = FALSE, which checks for exact matches between the scientific binomial supplied by the user and the full scientific binomial in the matchlist. When expansion = TRUE, the genera in the data supplied will be checked against the matchlist and all species from a given genera will be returned, regardless of whether a given species is actually in the supplied data set. A new column "InData" will tell the user whether a given species is actually in their data or has been expanded to.
 
+***
 
 # QCkit 0.1.0.2
 02 February 2023
+
 * Fixed a major bug in `te_check()` that was causing the function return species that were not threatened or endangered. The function now returns a tibble containing all species that are threatened, endangered, or considered for listing, specifies the status code of each species, and then give a brief explanation of the federal endangered species act status code returned.
 
 ***
@@ -32,6 +46,6 @@
   * `get_dc_flags()` returns the name of each flagging column within each data package and the count of each flag within each column as well as the total number of cells across all the data flagging columns.
   * Each function has a `force` option that defaults to `force = FALSE` and prints the results to the screen. setting `force = TRUE` will suppress the on-screen output.
 
-# QCkit 0.1.0
+# QCkit 0.1.0.0
 
 * Added a `NEWS.md` file to track changes to the package.
