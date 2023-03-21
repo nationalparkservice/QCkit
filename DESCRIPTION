@@ -42,7 +42,8 @@ Imports:
     readr,
     lifecycle,
     huxtable,
-    crayon
+    crayon,
+    data.table
 RoxygenNote: 7.2.3
 Suggests: 
     knitr,
