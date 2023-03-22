@@ -5,9 +5,9 @@
 #'
 #' @description `order_cols()` Checks and orders columns with TDWG Darwin Core naming standards and custom names in a dataset
 #'
-#' @details Check to see if you have the three required columns (locality, type, basisOfRecord) and various suggested columns present in your dataset. Print a list of which columns are present and which are not. Then, order all the columns in your dataset in the following order: required columns, suggested columns, the rest of the Darwin Core columns, "custom_" (non-Darwin Core) columns, and finally sensitive species data columns.
+#' @details Check to see if you have three (highly) recommended columns (locality, type, basisOfRecord) and various suggested columns present in your dataset. Print a list of which columns are present and which are not. Then, order all the columns in your dataset in the following order: (highly) recommended columns, suggested columns, the rest of the Darwin Core columns, "custom_" (non-Darwin Core) columns, and finally sensitive species data columns.
 #'
-#' @param df - This is the dataframe you want to run against the function. To call, simply write df = "the name of your dataframe".
+#' @param df - This is the dataframe you want to run against the function. To call, simply type df = "the name of your dataframe".
 #'
 #' @return - The function returns a list of required and suggested columns to include in your dataset. When assigning to an object, the object contains your new dataset with all columns ordered properly.
 #'
