@@ -52,18 +52,30 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.1.0.4" id="qckit-0104">QCkit 0.1.0.4<a class="anchor" aria-label="anchor" href="#qckit-0104"></a></h2>
-<p>21 March 2023 <code>order_cols</code> new function for ordering columns added</p>
-</div>
+<p>21 March 2023</p>
+<ul><li>
+<code>order_cols</code> new function for ordering columns added</li>
+</ul><p>16 March 2023</p>
+<ul><li>Added a new function, <code><a href="../reference/get_taxon_rank.html">get_taxon_rank()</a></code> which takes a column of scientific names and generates a new column with the most specific scientific name rank listed. It does this purely based on recognizing patterns in the scientific naming scheme and not by matching a list of known genera, families, etc.</li>
+<li>Consolidated <code><a href="../reference/get_taxon_rank.html">get_taxon_rank()</a></code> and <code><a href="../reference/te_check.html">te_check()</a></code> into a single file, taxonomy.R.</li>
+<li>Deprecated <code><a href="../reference/te_check.html">te_check()</a></code> in favor of <code><a href="../reference/check_te.html">check_te()</a></code>
+</li>
+<li>Deprecated <code><a href="../reference/DC_col_check.html">DC_col_check()</a></code> in favor of <code><a href="../reference/check_dc_cols.html">check_dc_cols()</a></code>
+</li>
+<li>Deprecated <code><a href="../reference/utm_to_ll.html">utm_to_ll()</a></code> in favor of <code><a href="../reference/convert_utm_to_ll.html">convert_utm_to_ll()</a></code>
+</li>
+<li>Deprecated <code><a href="../reference/long2UTM.html">long2UTM()</a></code> in favor of <code><a href="../reference/convert_long_to_utm.html">convert_long_to_utm()</a></code>
+</li>
+</ul><hr></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.1.0.3" id="qckit-0103">QCkit 0.1.0.3<a class="anchor" aria-label="anchor" href="#qckit-0103"></a></h2>
-<p>21 March 2023 <code>order_cols</code> new function for ordering columns added 28 February 2023 <code><a href="../reference/te_check.html">te_check()</a></code> bug fix - exact column name filtering allows for multiple columns with similar names in the input data column. Improved documentation for transparency. 23 February 2023 * updated <code><a href="../reference/te_check.html">te_check()</a></code>. It now supports searching multiple park units. 22 February 2023 * updated <code><a href="../reference/te_check.html">te_check()</a></code>. Now prints the source of the federal match list data and the date it was accessed to the console. Made the output format prettier. Added an “expansion” option to the function. Defaults to expansion = FALSE, which checks for exact matches between the scientific binomial supplied by the user and the full scientific binomial in the matchlist. When expansion = TRUE, the genera in the data supplied will be checked against the matchlist and all species from a given genera will be returned, regardless of whether a given species is actually in the supplied data set. A new column “InData” will tell the user whether a given species is actually in their data or has been expanded to.</p>
-</div>
 <p>28 February 2023</p>
 <ul><li>
 <code><a href="../reference/te_check.html">te_check()</a></code> bug fix - exact column name filtering allows for multiple columns with similar names in the input data column. Improved documentation for transparency.</li>
 </ul><p>23 February 2023</p>
-<ul><li><p>updated <code><a href="../reference/te_check.html">te_check()</a></code>. It now supports searching multiple park units. 22 February 2023</p></li>
-<li><p>updated <code><a href="../reference/te_check.html">te_check()</a></code>. Now prints the source of the federal match list data and the date it was accessed to the console. Made the output format prettier. Added an “expansion” option to the function. Defaults to expansion = FALSE, which checks for exact matches between the scientific binomial supplied by the user and the full scientific binomial in the matchlist. When expansion = TRUE, the genera in the data supplied will be checked against the matchlist and all species from a given genera will be returned, regardless of whether a given species is actually in the supplied data set. A new column “InData” will tell the user whether a given species is actually in their data or has been expanded to.</p></li>
+<ul><li>updated <code><a href="../reference/te_check.html">te_check()</a></code>. It now supports searching multiple park units.</li>
+</ul><p>22 February 2023</p>
+<ul><li>updated <code><a href="../reference/te_check.html">te_check()</a></code>. Now prints the source of the federal match list data and the date it was accessed to the console. Made the output format prettier. Added an “expansion” option to the function. Defaults to expansion = FALSE, which checks for exact matches between the scientific binomial supplied by the user and the full scientific binomial in the matchlist. When expansion = TRUE, the genera in the data supplied will be checked against the matchlist and all species from a given genera will be returned, regardless of whether a given species is actually in the supplied data set. A new column “InData” will tell the user whether a given species is actually in their data or has been expanded to.</li>
 </ul><hr></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.1.0.2" id="qckit-0102">QCkit 0.1.0.2<a class="anchor" aria-label="anchor" href="#qckit-0102"></a></h2>
@@ -109,7 +121,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.9000.</p>
 </div>
 
       </footer></div>
