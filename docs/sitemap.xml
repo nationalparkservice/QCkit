@@ -25,6 +25,18 @@
     <loc>/news/index.html</loc>
   </url>
   <url>
+    <loc>/reference/check_dc_cols.html</loc>
+  </url>
+  <url>
+    <loc>/reference/check_te.html</loc>
+  </url>
+  <url>
+    <loc>/reference/convert_long_to_utm.html</loc>
+  </url>
+  <url>
+    <loc>/reference/convert_utm_to_ll.html</loc>
+  </url>
+  <url>
     <loc>/reference/DC_col_check.html</loc>
   </url>
   <url>
@@ -44,6 +56,9 @@
   </url>
   <url>
     <loc>/reference/get_park_polygon.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_taxon_rank.html</loc>
   </url>
   <url>
     <loc>/reference/index.html</loc>
