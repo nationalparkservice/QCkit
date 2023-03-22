@@ -1,3 +1,6 @@
+# QCkit 0.1.0.4
+21 March 2023 `order_cols` new function for ordering columns added 
+
 # QCkit 0.1.0.3
 21 March 2023 `order_cols` new function for ordering columns added 
 28 February 2023 `te_check()` bug fix - exact column name filtering allows for multiple columns with similar names in the input data column. Improved documentation for transparency.
