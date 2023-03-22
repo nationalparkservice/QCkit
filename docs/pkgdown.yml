@@ -1,7 +1,6 @@
 pandoc: 2.19.2
-pkgdown: 2.0.6.9000
-pkgdown_sha: 5bb671b1a8bac8e926479868681936f7c9ee41b3
+pkgdown: 2.0.7
+pkgdown_sha: ~
 articles:
   QCkit: QCkit.html
-last_built: 2023-03-16T21:36Z
-
+last_built: 2023-03-22T17:02Z

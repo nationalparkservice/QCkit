@@ -1,3 +1,12 @@
+# QCkit 0.1.0.4
+21 March 2023 `order_cols` new function for ordering columns added 
+16 March 2022 deprecated and renamed multiple functions for constency in nameing schemes across packages and to coincide with tidyverse conventions
+
+***
+
+# QCkit 0.1.0.3
+28 February 2023 `te_check()` bug fix - exact column name filtering allows for multiple columns with similar names in the input data column. Improved documentation for transparency.
+
 16 March 2023
 
 * Added a new function, `get_taxon_rank()` which takes a column of scientific names and generates a new column with the most specific scientific name rank listed. It does this purely based on recognizing patterns in the scientific naming scheme and not by matching a list of known genera, families, etc.
@@ -17,6 +26,7 @@
 23 February 2023
 
 * updated `te_check()`. It now supports searching multiple park units.
+
 22 February 2023
 
 * updated `te_check()`. Now prints the source of the federal match list data and the date it was accessed to the console. Made the output format prettier. Added an "expansion" option to the function. Defaults to expansion = FALSE, which checks for exact matches between the scientific binomial supplied by the user and the full scientific binomial in the matchlist. When expansion = TRUE, the genera in the data supplied will be checked against the matchlist and all species from a given genera will be returned, regardless of whether a given species is actually in the supplied data set. A new column "InData" will tell the user whether a given species is actually in their data or has been expanded to.
