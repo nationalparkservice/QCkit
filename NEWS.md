@@ -1,4 +1,8 @@
 # QCkit 0.1.0.4
+17 April 2023
+
+* `get_elevation()` new function for getting elevation from GPS coordinates via USGS API.
+
 21 March 2023 
 
 * `order_cols` new function for ordering columns added 
