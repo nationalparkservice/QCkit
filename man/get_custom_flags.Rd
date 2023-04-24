@@ -67,9 +67,9 @@ quality, such as Data Release Reports (DRRs).
 \dontrun{
 
 get_custom_flags("~/my_data_package_directory", cols = c("scientificName",
-                                                         "locality"), 
+                                                         "locality"),
                                                          output="all")
 cols <- colnames(read.csv("mydata.csv"))[c(1:4, 7, 10)]
-get_custom_flags(cols = cols, output="package") 
+get_custom_flags(cols = cols, output="package")
 }
 }

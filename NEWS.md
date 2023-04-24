@@ -1,3 +1,7 @@
+# QCkit 0.1.0.5 "Work in Progress"
+24 April 2023
+* fixed bug in `get_custom_flags()`.
+
 # QCkit 0.1.0.4
 17 April 2023
 

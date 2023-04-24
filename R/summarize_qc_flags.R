@@ -1,6 +1,6 @@
 #' Create Table of Data Quality Flags Found in a Data Package
 #'
-#' @description 
+#' @description
 #' `r lifecycle::badge("deprecated")`
 #' get_dp_flags (dp=data package) returns a data frame that list
 #' the number of cells in the entire data package with relevant flags (A, AE,
@@ -12,11 +12,11 @@
 #' @details The function can be run from within the working directory where the
 #'  data package is, or the directory can be specified. The function only
 #'  supports .csv files and assumes that all .csv files in the folder are part
-#'  of the data package. The function counts cells within "*_flag" 
-#'  columns that start with one of the flagging characters (A, AE, R, P) and 
+#'  of the data package. The function counts cells within "*_flag"
+#'  columns that start with one of the flagging characters (A, AE, R, P) and
 #'  ignores trailing characters and whitespaces. NAs are assumed to be empty
 #'  cells or missing data.
-#'  
+#'
 #' @keywords internal
 #'
 #' @param directory is the path to the data package .csv files (defaults to the
@@ -38,9 +38,9 @@
 #' }
 #'
 get_dp_flags <- function(directory = here::here()) {
-  
+
   lifecycle::deprecate_warn("1.0.1", "get_dp_flags()", "get_custom_flags()")
-  
+
   fileList <- list.files(path = directory, pattern = "\\.csv$",
                          full.names = TRUE)
 
@@ -101,7 +101,7 @@ get_dp_flags <- function(directory = here::here()) {
 
 #' Create Table of Data Quality Flags Found in Data Files within a Data Package
 #'
-#' @description 
+#' @description
 #' `r lifecycle::badge("deprecated")`
 #' get_df_flags (df = data files) returns a data frame that lists
 #' the number of cells in each data file in the entire data package (excluding
@@ -138,9 +138,9 @@ get_dp_flags <- function(directory = here::here()) {
 #' }
 #'
 get_df_flags <- function(directory = here::here()) {
-  
+
   lifecycle::deprecate_warn("1.0.1", "get_dp_flags()", "get_custom_flags()")
-  
+
   # get list of .csv files in the specified directory
   fileList <- list.files(path = directory, pattern = "\\.csv$",
                          full.names = TRUE)
@@ -213,7 +213,7 @@ get_df_flags <- function(directory = here::here()) {
 #' Create Table of Data Quality Flags in Flagging Columns within individual
 #' data columns
 #'
-#' @description 
+#' @description
 #' `r lifecycle::badge("deprecated")`
 #' get_dc_flags (dc=data columns) returns a data frame that, for
 #' each data file in a data package lists the name of each data flagging column
@@ -230,7 +230,7 @@ get_df_flags <- function(directory = here::here()) {
 #' and whitespaces.
 #'
 #' @inheritParams get_dp_flags
-#' 
+#'
 #' @keywords internal
 #'
 #' @return a dataframe named dc_flag that contains a row for each .csv file in
@@ -249,9 +249,9 @@ get_df_flags <- function(directory = here::here()) {
 #' }
 #'
 get_dc_flags <- function(directory = here::here()) {
-  
+
   lifecycle::deprecate_warn("1.0.1", "get_dp_flags()", "get_custom_flags()")
-  
+
   fileList <- list.files(path = directory, pattern = "\\.csv$",
                          full.names = TRUE)
 
@@ -343,7 +343,7 @@ get_dc_flags <- function(directory = here::here()) {
 
 #' Creates dataframe(s) summarizing data quality
 #'
-#' @description 
+#' @description
 #' `r lifecycle::badge("experimental")`
 #' get_custom_flags returns data frames that that summarize data
 #' quality control flags (one that summarizes at the data package level, one at
@@ -351,15 +351,15 @@ get_dc_flags <- function(directory = here::here()) {
 #' with quality control flagging (a column name that ends in "_flag") and
 #' optionally any additional custom columns the user specifies, either by column
 #' name or number.
-#' 
-#' The use can specify which of the 3 data frames (or all 3, as a list of 
+#'
+#' The use can specify which of the 3 data frames (or all 3, as a list of
 #' dataframes) should be returned.
-#' 
-#' The number of each flag type for each column (A, AE, R, P) is reported. 
-#' Unflagged columns are assumed to have only accepted (or missing) data. The 
-#' total number of data points in the specified columns (and data flagging 
+#'
+#' The number of each flag type for each column (A, AE, R, P) is reported.
+#' Unflagged columns are assumed to have only accepted (or missing) data. The
+#' total number of data points in the specified columns (and data flagging
 #' columns for) each .csv are also reported. NAs considered missign data. An
-#' Unweighted Relative Response (RRU) is calculated as the total number of 
+#' Unweighted Relative Response (RRU) is calculated as the total number of
 #' accepted data points (A, AE, and data that are not flagged) divided by the
 #'total number of data points (excluding missing values) in all specified
 #' columns (and the flagged columns). Standard deviations are reported for RRU.
@@ -372,7 +372,7 @@ get_dc_flags <- function(directory = here::here()) {
 #' trailing characters and white spaces. For custom columns that do not include
 #' a specific flagging column, all non-missing (non-NA) values are considered
 #' Accepted (A).
-#' 
+#'
 #' The intent of get_custom_flags is for integration into reports on data
 #' quality, such as Data Release Reports (DRRs).
 #'
@@ -390,20 +390,20 @@ get_dc_flags <- function(directory = here::here()) {
 #'
 #' @return a dataframe with quality control summary information summarized at
 #' the specified level(s).
-#' 
+#'
 #' @importFrom stats sd
 #' @importFrom utils read.csv
-#' 
+#'
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' 
+#'
 #' get_custom_flags("~/my_data_package_directory", cols = c("scientificName",
-#'                                                          "locality"), 
+#'                                                          "locality"),
 #'                                                          output="all")
 #' cols <- colnames(read.csv("mydata.csv"))[c(1:4, 7, 10)]
-#' get_custom_flags(cols = cols, output="package") 
+#' get_custom_flags(cols = cols, output="package")
 #' }
 get_custom_flags <- function(directory = here::here(),
                              cols = (""),
@@ -411,13 +411,14 @@ get_custom_flags <- function(directory = here::here(),
                                         "package",
                                         "files",
                                         "columns")) {
-  
+
   fileList <- list.files(path = directory, pattern = "\\.csv$",
                          full.names = TRUE)
 
-  dfList <- suppressMessages(sapply(fileList, readr::read_csv))
 
-  names(dfList) <- base::basename(names(dfList))
+  dfList <- suppressMessages(lapply(fileList, readr::read_csv))
+
+  names(dfList) <- base::basename(fileList)
 
   cust_flags <- NULL
   for (i in seq_along(dfList)) {
@@ -432,7 +433,7 @@ get_custom_flags <- function(directory = here::here(),
         RRU <- A_flag/(nrow(cust_cols[j]))
         Cell_count <- A_flag
         percent_missing <- (sum(is.na(cust_cols[j])))/nrow(cust_cols[j])
-        
+
         filename <- names(dfList)[i]
         column <- colnames(cust_cols)[j]
         flags <- assign(
@@ -484,9 +485,9 @@ get_custom_flags <- function(directory = here::here(),
 
         # get cell count in file, exclude NAs and flags:
         Cell_count <- sum(!is.na(flags_only[j]))
-        
+
         percent_missing <- (sum(is.na(flags_only[j])))/nrow(flags_only[j])
-        
+
         RRU <- (A_flag + AE_flag) / nrow(flags_only[j])
 
         filename <- names(dfList)[i]
@@ -536,10 +537,10 @@ get_custom_flags <- function(directory = here::here(),
     }
   }
   colnames(cust_flags)[7] <- "Data Totals"
-  
+
   #generate summary statistics for each column:
-  data_file_summaries <- cust_flags %>% 
-    dplyr::group_by(filename) %>% 
+  data_file_summaries <- cust_flags %>%
+    dplyr::group_by(filename) %>%
     dplyr::summarize(A_total=sum(A_flag),
               #A_mean=mean(A_flag),
               #A_sd=stats::sd(A_flag),
@@ -556,7 +557,7 @@ get_custom_flags <- function(directory = here::here(),
               #missing_sd=stats::sd(percent_missing),
               RRU_mean=mean(RRU),
               RRU_sd=stats::sd(RRU))
-  
+
   #generate data package level summaries
   data_package_summary<- cust_flags %>%
     plyr::summarize(A_total=sum(A_flag, na.rm=TRUE),
@@ -575,15 +576,15 @@ get_custom_flags <- function(directory = here::here(),
               #missing_sd=sd(percent_missing, na.rm=TRUE),
               RRU_mean=mean(RRU, na.rm=TRUE),
               RRU_sd=sd(RRU, na.rm=TRUE))
-  
+
   qc_summary <- list(cust_flags,
                      data_file_summaries,
                      data_package_summary)
-  
+
   names(qc_summary)<-c("Column Level QC Summaries",
                        "Data File Level QC Summaries",
                        "Data Package Level QC Summaries")
-  
+
   if(output == "package"){
     return(qc_summary[[3]])
   }

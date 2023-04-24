@@ -2,28 +2,29 @@ Package: QCkit
 Type: Package
 Title: NPS Inventory and Monitoring Quality Control Toolkit
 Version: 0.1.0.4
-Authors@R:
-  c(person(given = "Robert",
+Authors@R: c(
+  person(given = "Robert",
            family = "Baker",
            email = "robert_baker@nps.gov",
            role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-7591-5035")),
-    person(given = "Judd",
+  person(given = "Judd",
            family = "Patterson",
            email = "judd_patterson@nps.gov",
            role = "aut",
            comment = c(ORCID = "0000-0002-0951-7917")),
-    person(given = "Joe",
+  person(given = "Joe",
            family = "DeVivo",
            role = "aut"),
-    person(given = "Issac",
+  person(given = "Issac",
            family = "Quevedo",
            role = "aut",
            comment = c(ORCID = "0000-0003-0129-981X")),
-    person(given = "Amy",
+  person(given = "Amy",
            family = "Sherman",
            role = "aut",
-           comment = c(ORCID = "0000-0002-9276-0087")))
+           comment = c(ORCID = "0000-0002-9276-0087"))
+           )
 Maintainer: Rob Baker <robert_baker@nps.gov>
 Description: This package contains a set of useful functions for data munging, quality control, and data flagging. Functions are contributed by multiple U.S. National Park Service staff, contractors, partners and others. These functions will likely be most useful for quality control of NPS data but may have utility beyond their intended functions.
 License: MIT + file LICENSE
@@ -50,7 +51,7 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0)
 VignetteBuilder: knitr
-URL: https://github.com/nationalparkservice/QCkit
+URL: https://github.com/nationalparkservice/QCkit/
 BugReports: https://nationalparkservice.github.io/QCkit/
 Config/testthat/edition: 3
 Roxygen: list(markdown = TRUE)
