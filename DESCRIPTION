@@ -50,7 +50,7 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0)
 VignetteBuilder: knitr
-URL: https://github.com/nationalparkservice/QCkit
+URL: https://doi.org/10.57830/2298923
 BugReports: https://nationalparkservice.github.io/QCkit/
 Config/testthat/edition: 3
 Roxygen: list(markdown = TRUE)
