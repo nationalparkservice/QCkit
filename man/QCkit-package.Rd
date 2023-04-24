@@ -11,7 +11,7 @@ This package contains a set of useful functions for data munging, quality contro
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/nationalparkservice/QCkit}
+  \item \url{https://github.com/nationalparkservice/QCkit/}
   \item Report bugs at \url{https://nationalparkservice.github.io/QCkit/}
 }
 
