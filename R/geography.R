@@ -65,10 +65,10 @@ convert_long_to_utm <- function(lon) {
 
 #' Return UTM Zone
 #'
-#' @description 
+#' @description
 #' `r lifecycle::badge("deprecated")`
 #' `long2UTM` was deprecated in favor of `convert_long_to_utm()` to enforce a consistent function naming pattern across the package and to conform to the tidyverse style guide.
-#' 
+#'
 #' `long2UTM()` take a longitude coordinate and returns the corresponding UTM zone.
 #'
 #' @details Input a longitude (decimal degree) coordinate and this simple function returns the number of the UTM zone where that point falls.
@@ -89,7 +89,7 @@ long2UTM <- function(lon) {
 #' @description `fuzz_location()` "fuzzes" a specific location to something less precise prior to public release of information about sensitive resources for which data are not to be released to the public. This function takes coordinates in either UTM or decimal degrees, converts to UTM (if in decimal degrees), creates a bounding box based on rounding of UTM coordinates, and then creates a polygon from the resultant points. The function returns a string in Well-Known-Text format.
 #'
 #' @details Details will be defined later.
-#' 
+#'
 #' @param lat - The latitude in either UTMs or decimal degrees.
 #' @param lon - The longitude in either UTMs or decimal degrees
 #' @param coord_ref_sys - The EPSG coordinate system of the latitude and longitude coordinates. Either 4326 for decimal degrees/WGS84 datum, 4269 for decimal degrees/NAD83, or 326xx for UTM/WGS84 datum (where the xx is the northern UTM zone). For example 32616 is for UTM zone 16N.
@@ -119,7 +119,7 @@ fuzz_location <- function(lat, lon, coord_ref_sys = 4326, fuzz_level = "Fuzzed -
       #southern hemisphere (S) UTM zones start at 32701 and go to 32760
       tempcrs <- long2UTM(lon) + 32700
     }
-    
+
     #convert the points to UTM given their existing CRS (decimal degree WGS84 or NAD83)
     point <- sf::st_point(c(lon, lat))
     point <- sf::st_sfc(point, crs = coord_ref_sys)
@@ -241,10 +241,10 @@ convert_utm_to_ll <- function(df, EastingCol, NorthingCol, zone, datum = "WGS84"
 
 #' Coordinate Conversion from UTM to Latitude and Longitude
 #'
-#' @description 
+#' @description
 #' `r lifecycle::badge("deprecated")`
 #' `utm_to_ll()` was deprecated in favor of `convert_utm_to_ll()` to enforce a consistent naming scheme for functions across the package and to conform with the tidyverse style guide.
-#' 
+#'
 #' utm_to_ll takes your dataframe with UTM coordinates in separate Easting and Northing columns, and adds on an additional two columns with the converted decimalLatitude and decimalLongitude coordinates using the reference coordinate system WGS84.
 #'
 #' @details Define the name of your dataframe, the easting and northing columns within it, the UTM zone within which those coordinates are located, and the reference coordinate system (datum). UTM Northing and Easting columns must be in separate columns prior to running the function. If a datum is not defined, the function will default to "WGS84". If there are missing coordinates in your dataframe they will be preserved, however they will be moved to the end of your dataframe. Note that some parameter names are not in snake_case but instead reflect DarwinCore naming conventions.
@@ -271,9 +271,9 @@ convert_utm_to_ll <- function(df, EastingCol, NorthingCol, zone, datum = "WGS84"
 #' )
 #' }
 utm_to_ll <- function(df, EastingCol, NorthingCol, zone, datum = "WGS84") {
-  
+
   lifecycle::deprecate_warn("0.1.0.3", "utm_to_ll()", "convert_utm_to_ll()")
-  
+
   Base <- as.data.frame(df)
   Base <- dplyr::rename(Base, "b" = EastingCol, "a" = NorthingCol)
   Mid <- Base[!is.na(Base$"b" & Base$"a"), ]
@@ -282,9 +282,9 @@ utm_to_ll <- function(df, EastingCol, NorthingCol, zone, datum = "WGS84") {
   Final[1:2] <- lapply(Final[1:2], FUN = function(z) {
     as.numeric(z)
   })
-  
+
   Final <- cbind(Final$b, Final$a)
-  
+
   v <- terra::vect(Final, crs = paste0(
     "+proj=utm +zone=",
     zone,
@@ -292,11 +292,11 @@ utm_to_ll <- function(df, EastingCol, NorthingCol, zone, datum = "WGS84") {
     datum, "
                                        +units=m"
   ))
-  
+
   converted <- terra::project(v, "+proj=longlat +datum=WGS84")
-  
+
   lonlat <- terra::geom(converted)[, c("x", "y")]
-  
+
   df <- cbind(Mid, lonlat)
   df <- plyr::rbind.fill(df, Mid2)
   df <- dplyr::rename(df,
