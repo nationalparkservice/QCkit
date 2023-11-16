@@ -39,3 +39,32 @@ fix_utc_offset <- function(datetime_strings) {
   return(datetime_strings)
 }
 
+#' Convert EML date/time format string to one that R can parse
+#'
+#' @details `convert_datetime_format()` is not a sophisticated function. If the EML format string is not valid, it will happily and without complaint return an R format string that will break your code. You have been warned.
+#'
+#' @param eml_format_string A character vector of EML date/time format strings. This function understands the following codes: YYYY = four digit year, YY = two digit year, MMM = three letter month abbrev., MM = two digit month, DD = two digit day, hh or HH = 24 hour time, mm = minutes, ss or SS = seconds.
+#'
+#' @return A character vector of date/time format strings that can be parsed by `readr` or `strptime`.
+#' @export
+#'
+#' @examples
+#' convert_datetime_format("MM/DD/YYYY")
+#' convert_datetime_format(c("MM/DD/YYYY", "YY-MM-DD"))
+#'
+convert_datetime_format <- function(eml_format_string) {
+  r_format_string <- eml_format_string %>%
+    stringr::str_replace_all("YYYY", "%Y") %>%
+    stringr::str_replace_all("YY", "%y") %>%
+    stringr::str_replace_all("MMM", "%b") %>%
+    stringr::str_replace_all("MM", "%m") %>%
+    stringr::str_replace_all("DD", "%d") %>%
+    stringr::str_replace_all("(hh)|(HH)", "%H") %>%
+    stringr::str_replace_all("mm", "%M") %>%
+    stringr::str_replace_all("(ss)|(SS)", "%S") %>%
+    stringr::str_replace_all("(?<!%)M", "%m") %>%  # Replace M with %m, but leave %M alone
+    stringr::str_replace_all("D", "%d")
+  #stringr::str_replace_all("T", " ")
+  
+  return(r_format_string)
+}
