@@ -23,14 +23,101 @@ create_datastore_script <- function(owner,
     stop("ERROR: GitHub connection failed. Are you connected to the internet?\n")
   }
 
+
+
   #Make the json R friendly:
   gh_req_json <- httr::content(gh_req, "text")
   gh_req_rjson <- jsonlite::fromJSON(gh_req_json)
 
+  #check DataStore for existing references with the same title
+  #Title is auto generated as repo + version:
+  dynamic_title <- paste0(repo, " ", gh_req_rjson$tag_name)
+
+  if(dev == TRUE){
+    post_url <- paste0(.ds_dev_api(), "AdvancedSearch")
+  } else {
+    post_url <- paste0(.ds_secure_api(), "AdvancedSearch")
+  }
+  #generate json body for rest api call to do an advanced search on the title:
+  mylist <- list("quickSearch" = "string",
+                  "visibility" = "string",
+                  "legacy" = "string",
+                  "version"=  "string",
+                  "agencyOriginated" = "string",
+                  "regions" = list("order" = 0,
+                                   "logicOperator" = "string",
+                                   "unitCode" = "string"),
+                  "units" = list("order" = 0,
+                                 "logicOperator" = "string",
+                                 "unitCode" = "string",
+                                 "linked" = TRUE,
+                                 "approved" = TRUE),
+                 "producingUnits" = list("order" = 0,
+                                         "logicOperator" = "string",
+                                         "unitCode" = "string"),
+                 "textFields" = list("order" = 0,
+                                     "logicalOperator" = "",
+                                     "fieldName" = "Title",
+                                     "searchText" = dynamic_title),
+                 "dates" = list("order" = 0,
+                                "logicOperator" = "string",
+                                "fieldName" = "string",
+                                "filter" = "string",
+                                "startDate" = "2023-11-16T21:08:36.017Z",
+                                "endDate" = "2023-11-16T21:08:36.017Z"),
+                 "daterange" = list("startDate" = "2023-11-16T21:08:36.017Z",
+                                    "endDate" = "2023-11-16T21:08:36.017Z",
+                                    "startYear" = "string",
+                                    "endYear" = "string"),
+                 "referenceTypes" = list("order" = 0,
+                                         "logicOperator" = "string",
+                                         "referenceType" = "script"),
+                 "referenceGroups" = list("order" = 0,
+                                          "logicOperator" = "string",
+                                          "group" = "string"),
+                 "rectangles" = "string",
+                 "subjectCategories" = list("order" = 0,
+                                            "logicOperator" = "string",
+                                            "subjectCategory" = 0),
+                 "taxon" = list("order" = 0,
+                                "logicOperator" = "string",
+                                "subjectCategory" = 0),
+                 "digitalResources" = list("order" = 0,
+                                           "logicOperator" = "string",
+                                           "type" = "string",
+                                           "fieldName" = "string",
+                                           "searchText" = "string"),
+                  "collections" = list("order" = 0,
+                                       "logicOperator" = "string",
+                                       "collection" = 0),
+                 "people" = list("order" = 0,
+                                 "logicOperator" = "string",
+                                 "fieldName" = "string",
+                                 "searchText" = "string"))
+
+  bdy <- jsonlite::toJSON(mylist, pretty = TRUE, auto_unbox = TRUE)
+
+  #perform datastore advanced search for title = dynamic_title:
+  req <- httr::POST(post_url,
+                    httr::authenticate(":", "", "ntlm"),
+                    httr::add_headers('Content-Type'='application/json'),
+                    body = bdy)
+  #check status code; suggest logging in to VPN if errors occur:
+  status_code <- httr::stop_for_status(req)$status_code
+  if(!status_code == 200){
+    stop("ERROR: DataStore connection failed. Are you logged in to the VPN?\n")
+  }
+  #get title list:
+  json <- httr::content(req, "text")
+  rjson <- jsonlite::fromJSON(json)
+  items <- rjson$items
+
+
+
   #get download link for .zip file
   gh_zip_url <- gh_req_rjson$zipball_url
 
-  #
+  #in case someone uses non-default directory
   orig_wd <- getwd()
   #set directory back to original working directory on exit.
   on.exit(setwd(orig_wd), add=TRUE)
@@ -44,10 +131,10 @@ create_datastore_script <- function(owner,
 
   #create file name:
   file_name <- paste0(repo, "_", gh_req_rjson$tag_name, ".zip")
-
+  #create file path
   download_file_path <- paste0("releases/", file_name)
 
-  #download the file (.zip):
+  #download the file (.zip) from github:
   invisible(capture.output(
     suppressMessages(httr::content(
       httr::GET(
@@ -63,7 +150,7 @@ create_datastore_script <- function(owner,
 
   #generate json body for rest api call to create the reference:
   mylist <- list(referenceTypeId = "Script",
-                 title = repo,
+                 title = dynamic_title,
                  location = "",
                  issuedDate = list(year = 0,
                                    month = 0,
@@ -87,23 +174,38 @@ create_datastore_script <- function(owner,
   status_code <- httr::stop_for_status(req)$status_code
   if(!status_code == 200){
     stop("ERROR: DataStore connection failed. Are you logged in to the VPN?\n")
+  }
+  #get newly created reference id:
+  json <- httr::content(req, "text")
+  rjson <- jsonlite::fromJSON(json)
+  ds_ref <- rjson$referenceCode
 
+  if(dev == TRUE){
+    ds_profile_link <- paste0(
+      "https://irmadev.nps.gov/DataStore/Reference/Profile/",
+      ds_ref)}
+  else{
+    ds_profile_link <- paste0(
+      "https//irma.nps.gov/DataStore/Reference/Profile/",
+      ds_ref)
+  }
+
+  if(force == FALSE){
+    cat("A draft reference has been created on DataStore.")
+    cat("Your reference can be accessed and activated at:\n", ds_profile_link)
   }
 
   #check for files that are too big!
   if(file.size(download_file_path) > 33554432){
     #warn for each file >32Mb
+    if(force == TRUE){
     cat(crayon::blue$bold(file_name),
         " is greater than 32Mb and cannot be uploaded with this funcion.\n",
         "please use the DataStore website to upload your files manually.",
         sep = "")
+      }
     stop()
   }
-
-  #get newly created reference id:
-  json <- httr::content(req, "text")
-  rjson <- jsonlite::fromJSON(json)
-  ds_ref <- rjson$referenceCode
 
   #use reference id to put the file:
   if(dev == TRUE){
