@@ -63,7 +63,8 @@ convert_datetime_format <- function(eml_format_string) {
     stringr::str_replace_all("mm", "%M") %>%
     stringr::str_replace_all("(ss)|(SS)", "%S") %>%
     stringr::str_replace_all("(?<!%)M", "%m") %>%  # Replace M with %m, but leave %M alone
-    stringr::str_replace_all("D", "%d")
+    stringr::str_replace_all("D", "%d") %>%
+    stringr::str_replace_all("[+-][Hh]{1,4}$", "%z")
   #stringr::str_replace_all("T", " ")
   
   return(r_format_string)
