@@ -37,11 +37,11 @@ get_elevation <- function(df,
 
   #test & warn for correct lat/long specification:
   if(force == FALSE){
-    lat_test <- df2 %>% filter(df2[,1] < 0)
+    lat_test <- df2 %>% dplyr::filter(df2[,1] < 0)
     if(nrow(lat_test > 0)){
       cat("Some latitudes appear to be below the equator. Make sure you correctly designated latitude and longitude.\n")
     }
-    long_test <- df2 %>% filter(df2[,2] > 0)
+    long_test <- df2 %>% dplyr::filter(df2[,2] > 0)
     if(nrow(long_test > 0)){
       cat("Some latitudes appear to be in the Eastern Hemisphere. Makre sure you correctly designated latitude and longitude.\n")
     }
