@@ -23,86 +23,23 @@ create_datastore_script <- function(owner,
     stop("ERROR: GitHub connection failed. Are you connected to the internet?\n")
   }
 
-
-
   #Make the json R friendly:
   gh_req_json <- httr::content(gh_req, "text")
   gh_req_rjson <- jsonlite::fromJSON(gh_req_json)
 
   #check DataStore for existing references with the same title
-  #Title is auto generated as repo + version:
-  dynamic_title <- paste0(repo, " ", gh_req_rjson$tag_name)
+  #Title is auto generated as repo + version; replace space with %20
+  new_ref_title <- paste0(gh_req_rjson$tag_name)
+  dynamic_title <- gsub(" ", "%20", new_ref_title)
 
-  if(dev == TRUE){
-    post_url <- paste0(.ds_dev_api(), "AdvancedSearch")
-  } else {
-    post_url <- paste0(.ds_secure_api(), "AdvancedSearch")
-  }
-  #generate json body for rest api call to do an advanced search on the title:
-  mylist <- list("quickSearch" = "string",
-                  "visibility" = "string",
-                  "legacy" = "string",
-                  "version"=  "string",
-                  "agencyOriginated" = "string",
-                  "regions" = list("order" = 0,
-                                   "logicOperator" = "string",
-                                   "unitCode" = "string"),
-                  "units" = list("order" = 0,
-                                 "logicOperator" = "string",
-                                 "unitCode" = "string",
-                                 "linked" = TRUE,
-                                 "approved" = TRUE),
-                 "producingUnits" = list("order" = 0,
-                                         "logicOperator" = "string",
-                                         "unitCode" = "string"),
-                 "textFields" = list("order" = 0,
-                                     "logicalOperator" = "",
-                                     "fieldName" = "Title",
-                                     "searchText" = dynamic_title),
-                 "dates" = list("order" = 0,
-                                "logicOperator" = "string",
-                                "fieldName" = "string",
-                                "filter" = "string",
-                                "startDate" = "2023-11-16T21:08:36.017Z",
-                                "endDate" = "2023-11-16T21:08:36.017Z"),
-                 "daterange" = list("startDate" = "2023-11-16T21:08:36.017Z",
-                                    "endDate" = "2023-11-16T21:08:36.017Z",
-                                    "startYear" = "string",
-                                    "endYear" = "string"),
-                 "referenceTypes" = list("order" = 0,
-                                         "logicOperator" = "string",
-                                         "referenceType" = "script"),
-                 "referenceGroups" = list("order" = 0,
-                                          "logicOperator" = "string",
-                                          "group" = "string"),
-                 "rectangles" = "string",
-                 "subjectCategories" = list("order" = 0,
-                                            "logicOperator" = "string",
-                                            "subjectCategory" = 0),
-                 "taxon" = list("order" = 0,
-                                "logicOperator" = "string",
-                                "subjectCategory" = 0),
-                 "digitalResources" = list("order" = 0,
-                                           "logicOperator" = "string",
-                                           "type" = "string",
-                                           "fieldName" = "string",
-                                           "searchText" = "string"),
-                  "collections" = list("order" = 0,
-                                       "logicOperator" = "string",
-                                       "collection" = 0),
-                 "people" = list("order" = 0,
-                                 "logicOperator" = "string",
-                                 "fieldName" = "string",
-                                 "searchText" = "string"))
+  post_url <- paste0(.ds_secure_api(), "QuickSearch?q=", "EMLeditor")
 
-  bdy <- jsonlite::toJSON(mylist, pretty = TRUE, auto_unbox = TRUE)
 
-  #perform datastore advanced search for title = dynamic_title:
-  req <- httr::POST(post_url,
+  req <- httr::GET(post_url,
                     httr::authenticate(":", "", "ntlm"),
-                    httr::add_headers('Content-Type'='application/json'),
-                    body = bdy)
-  #check status code; suggest logging in to VPN if errors occur:
+                    httr::add_headers('accept'='application/json'))
+
+    #check status code; suggest{ logging in to VPN if errors occur:
   status_code <- httr::stop_for_status(req)$status_code
   if(!status_code == 200){
     stop("ERROR: DataStore connection failed. Are you logged in to the VPN?\n")
@@ -110,8 +47,17 @@ create_datastore_script <- function(owner,
   #get title list:
   json <- httr::content(req, "text")
   rjson <- jsonlite::fromJSON(json)
-  items <- rjson$items
+  items <- rjson$items$title
 
+  #search for title in title list, if force == false:
+  if(force == FALSE){
+    if(dynamic_title %in% items){
+      cat("A DataStore reference with title containing: ",
+          new_ref_title,
+          " already exists.", sep="")
+
+    }
+  }
 
 
   #get download link for .zip file
@@ -150,7 +96,7 @@ create_datastore_script <- function(owner,
 
   #generate json body for rest api call to create the reference:
   mylist <- list(referenceTypeId = "Script",
-                 title = dynamic_title,
+                 title = new_ref_title,
                  location = "",
                  issuedDate = list(year = 0,
                                    month = 0,
@@ -238,14 +184,13 @@ create_datastore_script <- function(owner,
   #release url:
   weblink <- gh_req_rjson$html_url
   #last verified date/time:
-  sys_date <- as.POSIXlt(Sys.time(), "UTC")
-  sys_date_iso8601 <- strftime(sys_date, "%Y-%m-%dT%H:%M:%S")
-  ds_date_time <- paste0(sys_date_iso8601, ".000Z")
+  sys_date <- Sys.time()
+  sys_date_iso8601 <- strptime(sys_date, format="%Y-%m-%d %H:%M:%S")
   mylist <- list(resourceID = "0",
                  userSort = "0",
                  description = "GitHub.com url for the release",
                  uri = weblink,
-                 lastVerified = ds_date_time)
+                 lastVerified = sys_date_iso8601)
   bdy <- jsonlite::toJSON(mylist, pretty = TRUE, auto_unbox = TRUE)
 
   #use reference id to put the weblink:
@@ -255,7 +200,7 @@ create_datastore_script <- function(owner,
     api_url <- paste0(.ds_secure_api(), "Reference/", ds_ref, "/ExternalLinks")
   }
 
-  #upload the weglink:
+  #upload the weblink:
   req <- httr::POST(
     url = api_url,
     httr::add_headers('Content-Type'='application/json'),
