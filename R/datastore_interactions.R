@@ -32,9 +32,8 @@ create_datastore_script <- function(owner,
   new_ref_title <- paste0(gh_req_rjson$tag_name)
   dynamic_title <- gsub(" ", "%20", new_ref_title)
 
+  #quick search of datastore for the string "dynamic title"
   post_url <- paste0(.ds_secure_api(), "QuickSearch?q=", "EMLeditor")
-
-
   req <- httr::GET(post_url,
                     httr::authenticate(":", "", "ntlm"),
                     httr::add_headers('accept'='application/json'))
@@ -47,14 +46,18 @@ create_datastore_script <- function(owner,
   #get title list:
   json <- httr::content(req, "text")
   rjson <- jsonlite::fromJSON(json)
-  items <- rjson$items$title
-
+  items <- as.data.frame(rjson$items)
   #search for title in title list, if force == false:
   if(force == FALSE){
-    if(dynamic_title %in% items){
-      cat("A DataStore reference with title containing: ",
+    matches <- items %>% filter(stringr::str_detect(items$title, "EMLeditor"))
+    if(length(seq_along(matches$title) > 0)){
+      cat("One or more DataStore references with title containing: ",
           new_ref_title,
-          " already exists.", sep="")
+          " already exists:", sep="")
+      cat("Reference ID: ", matches$referenceId, "; Title: ", matches$title, sep="")
+      cat("Are you sure you want to create a new draft reference for ",
+          new_ref_title, "?", sep = "")
+
 
     }
   }
