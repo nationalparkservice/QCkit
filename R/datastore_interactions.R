@@ -1,6 +1,28 @@
-
-
-
+#' Turn a GitHub release into a DataStore Script Reference
+#'
+#' @description Given a GitHub owner ("nationalparkservice") and public repo ("EMLeditor"), the function uses the GitHub API to access the latest release version on GitHub and generate a corresponding draft Script reference on DataStore.
+#'
+#' WARNING: if you are not an author of the repo on GitHub, you should probably NOT be the one adding it to DataStore unless you have very good reason. If you want to cite a GitHub release/repo and need a DOI, contact the repo maintainer and suggest they use this function to put it on DataStore for you.
+#'
+#' It searches DataStore for references with a similar title (where the title is repo + release tag). If `force = FALSE` and there are similarly titled references, the function will return a list of them and ask if the user really wants a new DataStore reference generated. Assuming yes (or if there are no existing DataStore references with a similar title or `force = TRUE`), the function will: 1) download the .zip of the lastest GitHub release for the repo, 2) initiate a draft reference on DataStore, 3) give the draft reference a title (repo + release tag), 4) upload the .zip from GitHub 5) add a web link to the release on GitHub.
+#'
+#' The user will still need to go access the draft Script reference on DataStore to fill in the remaining fields (which are not accessible via API and so cannot be automated through this function) and activate the reference (thereby generating and registering a citeable DOI).
+#'
+#' If the Reference is a version of an older reference, the user will have to access the older version and indicate that it is an older version of the current Reference. The user will also have to manually add the new Reference to a Project for the repo, if desired.
+#'
+#' @param owner String. The owner of the account where the GitHub repo resides. For example, "nationalparkservice"
+#' @param repo String. The repo with a release that should be turned into a DataStore Script reference. For example, "EMLeditor"
+#' @param path String. The location where the release .zip from GitHub should be downloaded to (and uploaded from). Defaults to the working directory of the R Project.
+#' @param force Logical. Defaults to FALSE. In the default status the function has a number of interactive components, such as searching DataStore for similarly titled References and asking if a new Reference is really what the user wants. When set to TRUE, all interactive components are turned off and the function will proceed unless it hits an error. Setting force = TRUE may be useful for scripting purposes.
+#' @param dev Logical. Defaults to FALSE. In the default status, the function generates and populates a new draft Script reference on the DataStore production server. If set to TRUE, the draft Script reference will be generated and populated on the DataStore development server. Setting dev = TRUE may be useful for testing the function without generating excessive references on the DataStore production server.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' create_datastore_script("nationalparkservice", "EMLeditor")
+#' }
 create_datastore_script <- function(owner,
                                     repo,
                                     path = here::here(),
@@ -29,27 +51,29 @@ create_datastore_script <- function(owner,
 
   #check DataStore for existing references with the same title
   #Title is auto generated as repo + version; replace space with %20
-  new_ref_title <- paste0(gh_req_rjson$tag_name)
+  new_ref_title <- paste0(repo, " ", gh_req_rjson$tag_name)
   dynamic_title <- gsub(" ", "%20", new_ref_title)
 
-  #quick search of datastore for the string "dynamic title"
-  post_url <- paste0(.ds_secure_api(), "QuickSearch?q=", "EMLeditor")
+  #quick search of DataStore for the string "dynamic title"
+  post_url <- paste0(.QC_ds_secure_api(), "QuickSearch?q=", dynamic_title)
   req <- httr::GET(post_url,
                     httr::authenticate(":", "", "ntlm"),
                     httr::add_headers('accept'='application/json'))
 
-    #check status code; suggest{ logging in to VPN if errors occur:
+  #check status code; suggest logging in to VPN if errors occur:
   status_code <- httr::stop_for_status(req)$status_code
   if(!status_code == 200){
     stop("ERROR: DataStore connection failed. Are you logged in to the VPN?\n")
   }
-  #get title list:
+
+  #get search results and turn into a dataframe:
   json <- httr::content(req, "text")
   rjson <- jsonlite::fromJSON(json)
   items <- as.data.frame(rjson$items)
+
   #search for title in title list, if force == false:
   if(force == FALSE){
-    matches <- items %>% filter(stringr::str_detect(items$title, "EMLeditor"))
+    matches <- items %>% filter(stringr::str_detect(items$title, new_ref_title))
     if(length(seq_along(matches$title) > 0)){
       cat("One or more DataStore references with title containing: ",
           new_ref_title,
@@ -57,11 +81,13 @@ create_datastore_script <- function(owner,
       cat("Reference ID: ", matches$referenceId, "; Title: ", matches$title, sep="")
       cat("Are you sure you want to create a new draft reference for ",
           new_ref_title, "?", sep = "")
-
-
+      var1 <- readline(prompt = cat("\n\n1: Yes\n2: No\n\n"))
+      if(var1 == 2){
+        cat("Your have not generated a new DataStore refernce.")
+        return()
+      }
     }
   }
-
 
   #get download link for .zip file
   gh_zip_url <- gh_req_rjson$zipball_url
@@ -109,9 +135,9 @@ create_datastore_script <- function(owner,
   bdy <- jsonlite::toJSON(mylist, pretty = TRUE, auto_unbox = TRUE)
 
   if(dev == TRUE){
-    post_url <- paste0(.ds_dev_api(), "Reference/CreateDraft")
+    post_url <- paste0(.QC_ds_dev_api(), "Reference/CreateDraft")
   } else {
-    post_url <- paste0(.ds_secure_api(), "Reference/CreateDraft")
+    post_url <- paste0(.QC_ds_secure_api(), "Reference/CreateDraft")
   }
 
   #create the draft reference:
@@ -138,16 +164,15 @@ create_datastore_script <- function(owner,
       "https//irma.nps.gov/DataStore/Reference/Profile/",
       ds_ref)
   }
-
+  #inform user a new reference has been generated:
   if(force == FALSE){
-    cat("A draft reference has been created on DataStore.")
-    cat("Your reference can be accessed and activated at:\n", ds_profile_link)
+    cat("A draft reference has been created on DataStore.\n")
   }
 
   #check for files that are too big!
   if(file.size(download_file_path) > 33554432){
     #warn for each file >32Mb
-    if(force == TRUE){
+    if(force == FALSE){
     cat(crayon::blue$bold(file_name),
         " is greater than 32Mb and cannot be uploaded with this funcion.\n",
         "please use the DataStore website to upload your files manually.",
@@ -158,9 +183,9 @@ create_datastore_script <- function(owner,
 
   #use reference id to put the file:
   if(dev == TRUE){
-    api_url <- paste0(.ds_dev_api(), "Reference/", ds_ref, "/UploadFile")
+    api_url <- paste0(.QC_ds_dev_api(), "Reference/", ds_ref, "/UploadFile")
   } else {
-    api_url <- paste0(.ds_secure_api(), "Reference/", ds_ref, "/UploadFile")
+    api_url <- paste0(.QC_ds_secure_api(), "Reference/", ds_ref, "/UploadFile")
   }
 
   #upload the zip file
@@ -172,17 +197,16 @@ create_datastore_script <- function(owner,
     encode = "multipart",
     httr::progress(type = "up", con = ""))
 
-    status_code <- httr::stop_for_status(req)$status_code
-
-      if(status_code != 201){
-      stop("ERROR: DataStore connection failed. Your file was not successfully uploaded.")
-    }
-    else{
+  status_code <- httr::stop_for_status(req)$status_code
+  if(status_code != 201){
+    stop("ERROR: DataStore connection failed. Your file was not successfully uploaded.")
+  }
+  ds_resource_url <- req$headers$location
+    if(force == FALSE){
       cat("Your file, ", crayon::blue$bold(file_name),
           ", has been uploaded to:\n", sep = "")
-      cat(req$headers$location, "\n", sep="")
-    }
-
+      cat(ds_resource_url, "\n", sep="")
+  }
   #add a web link:
   #release url:
   weblink <- gh_req_rjson$html_url
@@ -198,9 +222,9 @@ create_datastore_script <- function(owner,
 
   #use reference id to put the weblink:
   if(dev == TRUE){
-    api_url <- paste0(.ds_dev_api(), "Reference/", ds_ref, "/ExternalLinks")
+    api_url <- paste0(.QC_ds_dev_api(), "Reference/", ds_ref, "/ExternalLinks")
   } else {
-    api_url <- paste0(.ds_secure_api(), "Reference/", ds_ref, "/ExternalLinks")
+    api_url <- paste0(.QC_ds_secure_api(), "Reference/", ds_ref, "/ExternalLinks")
   }
 
   #upload the weblink:
@@ -211,71 +235,22 @@ create_datastore_script <- function(owner,
     body = bdy)
 
   status_code <- httr::stop_for_status(req)$status_code
-
-  json <- httr::content(req, "text")
-  rjson <- jsonlite::fromJSON(json)
-
+  if(status_code != 200){
+    stop("ERROR: DataStore connection failed. Your file was not successfully uploaded.")
+  }
+  if(force == FALSE){
+    cat("The following web link has been added to your Script Reference: \n")
+    cat(weblink, "\n", sep="")
+    cat("Your draft reference can be accessed at:\n")
+    if(dev == TRUE){
+      ds_ref_url <- paste0("https://irmadev.nps.gov/DataStore/Reference/Profile/",
+                    ds_ref)
+    } else {
+      ds_ref_url <- paste0("https://irma.nps.gov/DataStore/Reference/Profile/",
+                    ds_ref)
+    }
+    cat(crayon::blue$bold(ds_ref_url))
+  }
 }
 
-
-
-
-  #generate json body for rest api call to create the reference:
-  mylist <- list(referenceTypeId = "Script",
-                 title = dynamic_title,
-                 location = "",
-                 issuedDate = list(year = 0,
-                                   month = 0,
-                                   day = 0,
-                                   precision = ""))
-bdy <- jsonlite::toJSON(mylist, pretty = TRUE, auto_unbox = TRUE)
-
-
-GH token:
-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
-
-curl -L -H "Accept: application/vnd.github+json" \
--H "Authorization: Bearer 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" \
--H "X-GitHub-Api-Version: 2022-11-28" \
-https://api.github.com/repos/nationalparkservice/EMLeditor/releases/latest
-
-
-curl  https://api.github.com/repos/nationalparkservice/EMLeditor/releases/latest -L -H 'Accept: application/vnd.github+json' -H 'X-GitHub-Api-Version: 2022-11-28'
-
-[
-  {
-    "url": ["https://api.github.com/repos/nationalparkservice/EMLeditor/releases/latest"],
-    "method": ["GET"],
-    "cookies": {},
-    "username": {},
-    "password": {},
-    "user_agent": {},
-    "referer": {},
-    "data": {},
-    "headers": {
-      "Accept": ["application/vnd.github+json"],
-      "X-GitHub-Api-Version": ["2022-11-28"]
-    },
-    "verbose": [false],
-    "url_parts": {
-      "scheme": ["https"],
-      "hostname": ["api.github.com"],
-      "port": {},
-      "path": ["repos/nationalparkservice/EMLeditor/releases/latest"],
-      "query": {},
-      "params": {},
-      "fragment": {},
-      "username": {},
-      "password": {}
-    },
-    "orig_curl": ["curl  https://api.github.com/repos/nationalparkservice/EMLeditor/releases/latest -L -H 'Accept: application/vnd.github+json' -H 'X-GitHub-Api-Version: 2022-11-28'"]
-  }
-]
-
-req <- httr::GET("https://api.github.com/repos/nationalparkservice/EMLeditor/releases/latest",
-                  #httr::authenticate(":", "", "ntlm"),
-                  httr::add_headers('Accept'='application/vnd.github+json'),
-                  httr::verbose()
-)
-
-req <- httr2:
+#### SET DATASTORE PERMISSIONS TO PUBLIC.
