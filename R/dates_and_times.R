@@ -41,9 +41,10 @@ fix_utc_offset <- function(datetime_strings) {
 
 #' Convert EML date/time format string to one that R can parse
 #'
-#' @details `convert_datetime_format()` is not a sophisticated function. If the EML format string is not valid, it will happily and without complaint return an R format string that will break your code. You have been warned.
+#' @details `convert_datetime_format()` is not a sophisticated function. If the EML format string is not valid, it will happily and without complaint return an R format string that will break your code. You have been warned.  Note that UTC offset formats using a colon or only two digits will be parsed by this function, but if parsing datetime values from strings, you will also need to use `fix_utc_offset` to change the UTC offsets to the +/-hhhh format that R can read.
 #'
-#' @param eml_format_string A character vector of EML date/time format strings. This function understands the following codes: YYYY = four digit year, YY = two digit year, MMM = three letter month abbrev., MM = two digit month, DD = two digit day, hh or HH = 24 hour time, mm = minutes, ss or SS = seconds.
+#' @param eml_format_string A character vector of EML date/time format strings. This function understands the following codes: YYYY = four digit year, YY = two digit year, MMM = three letter month abbrev., MM = two digit month, DD = two digit day, hh or HH = 24 hour time, mm = minutes, ss or SS = seconds, +/-hhhh or +/-HHHH = UTC offset.
+#' @param convert_z Should a "Z" at the end of the format string (indicating UTC) be replaced by a "%z"? Only set to `TRUE` if you plan to use `fix_utc_offset` to change "Z" in datetime strings to "+0000". 
 #'
 #' @return A character vector of date/time format strings that can be parsed by `readr` or `strptime`.
 #' @export
@@ -52,20 +53,24 @@ fix_utc_offset <- function(datetime_strings) {
 #' convert_datetime_format("MM/DD/YYYY")
 #' convert_datetime_format(c("MM/DD/YYYY", "YY-MM-DD"))
 #'
-convert_datetime_format <- function(eml_format_string) {
+convert_datetime_format <- function(eml_format_string, convert_z = FALSE) {
   r_format_string <- eml_format_string %>%
     stringr::str_replace_all("YYYY", "%Y") %>%
     stringr::str_replace_all("YY", "%y") %>%
     stringr::str_replace_all("MMM", "%b") %>%
     stringr::str_replace_all("MM", "%m") %>%
     stringr::str_replace_all("DD", "%d") %>%
-    stringr::str_replace_all("(hh)|(HH)", "%H") %>%
+    stringr::str_replace_all("(?<![+-])((hh)|(HH))", "%H") %>%
     stringr::str_replace_all("mm", "%M") %>%
     stringr::str_replace_all("(ss)|(SS)", "%S") %>%
     stringr::str_replace_all("(?<!%)M", "%m") %>%  # Replace M with %m, but leave %M alone
     stringr::str_replace_all("D", "%d") %>%
-    stringr::str_replace_all("[+-][Hh]{1,4}$", "%z")
+    stringr::str_replace_all("[+-][Hh]{1,2}:?[Hh]{0,2}(?=$)", "%z")  # Replace UTC offset format string (e.g. -hh, -hhhh, -hh:hh) with %z. Note that R seems to only parse UTC offsets when in the format +/-hhhh.
   #stringr::str_replace_all("T", " ")
+  
+  if (convert_z) {
+    r_format_string <- stringr::str_replace(r_format_string, "Z(?=$)", "%z")
+  }
   
   return(r_format_string)
 }
