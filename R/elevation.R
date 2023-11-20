@@ -20,8 +20,15 @@
 #'
 #' @examples
 #'  \dontrun{
-#'  new_dataframe <- get_elevation(dataframe, "decimalLatitude", "decimalLongitude", spatial_ref="4326")
-#'  new_dataframe <- get_elevation(dataframe, "decimalLatitude", "decimalLongitude", spatial_ref="102100", force=TRUE)
+#' new_dataframe <- get_elevation(df,
+#'                               "decimalLatitude",
+#'                               "decimalLongitude",
+#'                               spatial_ref="4326")
+#' new_dataframe <- get_elevation(df,
+#'                               "decimalLatitude",
+#'                               "decimalLongitude",
+#'                               spatial_ref="102100",
+#'                               force=TRUE)
 #'  }
 get_elevation <- function(df,
                           decimal_lat,
