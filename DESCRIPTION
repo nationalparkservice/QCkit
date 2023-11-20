@@ -44,7 +44,8 @@ Imports:
     lifecycle,
     huxtable,
     crayon,
-    data.table
+    data.table,
+    jsonlite
 RoxygenNote: 7.2.3
 Suggests: 
     knitr,
