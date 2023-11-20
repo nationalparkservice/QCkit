@@ -74,21 +74,23 @@ create_datastore_script <- function(owner,
 
   #search for title in title list, if force == false:
   if(force == FALSE){
-    matches <- items %>% filter(stringr::str_detect(items$title, new_ref_title))
-    if(length(seq_along(matches$title) > 0)){
-      cat("One or more DataStore references with title containing: ",
-          new_ref_title,
-          " already exists:", sep="")
-      cat("Reference ID: ",
-          matches$referenceId,
-          "; Title: ",
-          matches$title, sep="")
-      cat("Are you sure you want to create a new draft reference for ",
-          new_ref_title, "?", sep = "")
-      var1 <- readline(prompt = cat("\n\n1: Yes\n2: No\n\n"))
-      if(var1 == 2){
-        cat("Your have not generated a new DataStore refernce.")
-        return()
+    if(length(items) > 0){
+      matches <- items %>% filter(stringr::str_detect(items$title, new_ref_title))
+      if(length(seq_along(matches$title) > 0)){
+        cat("One or more DataStore references with title containing: ",
+            new_ref_title,
+            " already exists:", sep="")
+        cat("Reference ID: ",
+            matches$referenceId,
+            "; Title: ",
+            matches$title, sep="")
+        cat("Are you sure you want to create a new draft reference for ",
+            new_ref_title, "?", sep = "")
+        var1 <- readline(prompt = cat("\n\n1: Yes\n2: No\n\n"))
+        if(var1 == 2){
+          cat("Your have not generated a new DataStore refernce.")
+          return()
+        }
       }
     }
   }
