@@ -62,11 +62,11 @@ get_dp_flags <- function(directory = here::here()) {
     A <- suppressWarnings(sum(stringr::str_count(flags_only, "\\bA"),
                               na.rm = TRUE))
     AE <- suppressWarnings(sum(stringr::str_count(flags_only, "\\bAE"),
-                              na.rm = TRUE))
+                             na.rm = TRUE))
     R <- suppressWarnings(sum(stringr::str_count(flags_only, "\\bR"),
-                              na.rm = TRUE))
+                             na.rm = TRUE))
     P <- suppressWarnings(sum(stringr::str_count(flags_only, "\\bP"),
-                              na.rm = TRUE))
+                             na.rm = TRUE))
     # Increment flag counts:
     A_flag <- sum(A_flag + A)
     AE_flag <- sum(AE_flag + AE)
@@ -196,8 +196,7 @@ get_df_flags <- function(directory = here::here()) {
     A_count <- (Cell_count - R_flag - P_flag)
 
     # Calculate RRU as accepted data/all data
-    flags$RRU <- ((A_count) /
-      flags$Cell_count)
+    flags$RRU <- ((A_count) / flags$Cell_count)
 
     # add to df_flags dataframe:
     df_flags <- rbind(df_flags, flags)
