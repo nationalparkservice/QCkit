@@ -17,35 +17,54 @@
 #' \dontrun{
 #' order_cols(df)
 #' }
-order_cols <- function(df){
+order_cols <- function(df) {
 
-suggested <- c('eventDate', 'eventDate_flag', 'scientificName', 'scientificName_flag', 'taxonRank', 'verbatimIdentification', 'vernacularName', 'namePublishedIn', 'recordedBy', 'individualCount', 'decimalLongitude', 'decimalLatitude', 'coordinate_flag', 'geodeticDatum', 'verbatimCoordinates', 'verbatimCoordinateSystem', 'verbatimSRS', 'coordinateUncertaintyInMeters')
+  suggested <- c("eventDate", "eventDate_flag", "scientificName",
+                 "scientificName_flag", "taxonRank", "verbatimIdentification",
+                 "vernacularName", "namePublishedIn", "recordedBy",
+                 "individualCount", "decimalLongitude", "decimalLatitude",
+                 "coordinate_flag", "geodeticDatum", "verbatimCoordinates",
+                 "verbatimCoordinateSystem", "verbatimSRS",
+                 "coordinateUncertaintyInMeters")
 
-required <- c('locality', 'type', 'basisOfRecord')
+  required <- c("locality", "type", "basisOfRecord")
 
-allofem <- c('locality', 'type', 'basisOfRecord', 'eventDate', 'eventDate_flag', 'scientificName', 'scientificName_flag', 'taxonRank', 'verbatimIdentification', 'vernacularName', 'namePublishedIn', 'custom_TaxonomicNotes', 'recordedBy', 'individualCount', 'decimalLongitude', 'decimalLatitude', 'coordinate_flag', 'geodeticDatum', 'verbatimCoordinates', 'verbatimCoordinateSystem', 'verbatimSRS', 'coordinateUncertaintyInMeters')
+  allofem <- c("locality", "type", "basisOfRecord", "eventDate",
+               "eventDate_flag", "scientificName", "scientificName_flag",
+               "taxonRank", "verbatimIdentification", "vernacularName",
+               "namePublishedIn", "custom_TaxonomicNotes", "recordedBy",
+               "individualCount", "decimalLongitude", "decimalLatitude",
+               "coordinate_flag", "geodeticDatum", "verbatimCoordinates",
+               "verbatimCoordinateSystem", "verbatimSRS",
+               "coordinateUncertaintyInMeters")
 
-print(lapply(required, function(x) ifelse(x %in% names(df), paste0("Looking great! The required field \'", x, "\' exists within your data"), paste0("Please include the required field \'", x, "\' in your dataset"))))
+  print(lapply(required,
+               function(x) ifelse(x %in% names(df),
+                                  paste0("Looking great! The required field \'",
+                                       x, "\' exists within your data"),
+                                  paste0("Please include the required field \'",
+                                       x, "\' in your dataset"))))
 
-print(lapply(suggested, function(x) ifelse(x %in% names(df), paste0("The field \'", x, "\' is present"), paste0("The suggested field \'", x, "\' is NOT present. If data for this field exists, please include it in your dataset"))))
+  print(lapply(suggested,
+               function(x) ifelse(x %in% names(df),
+                                  paste0("The field \'", x, "\' is present"),
+                                paste0("The suggested field \'", x,
+                                       "\' is NOT present. If data for this field exists, please include it in your dataset"))))
 
-
-df <- list(df)
-
-df <- lapply(df, function(x) data.table::setcolorder(x, intersect(allofem, names(x))))
-
-df <- as.data.frame(df)
-
-customs <- df[, stringr::str_detect(names(df), 'custom_') == TRUE]
-
-df <- df[, stringr::str_detect(names(df), 'custom_') == FALSE]
-
-sensitives <- df %>% dplyr::select(any_of(c("informationWithheld", "dataGeneralizations", "footprintWKT")))
-
-df <- df %>% dplyr::select(-dplyr::any_of(c("informationWithheld", "dataGeneralizations", "footprintWKT")))
-
-df <- cbind(df, customs, sensitives)
-
-df <- df %>% dplyr::relocate(any_of("custom_TaxonomicNotes"), .after = "namePublishedIn")
-
+  df <- list(df)
+  df <- lapply(df, function(x) data.table::setcolorder(x,
+                                                       intersect(allofem,
+                                                                 names(x))))
+  df <- as.data.frame(df)
+  customs <- df[, stringr::str_detect(names(df), "custom_") == TRUE]
+  df <- df[, stringr::str_detect(names(df), "custom_") == FALSE]
+  sensitives <- df %>% dplyr::select(any_of(c("informationWithheld",
+                                              "dataGeneralizations",
+                                              "footprintWKT")))
+  df <- df %>% dplyr::select(-dplyr::any_of(c("informationWithheld",
+                                              "dataGeneralizations",
+                                              "footprintWKT")))
+  df <- cbind(df, customs, sensitives)
+  df <- df %>% dplyr::relocate(any_of("custom_TaxonomicNotes"),
+                               .after = "namePublishedIn")
 }

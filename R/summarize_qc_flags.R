@@ -276,16 +276,16 @@ get_dc_flags <- function(directory = here::here()) {
         # Assessment codes)
         A_flag <- suppressWarnings(sum(stringr::str_count(flags_only[j],
                                                           "\\bA"),
-                                                          na.rm = TRUE))
+                                       na.rm = TRUE))
         AE_flag <- suppressWarnings(sum(stringr::str_count(flags_only[j],
                                                            "\\bAE"),
-                                                          na.rm = TRUE))
+                                        na.rm = TRUE))
         R_flag <- suppressWarnings(sum(stringr::str_count(flags_only[j],
                                                           "\\bR"),
-                                                          na.rm = TRUE))
+                                       na.rm = TRUE))
         P_flag <- suppressWarnings(sum(stringr::str_count(flags_only[j],
                                                           "\\bP"),
-                                                          na.rm = TRUE))
+                                       na.rm = TRUE))
         # get cell count in file, exclude NAs and flags:
         Cell_count <- sum(!is.na(flags_only[j]))
 
@@ -430,9 +430,9 @@ get_custom_flags <- function(directory = here::here(),
         AE_flag <- 0
         R_flag <- 0
         P_flag <- 0
-        RRU <- A_flag/(nrow(cust_cols[j]))
+        RRU <- A_flag / (nrow(cust_cols[j]))
         Cell_count <- A_flag
-        percent_missing <- (sum(is.na(cust_cols[j])))/nrow(cust_cols[j])
+        percent_missing <- (sum(is.na(cust_cols[j]))) / nrow(cust_cols[j])
 
         filename <- names(dfList)[i]
         column <- colnames(cust_cols)[j]
@@ -486,7 +486,7 @@ get_custom_flags <- function(directory = here::here(),
         # get cell count in file, exclude NAs and flags:
         Cell_count <- sum(!is.na(flags_only[j]))
 
-        percent_missing <- (sum(is.na(flags_only[j])))/nrow(flags_only[j])
+        percent_missing <- (sum(is.na(flags_only[j]))) / nrow(flags_only[j])
 
         RRU <- (A_flag + AE_flag) / nrow(flags_only[j])
 
@@ -525,7 +525,7 @@ get_custom_flags <- function(directory = here::here(),
       R_flag <- NA
       P_flag <- NA
       Cell_count <- NA
-      percent_missing <-NA
+      percent_missing <- NA
       RRU <- NA
 
       flags <- data.frame(
@@ -541,60 +541,42 @@ get_custom_flags <- function(directory = here::here(),
   #generate summary statistics for each column:
   data_file_summaries <- cust_flags %>%
     dplyr::group_by(filename) %>%
-    dplyr::summarize(A_total=sum(A_flag),
-              #A_mean=mean(A_flag),
-              #A_sd=stats::sd(A_flag),
-              AE_total=sum(AE_flag),
-              #AE_mean=mean(AE_flag),
-              #AE_sd=stats::sd(AE_flag),
-              P_total=sum(P_flag),
-              #P_mean=mean(P_flag),
-              #P_sd=stats::sd(P_flag),
-              R_total=sum(R_flag),
-              #R_mean=mean(R_flag),
-              #R_sd=stats::sd(R_flag),
-              missing_mean_percent=mean(percent_missing),
-              #missing_sd=stats::sd(percent_missing),
-              RRU_mean=mean(RRU),
-              RRU_sd=stats::sd(RRU))
+    dplyr::summarize(A_total = sum(A_flag),
+                     AE_total = sum(AE_flag),
+                     P_total = sum(P_flag),
+                     R_total = sum(R_flag),
+                     missing_mean_percent = mean(percent_missing),
+                     RRU_mean = mean(RRU),
+                     RRU_sd = stats::sd(RRU))
 
   #generate data package level summaries
-  data_package_summary<- cust_flags %>%
-    plyr::summarize(A_total=sum(A_flag, na.rm=TRUE),
-              #A_mean=mean(A_flag, na.rm = TRUE),
-              #A_sd=sd(A_flag, na.rm = TRUE),
-              AE_total=sum(AE_flag, na.rm=TRUE),
-              #AE_mean=mean(AE_flag, na.rm=TRUE),
-              #AE_sd=sd(AE_flag, na.rm=TRUE),
-              P_total=sum(P_flag, na.rm=TRUE),
-              #P_mean=mean(P_flag, na.rm=TRUE),
-              #P_sd=sd(P_flag, na.rm=TRUE),
-              R_total=sum(R_flag, na.rm=TRUE),
-              #R_mean=mean(R_flag, na.rm=TRUE),
-              #R_sd=sd(R_flag, na.rm=TRUE),
-              missing_mean_percent=mean(percent_missing, na.rm=TRUE),
-              #missing_sd=sd(percent_missing, na.rm=TRUE),
-              RRU_mean=mean(RRU, na.rm=TRUE),
-              RRU_sd=sd(RRU, na.rm=TRUE))
+  data_package_summary <- cust_flags %>%
+    plyr::summarize(A_total = sum(A_flag, na.rm = TRUE),
+                    AE_total = sum(AE_flag, na.rm = TRUE),
+                    P_total = sum(P_flag, na.rm = TRUE),
+                    R_total = sum(R_flag, na.rm = TRUE),
+                    missing_mean_percent = mean(percent_missing, na.rm = TRUE),
+                    RRU_mean = mean(RRU, na.rm = TRUE),
+                    RRU_sd = sd(RRU, na.rm = TRUE))
 
   qc_summary <- list(cust_flags,
                      data_file_summaries,
                      data_package_summary)
 
-  names(qc_summary)<-c("Column Level QC Summaries",
+  names(qc_summary) <- c("Column Level QC Summaries",
                        "Data File Level QC Summaries",
                        "Data Package Level QC Summaries")
 
-  if(output == "package"){
+  if (output == "package") {
     return(qc_summary[[3]])
   }
-  if(output == "files"){
+  if (output == "files") {
     return(qc_summary[[2]])
   }
-  if(output == "columns"){
+  if (output == "columns") {
     return(qc_summary[[1]])
   }
-  if(output == "all"){
+  if (output == "all") {
     return(qc_summary)
   }
 }
