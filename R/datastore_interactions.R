@@ -30,19 +30,19 @@ create_datastore_script <- function(owner,
                                     force = FALSE,
                                     dev = FALSE) {
   gh_url <- paste0("https://api.github.com/repos/",
-                owner,
-                "/",
-                repo,
-                "/releases/latest")
+                   owner,
+                   "/",
+                   repo,
+                   "/releases/latest")
 
   #GitHub API request for latest release of a given repo:
   gh_req <- httr::GET(gh_url,
-                     httr::add_headers('Accept'='application/vnd.github+json'))
+                      httr::add_headers('Accept' = 'application/vnd.github+json'))
 
   status_code <- httr::stop_for_status(gh_req)$status_code
 
   #if API call fails, alert user and remind them to log on to VPN:
-  if(!status_code == 200){
+  if (!status_code == 200) {
     stop("ERROR: GitHub connection failed. Are you connected to the internet?")
   }
 
@@ -58,12 +58,12 @@ create_datastore_script <- function(owner,
   #quick search of DataStore for the string "dynamic title"
   post_url <- paste0(.QC_ds_secure_api(), "QuickSearch?q=", dynamic_title)
   req <- httr::GET(post_url,
-                    httr::authenticate(":", "", "ntlm"),
-                    httr::add_headers('accept'='application/json'))
+                   httr::authenticate(":", "", "ntlm"),
+                   httr::add_headers('accept' = 'application/json'))
 
   #check status code; suggest logging in to VPN if errors occur:
   status_code <- httr::stop_for_status(req)$status_code
-  if(!status_code == 200){
+  if (!status_code == 200) {
     stop("ERROR: DataStore connection failed. Are you logged in to the VPN?\n")
   }
 
@@ -73,21 +73,21 @@ create_datastore_script <- function(owner,
   items <- as.data.frame(rjson$items)
 
   #search for title in title list, if force == false:
-  if(force == FALSE){
-    if(length(items) > 0){
+  if (force == FALSE) {
+    if (length(items) > 0) {
       matches <- items %>% filter(stringr::str_detect(items$title, new_ref_title))
-      if(length(seq_along(matches$title) > 0)){
+      if (length(seq_along(matches$title) > 0)) {
         cat("One or more DataStore references with title containing: ",
             new_ref_title,
-            " already exists:", sep="")
+            " already exists:", sep = "")
         cat("Reference ID: ",
             matches$referenceId,
             "; Title: ",
-            matches$title, sep="")
+            matches$title, sep = "")
         cat("Are you sure you want to create a new draft reference for ",
             new_ref_title, "?", sep = "")
         var1 <- readline(prompt = cat("\n\n1: Yes\n2: No\n\n"))
-        if(var1 == 2){
+        if (var1 == 2) {
           cat("Your have not generated a new DataStore refernce.")
           return()
         }
@@ -101,7 +101,7 @@ create_datastore_script <- function(owner,
   #in case someone uses non-default directory
   orig_wd <- getwd()
   #set directory back to original working directory on exit.
-  on.exit(setwd(orig_wd), add=TRUE)
+  on.exit(setwd(orig_wd), add = TRUE)
   #set wd to path; defaults to wd.
   setwd(path)
 
@@ -117,16 +117,16 @@ create_datastore_script <- function(owner,
 
   #download the file (.zip) from github:
   invisible(capture.output(
-    suppressMessages(httr::content(
-      httr::GET(
-        gh_zip_url,
+                           suppressMessages(httr::content(
+                                                          httr::GET(
+                gh_zip_url,
         httr::progress(),
         httr::write_disk(download_file_path,
                          overwrite = TRUE))))))
-  if(force == FALSE){
+  if (force == FALSE) {
     cat("Writing: ",
         crayon::blue$bold(download_file_path),
-        ".\n", sep="")
+        ".\n", sep = "")
   }
 
   #generate json body for rest api call to create the reference:
@@ -140,7 +140,7 @@ create_datastore_script <- function(owner,
                  Version = "0.1.3")
   bdy <- jsonlite::toJSON(mylist, pretty = TRUE, auto_unbox = TRUE)
 
-  if(dev == TRUE){
+  if (dev == TRUE) {
     post_url <- paste0(.QC_ds_dev_api(), "Reference/CreateDraft")
   } else {
     post_url <- paste0(.QC_ds_secure_api(), "Reference/CreateDraft")
@@ -149,7 +149,7 @@ create_datastore_script <- function(owner,
   #create the draft reference:
   req <- httr::POST(post_url,
                     httr::authenticate(":", "", "ntlm"),
-                    httr::add_headers('Content-Type'='application/json'),
+                    httr::add_headers('Content-Type' = 'application/json'),
                     body = bdy)
   #check status code; suggest logging in to VPN if errors occur:
   status_code <- httr::stop_for_status(req)$status_code
@@ -161,24 +161,24 @@ create_datastore_script <- function(owner,
   rjson <- jsonlite::fromJSON(json)
   ds_ref <- rjson$referenceCode
 
-  if(dev == TRUE){
+  if (dev == TRUE) {
     ds_profile_link <- paste0(
       "https://irmadev.nps.gov/DataStore/Reference/Profile/",
-      ds_ref)}
-  else{
+      ds_ref)
+    } else {
     ds_profile_link <- paste0(
       "https//irma.nps.gov/DataStore/Reference/Profile/",
       ds_ref)
   }
   #inform user a new reference has been generated:
-  if(force == FALSE){
+  if (force == FALSE) {
     cat("A draft reference has been created on DataStore.\n")
   }
 
   #check for files that are too big!
-  if(file.size(download_file_path) > 33554432){
+  if (file.size(download_file_path) > 33554432) {
     #warn for each file >32Mb
-    if(force == FALSE){
+    if (force == FALSE) {
     cat(crayon::blue$bold(file_name),
         " is greater than 32Mb and cannot be uploaded with this funcion.\n",
         "please use the DataStore website to upload your files manually.",
@@ -188,7 +188,7 @@ create_datastore_script <- function(owner,
   }
 
   #use reference id to put the file:
-  if(dev == TRUE){
+  if (dev == TRUE) {
     api_url <- paste0(.QC_ds_dev_api(), "Reference/", ds_ref, "/UploadFile")
   } else {
     api_url <- paste0(.QC_ds_secure_api(), "Reference/", ds_ref, "/UploadFile")
@@ -204,21 +204,21 @@ create_datastore_script <- function(owner,
     httr::progress(type = "up", con = ""))
 
   status_code <- httr::stop_for_status(req)$status_code
-  if(status_code != 201){
+  if (status_code != 201) {
     stop("ERROR: DataStore connection failed. Your file was not uploaded.")
   }
   ds_resource_url <- req$headers$location
-    if(force == FALSE){
+    if (force == FALSE) {
       cat("Your file, ", crayon::blue$bold(file_name),
           ", has been uploaded to:\n", sep = "")
-      cat(ds_resource_url, "\n", sep="")
+      cat(ds_resource_url, "\n", sep = "")
   }
   #add a web link:
   #release url:
   weblink <- gh_req_rjson$html_url
   #last verified date/time:
   sys_date <- Sys.time()
-  sys_date_iso8601 <- strptime(sys_date, format="%Y-%m-%d %H:%M:%S")
+  sys_date_iso8601 <- strptime(sys_date, format = "%Y-%m-%d %H:%M:%S")
   mylist <- list(resourceID = "0",
                  userSort = "0",
                  description = "GitHub.com url for the release",
@@ -227,7 +227,7 @@ create_datastore_script <- function(owner,
   bdy <- jsonlite::toJSON(mylist, pretty = TRUE, auto_unbox = TRUE)
 
   #use reference id to put the weblink:
-  if(dev == TRUE){
+  if (dev == TRUE) {
     api_url <- paste0(.QC_ds_dev_api(),
                       "Reference/",
                       ds_ref,
@@ -242,17 +242,17 @@ create_datastore_script <- function(owner,
   #upload the weblink:
   req <- httr::POST(
     url = api_url,
-    httr::add_headers('Content-Type'='application/json'),
+    httr::add_headers('Content-Type' = 'application/json'),
     httr::authenticate(":", "", "ntlm"),
     body = bdy)
 
   status_code <- httr::stop_for_status(req)$status_code
-  if(status_code != 200){
+  if (status_code != 200) {
     stop("ERROR: DataStore connection failed. Your web link was not added.")
   }
-  if(force == FALSE){
+  if (force == FALSE) {
     cat("The following web link has been added to your Script Reference: \n")
-    cat(weblink, "\n", sep="")
+    cat(weblink, "\n", sep = "")
   }
 
   #add keywords
@@ -263,21 +263,21 @@ create_datastore_script <- function(owner,
                           repo,
                           "/topics")
   headers = c(`Accept` = "application/vnd.github.mercy-preview+json")
-  res <- httr::GET(url = gh_topics_url, httr::add_headers(.headers=headers))
+  res <- httr::GET(url = gh_topics_url, httr::add_headers(.headers = headers))
 
   status_code <- httr::stop_for_status(res)$status_code
-  if(status_code != 200){
+  if (status_code != 200) {
     stop("ERROR: GitHub connection failed. Your topics were not retrieved.")
   }
   json <- httr::content(res, "text")
   rjson <- jsonlite::fromJSON(json)
 
   #add keywords to reference:
-  if(length(seq_along(rjson$names)) > 0){
+  if (length(seq_along(rjson$names)) > 0) {
     keywords <- sort(rjson$names)
-    keyword_string <- paste(as.character(keywords), collapse=", ")
+    keyword_string <- paste(as.character(keywords), collapse = ", ")
 
-    if(dev == TRUE){
+    if (dev == TRUE) {
       ds_kw_url <- paste0(.QC_ds_dev_api(), "Reference/", ds_ref, "/Keywords")
     } else {
       ds_kw_url <- paste0(.QC_ds_secure_api(),
@@ -297,21 +297,21 @@ create_datastore_script <- function(owner,
     )
     #Check request status
     status_code <- httr::stop_for_status(req_kw)$status_code
-    if(status_code != 200){
+    if (status_code != 200) {
       stop("ERROR: DataStore connection failed. Keywords were not added.")
     }
     #make response pretty
     json_kw <- httr::content(req_kw, "text")
     rjson_kw <- jsonlite::fromJSON(json_kw)
     #inform user of new keywords
-    if(force == FALSE){
+    if (force == FALSE) {
       cat("Your DataStore Reference now has the following keywords:\n")
       print(rjson_kw)
     }
   }
 
-  if(force == FALSE){
-    if(length(seq_along(rjson$names)) < 1){
+  if (force == FALSE) {
+    if (length(seq_along(rjson$names)) < 1) {
       cat("The ", repo, "repository at github.com/",
           repo, "does not have any topics.\n", sep="")
       cat("No keywords will be added to the DataStore reference.")
@@ -331,7 +331,7 @@ create_datastore_script <- function(owner,
                  linksRestricted = FALSE)
   bdy <- jsonlite::toJSON(mylist, pretty = TRUE, auto_unbox = TRUE)
 
-  if(dev == TRUE){
+  if (dev == TRUE) {
     post_url <- paste0(.QC_ds_dev_api(), "Reference/",
                        ds_ref, "/AccessConstraints")
   } else {
@@ -342,24 +342,24 @@ create_datastore_script <- function(owner,
   #create the draft reference:
   req <- httr::PUT(post_url,
                     httr::authenticate(":", "", "ntlm"),
-                    httr::add_headers('Content-Type'='application/json'),
+                    httr::add_headers('Content-Type' = 'application/json'),
                     body = bdy)
   #check status code; suggest logging in to VPN if errors occur:
   status_code <- httr::stop_for_status(req)$status_code
-  if(!status_code == 200){
+  if (!status_code == 200) {
     stop("ERROR: DataStore connection failed. Are you logged in to the VPN?\n")
   }
   #get newly created reference id:
   json <- httr::content(req, "text")
   rjson <- jsonlite::fromJSON(json)
 
-  if(force == FALSE){
+  if (force == FALSE) {
     cat("Your reference has been set to unrestricted with no sensitivity.\n")
     cat("Your reference has been set to \"Operational\" quality.\n")
     cat("Unless you have a documented reason to do so, please leave the reference public.\n")
 
     cat("Your draft reference can be accessed at:\n")
-    if(dev == TRUE){
+    if (dev == TRUE) {
       ds_ref_url <- paste0("https://irmadev.nps.gov/DataStore/Reference/Profile/",
                   ds_ref)
     } else {
