@@ -5,12 +5,12 @@
 #' @details Define your species data set name and the column name with the scientific names of your species (if you are following a Simple Darwin Core naming format, this column should be scientificName, but any column name is fine).
 #'
 #' The function will read the various strings in your species name column and identify them as either a family, genus, species, or subspecies. This function only works with cleaned and parsed scientific names. If the scientific name is higher than family, the function will not work correctly. Subfamily and Tribe names (which, similar to family names end in "ae*") will be designated Family.
-#' 
+#'
 #' @param df - The name of your data frame containing species observations
 #' @param sciName_col - The name of the column within your data frame containing the scientific names of the species.
-#' 
+#'
 #' @return The function returns a new column in the given data frame named taxonRank with the taxonomic rank of the corresponding scientific name in each column. If there is no name in a row, then it returns as NA for that row.
-#' 
+#'
 #' @export
 #'
 #' @examples
@@ -18,14 +18,13 @@
 #' mydf <- get_taxon_rank(df = mydf, sciName_col = "scientificName")
 #' }
 #'
-get_taxon_rank <- function(df, sciName_col) 
-{
+get_taxon_rank <- function(df, sciName_col) {
   sciName_col <- df[[sciName_col]]
   dplyr::mutate(df, taxonRank = dplyr::case_when(
-    stringr::str_detect(sciName_col, "\\s[^\\s]*\\s") ~ "subspecies", #regex says match a space, followed by any number of characters, followed by another space    
-    stringr::str_detect(sciName_col, "\\s.*") ~ "species", #regex says match a space followed by any number of character     
-    stringr::str_detect(sciName_col, "ae$") ~ "family", #regex says match to any word that has ae at the end of it    
-    stringr::str_detect(sciName_col, "^\\S*$") ~ "genus")) #regex says match to any number of characters that DO NOT have a space in front and then ends   
+    stringr::str_detect(sciName_col, "\\s[^\\s]*\\s") ~ "subspecies", #regex says match a space, followed by any number of characters, followed by another space
+    stringr::str_detect(sciName_col, "\\s.*") ~ "species", #regex says match a space followed by any number of character
+    stringr::str_detect(sciName_col, "ae$") ~ "family", #regex says match to any word that has ae at the end of it
+    stringr::str_detect(sciName_col, "^\\S*$") ~ "genus")) #regex says match to any number of characters that DO NOT have a space in front and then ends
 }
 
 #' Threatened Or Endangered Species Checker Function
@@ -35,10 +34,10 @@ get_taxon_rank <- function(df, sciName_col)
 #' @details Define your species data set name, column name with the scientific names of your species, and your four letter park code.
 #'
 #' The `check_te()` function downloads the Federal Conservation list using the IRMA odata API service and matches this species list to the list of scientific names in your data frame. Keep in mind that this is a Federal list, not a state list. Changes in taxa names may also cause some species to be missed. Because the odata API service is not publicly available, you must be logged in to the NPS VPN or in the office to use this function.
-#' 
+#'
 #'  For the default, expansion = FALSE, the function will perform an exact match between the taxa in your scientificName column and the federal Conservation List and then filter the results to keep only species that are listed as endangered, threatened, or considered for listing. If your scientificName column contains information other than the binomial (genus and species), no matches will be returned. For instance, if you have an Order or just a genus listed, these will not be matched to the Federal Conservation List.
-#'  
-#'  If you set expansion = TRUE, the function will truncate each item in your scientificName column to the first word in an attempt to extract a genus name. If you only have genera listed, these will be retained. If you have have higher-order taxa listed such as Family, Order, or Phyla again the first word will be retained. This first word (typically a genus) will be matched to just the generic name of species from the Federal Conservation List. All matches, regardless of listing status, are retained. The result is that for a given species in your scientificName column, all species within that genus that are on the Federal Conservation List will be returned (along with their federal conservation listing codes and a column indicating whether the species is actually in your data or is part of the expanded search). 
+#'
+#'  If you set expansion = TRUE, the function will truncate each item in your scientificName column to the first word in an attempt to extract a genus name. If you only have genera listed, these will be retained. If you have have higher-order taxa listed such as Family, Order, or Phyla again the first word will be retained. This first word (typically a genus) will be matched to just the generic name of species from the Federal Conservation List. All matches, regardless of listing status, are retained. The result is that for a given species in your scientificName column, all species within that genus that are on the Federal Conservation List will be returned (along with their federal conservation listing codes and a column indicating whether the species is actually in your data or is part of the expanded search).
 #'
 #' @param x - The name of your data frame containing species observations
 #' @param species_col - The name of the column within your data frame containing the scientific names of the species (genus and specific epithet).
@@ -66,11 +65,11 @@ check_te <- function(x, species_col, park_code, expansion=FALSE) {
     url <- paste0(url, park_code[i], "%27%20or%20ParkCode%20eq%20%27")
   }
   odata_url <- paste0(url, "All%27")
-  #trycatch for VPN connections: 
+  #trycatch for VPN connections:
   tryCatch(
     {
       fedlist <- ODataQuery::retrieve_data(odata_url)},
-    error = function(e){
+    error = function(e) {
       cat(crayon::red$bold("ERROR: "),
           "Your connection timed out.\n",
           "Make sure you are logged on to the VPN before running ",
@@ -109,8 +108,8 @@ check_te <- function(x, species_col, park_code, expansion=FALSE) {
     status_code == "Fed-PXE" ~ "Proposed Experimental Population, Essential",
     status_code == "Fed-PEXPN" ~ "Proposed Experimental Population, Non-Essential",
     status_code == "Fed-PXN" ~ "Proposed Experimental Population, Non-Essential",
-    status_code == "Fed-PSAE" ~"Proposed Similarity of Appearance to an Endangered Taxon",
-    status_code == "Fed-PE(S/A)" ~"Proposed Similarity of Appearance to an Endangered Taxon",
+    status_code == "Fed-PSAE" ~ "Proposed Similarity of Appearance to an Endangered Taxon",
+    status_code == "Fed-PE(S/A)" ~ "Proposed Similarity of Appearance to an Endangered Taxon",
     status_code == "Fed-PSAT" ~ "Proposed Similarity of Appearance to a Threatened Taxon",
     status_code == "Fed-PT(S/A)" ~ "Proposed Similarity of Appearance to a Threatened Taxon",
     status_code == "Fed-RT" ~ "Resolved Taxon",
@@ -139,59 +138,59 @@ check_te <- function(x, species_col, park_code, expansion=FALSE) {
   #get URL data were accessed from:
   url <- fedlist$value$DataSource[1]
   #get just species from user data frame:
-  species_col_grepl<-paste0('\\b', species_col, '\\b')
-  Species<-x[grepl(species_col_grepl, colnames(x))]
-  colnames(Species)<-"species_col"
+  species_col_grepl <- paste0('\\b', species_col, '\\b')
+  Species <- x[grepl(species_col_grepl, colnames(x))]
+  colnames(Species) <- "species_col"
   # if any member of a genera in the dataset is protected, return all members
   # of that genera, even if they aren't in the observational data:
-  if(expansion == TRUE){
+  if (expansion == TRUE) {
     #get genus name in input dataframe:
     Species$genus_col <- gsub(" .*$", "", Species$species_col)
     #get genus name in fedspp:
     fedspp$genus_col <- gsub(" .*$", "", fedspp$species_col)
     #inner join based on genera:
-    TorE <- dplyr::inner_join(Species, fedspp, by="genus_col")
-    
+    TorE <- dplyr::inner_join(Species, fedspp, by = "genus_col")
+
     #if no species in the list:
-    if(nrow(TorE)*ncol(TorE)==0){
+    if (nrow(TorE) * ncol(TorE) == 0) {
       cat("No T&E species found in your dataset.\n")
       #print date and source of data:
       cat("Your T&E check used data pulled from: ",
           crayon::bold$red(url), " on ",
-          crayon::bold$red(fed_date), ".", sep="")
+          crayon::bold$red(fed_date), ".", sep = "")
       return()
     }
     #if there are species returned:
-    if(nrow(TorE)*ncol(TorE) > 0){
+    if (nrow(TorE) * ncol(TorE) > 0) {
       #add a column indicating if entry was in the original dataset or just shares genus name)
       TorE <- TorE %>%
         dplyr::mutate(InData = ifelse(species_col.x == species_col.y,
                                       "In your Data", "Expansion"))
-      #clean up dataframe:    
-      TorE<-TorE[, c(5,3,7,4,6)]    
+      #clean up dataframe:
+      TorE <- TorE[, c(5, 3, 7, 4, 6)]
       colnames(TorE) <- c("Park_code",
                           "Species",
                           "In_data",
                           "status_code",
                           "status_explanation")
       #format output for easy digestion:
-      TorE<-huxtable::as_hux(TorE)
-      TorE<-huxtable::map_text_color(TorE,
+      TorE <- huxtable::as_hux(TorE)
+      TorE <- huxtable::map_text_color(TorE,
                                      huxtable::by_values("In your Data" = "green",
                                                          "Threatened" = "darkorange2",
                                                          "Endangered" = "red",
                                                          "Concern" = "yellow3",
                                                          "Candidate" = "yellow3"))
-      TorE<-huxtable::theme_basic(TorE)
+      TorE <- huxtable::theme_basic(TorE)
       #print data source and date:
       cat("Your T&E check used data pulled from: ",
           crayon::bold$red(url), " on ",
-          crayon::bold$red(fed_date), ".\n", sep="")
+          crayon::bold$red(fed_date), ".\n", sep = "")
       return(TorE)
     }
   }
   #if expansion = FALSE:
-  if(expansion == FALSE){
+  if (expansion == FALSE) {
     #find all T&E species
     TorE <- dplyr::inner_join(Species, fedspp, by = "species_col")
     #keep only rows with Fed-E, Fed-T, Fed-C and Fed-C2 status codes
@@ -200,29 +199,30 @@ check_te <- function(x, species_col, park_code, expansion=FALSE) {
                          TorE$status_code == "Fed-E" |
                          TorE$status_code == "Fed-C2"),]
     #If no species of concern, state that and exit function.
-    if(nrow(TorE)*ncol(TorE)==0){
+    if (nrow(TorE) * ncol(TorE) == 0) {
       cat("No T&E species found in your dataset.\n")
       #print date and source of data:
       cat("Your T&E check used data pulled from: ",
           crayon::bold$red(url), " on ",
-          crayon::bold$red(fed_date), ".\n", sep="")
+          crayon::bold$red(fed_date), ".\n", sep = "")
       return(TorE)
     }
     #if there are species in the list, return list (and data source/date):
-    if(nrow(TorE)*ncol(TorE) > 0){
-      TorE<-TorE[, c(3,1,2,4)]
-      colnames(TorE)<-c("Park_code", "Species", "status_code", "status_explanation")
-      TorE<-huxtable::as_hux(TorE)
-      TorE<-huxtable::map_text_color(TorE,
+    if (nrow(TorE) * ncol(TorE) > 0) {
+      TorE <- TorE[, c(3,1,2,4)]
+      colnames(TorE) <- c("Park_code", "Species", "status_code",
+                          "status_explanation")
+      TorE <- huxtable::as_hux(TorE)
+      TorE <- huxtable::map_text_color(TorE,
                                      huxtable::by_values("Threatened" = "darkorange2",
                                                          "Endangered" = "red",
                                                          "Concern" = "yellow3",
                                                          "Candidate" = "yellow3"))
-      TorE<-huxtable::theme_basic(TorE)
+      TorE <- huxtable::theme_basic(TorE)
       #print date and source of data:
       cat("Your T&E check used data pulled from: ",
           crayon::bold$red(url), " on ",
-          crayon::bold$red(fed_date), ".\n", sep="")
+          crayon::bold$red(fed_date), ".\n", sep = "")
       return(TorE)
     }
   }
@@ -230,20 +230,20 @@ check_te <- function(x, species_col, park_code, expansion=FALSE) {
 
 #' Threatened Or Endangered Species Checker Function
 #'
-#' @description 
+#' @description
 #' `r lifecycle::badge("deprecated")`
-#' 
+#'
 #' This function has been deprecated in favor of `check_te()`. The function name was changed to promote constancy in function naming across the package and to conform with tidyverse style guides. `te_check()` is no longer updated and may not reference the latest version of the federal endangered and threatened species listings.
-#' 
+#'
 #' `te_check()` generates a list of species you should consider removing from your dataset before making it public by matching the scientific names within your data set to the Federal Conservation List. `te_check()` should be considered a helpful tool for identifying federally listed endangered and threatened species in your data. Each National Park has a park-specific Protected Data Memo that outlines which data should be restricted. Threatened and endangered species are often - although not always - listed on these Memos. Additional species (from state conservation lists) or non-threatened and non-endangered species of concern or other biological or non-biological resources may be listed on Memos. Consult the relevant park-specific Protected Data Memo prior to making decisions on restricting or releasing data.
 #'
 #' @details Define your species data set name, column name with the scientific names of your species, and your four letter park code.
 #'
 #' The `te_check()` function downloads the Federal Conservation list using the IRMA odata API service and matches this species list to the list of scientific names in your data frame. Keep in mind that this is a Federal list, not a state list. Changes in taxa names may also cause some species to be missed. Because the odata API service is not publicly available, you must be logged in to the NPS VPN or in the office to use this function.
-#' 
+#'
 #'  For the default, expansion = FALSE, the function will perform an exact match between the taxa in your scientificName column and the federal Conservation List and then filter the results to keep only species that are listed as endangered, threatened, or considered for listing. If your scientificName column contains information other than the binomial (genus and species), no matches will be returned. For instance, if you have an Order or just a genus listed, these will not be matched to the Federal Conservation List.
-#'  
-#'  If you set expansion = TRUE, the function will truncate each item in your scientificName column to the first word in an attempt to extract a genus name. If you only have genera listed, these will be retained. If you have have higher-order taxa listed such as Family, Order, or Phyla again the first word will be retained. This first word (typically a genus) will be matched to just the generic name of species from the Federal Conservation List. All matches, regardless of listing status, are retained. The result is that for a given species in your scientificName column, all species within that genus that are on the Federal Conservation List will be returned (along with their federal conservation listing codes and a column indicating whether the species is actually in your data or is part of the expanded search). 
+#'
+#'  If you set expansion = TRUE, the function will truncate each item in your scientificName column to the first word in an attempt to extract a genus name. If you only have genera listed, these will be retained. If you have have higher-order taxa listed such as Family, Order, or Phyla again the first word will be retained. This first word (typically a genus) will be matched to just the generic name of species from the Federal Conservation List. All matches, regardless of listing status, are retained. The result is that for a given species in your scientificName column, all species within that genus that are on the Federal Conservation List will be returned (along with their federal conservation listing codes and a column indicating whether the species is actually in your data or is part of the expanded search).
 #'
 #' @param x - The name of your data frame containing species observations
 #' @param species_col - The name of the column within your data frame containing the scientific names of the species (genus and specific epithet).
@@ -252,9 +252,9 @@ check_te <- function(x, species_col, park_code, expansion=FALSE) {
 #'
 #' @return The function returns a (modified) data frame with the names of all the species that fall under the federal conservation list. The resulting data frame may have multiple instances of a given species if it is listed in multiple parks (park codes for each listing are supplied). Technically it is a huxtable, but it should function identically to a data frame for downstream purposes.
 #' @importFrom magrittr %>%
-#' 
+#'
 #' @keywords internal
-#' 
+#'
 #' @export
 #'
 #' @examples
@@ -267,7 +267,7 @@ check_te <- function(x, species_col, park_code, expansion=FALSE) {
 #' list<-te_check(data, "scientificName", park_code, expansion=TRUE)
 #' }
 #'
-te_check <- function(x, species_col, park_code, expansion=FALSE) {
+te_check <- function(x, species_col, park_code, expansion = FALSE) {
   lifecycle::deprecate_warn("0.1.0.3", "te_check", "check_te()")
   #generate URL for odata services:
   url<-"https://irmadev.nps.gov/PrototypeCSVtoAPI/odata/FederalConservationListTaxaforDataProtection2272462?$filter=ParkCode%20eq%20%27"
@@ -275,7 +275,7 @@ te_check <- function(x, species_col, park_code, expansion=FALSE) {
     url <- paste0(url, park_code[i], "%27%20or%20ParkCode%20eq%20%27")
   }
   odata_url <- paste0(url, "All%27")
-  #trycatch for VPN connections: 
+  #trycatch for VPN connections:
   tryCatch(
     {
       fedlist <- ODataQuery::retrieve_data(odata_url)},
@@ -296,7 +296,7 @@ te_check <- function(x, species_col, park_code, expansion=FALSE) {
   # add column explaining Fed T and E codes. From:
   # https://ecos.fws.gov/ecp0/html/db-status.html
   #---- code folding ----
-  fedspp<-fedspp %>% mutate(status = case_when(
+  fedspp < -fedspp %>% mutate(status = case_when(
     status_code == "Fed-E" ~ "Endangered",
     status_code == "Fed-T" ~ "Threatened",
     status_code == "Fed-EmE" ~ "Emergency Listing, Endangered",
@@ -318,7 +318,7 @@ te_check <- function(x, species_col, park_code, expansion=FALSE) {
     status_code == "Fed-PXE" ~ "Proposed Experimental Population, Essential",
     status_code == "Fed-PEXPN" ~ "Proposed Experimental Population, Non-Essential",
     status_code == "Fed-PXN" ~ "Proposed Experimental Population, Non-Essential",
-    status_code == "Fed-PSAE" ~"Proposed Similarity of Appearance to an Endangered Taxon",
+    status_code == "Fed-PSAE" ~ "Proposed Similarity of Appearance to an Endangered Taxon",
     status_code == "Fed-PE(S/A)" ~"Proposed Similarity of Appearance to an Endangered Taxon",
     status_code == "Fed-PSAT" ~ "Proposed Similarity of Appearance to a Threatened Taxon",
     status_code == "Fed-PT(S/A)" ~ "Proposed Similarity of Appearance to a Threatened Taxon",
@@ -360,7 +360,7 @@ te_check <- function(x, species_col, park_code, expansion=FALSE) {
     fedspp$genus_col <- gsub(" .*$", "", fedspp$species_col)
     #inner join based on genera:
     TorE <- dplyr::inner_join(Species, fedspp, by="genus_col")
-    
+
     #if no species in the list:
     if(nrow(TorE)*ncol(TorE)==0){
       cat("No T&E species found in your dataset.\n")
@@ -376,8 +376,8 @@ te_check <- function(x, species_col, park_code, expansion=FALSE) {
       TorE <- TorE %>%
         dplyr::mutate(InData = ifelse(species_col.x == species_col.y,
                                       "In your Data", "Expansion"))
-      #clean up dataframe:    
-      TorE<-TorE[, c(5,3,7,4,6)]    
+      #clean up dataframe:
+      TorE<-TorE[, c(5,3,7,4,6)]
       colnames(TorE) <- c("Park_code",
                           "Species",
                           "In_data",
