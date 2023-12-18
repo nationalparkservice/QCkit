@@ -36,8 +36,9 @@ create_datastore_script <- function(owner,
                    "/releases/latest")
 
   #GitHub API request for latest release of a given repo:
-  gh_req <- httr::GET(gh_url,
-                      httr::add_headers('Accept' = 'application/vnd.github+json'))
+  gh_req <- httr::GET(
+    gh_url,
+    httr::add_headers('Accept' = 'application/vnd.github+json'))
 
   status_code <- httr::stop_for_status(gh_req)$status_code
 
@@ -75,7 +76,8 @@ create_datastore_script <- function(owner,
   #search for title in title list, if force == false:
   if (force == FALSE) {
     if (length(items) > 0) {
-      matches <- items %>% filter(stringr::str_detect(items$title, new_ref_title))
+      matches <- items %>% filter(stringr::str_detect(items$title,
+                                                      new_ref_title))
       if (length(seq_along(matches$title) > 0)) {
         cat("One or more DataStore references with title containing: ",
             new_ref_title,
@@ -117,12 +119,12 @@ create_datastore_script <- function(owner,
 
   #download the file (.zip) from github:
   invisible(capture.output(
-                           suppressMessages(httr::content(
-                                                          httr::GET(
-                gh_zip_url,
+    suppressMessages(
+      httr::content(
+        httr::GET(gh_zip_url,
         httr::progress(),
         httr::write_disk(download_file_path,
-                         overwrite = TRUE))))))
+        overwrite = TRUE))))))
   if (force == FALSE) {
     cat("Writing: ",
         crayon::blue$bold(download_file_path),
@@ -153,7 +155,7 @@ create_datastore_script <- function(owner,
                     body = bdy)
   #check status code; suggest logging in to VPN if errors occur:
   status_code <- httr::stop_for_status(req)$status_code
-  if(!status_code == 200){
+  if (!status_code == 200) {
     stop("ERROR: DataStore connection failed. Are you logged in to the VPN?\n")
   }
   #get newly created reference id:
@@ -262,7 +264,7 @@ create_datastore_script <- function(owner,
                           "/",
                           repo,
                           "/topics")
-  headers = c(`Accept` = "application/vnd.github.mercy-preview+json")
+  headers <- c(`Accept` = "application/vnd.github.mercy-preview+json")
   res <- httr::GET(url = gh_topics_url, httr::add_headers(.headers = headers))
 
   status_code <- httr::stop_for_status(res)$status_code
@@ -313,7 +315,7 @@ create_datastore_script <- function(owner,
   if (force == FALSE) {
     if (length(seq_along(rjson$names)) < 1) {
       cat("The ", repo, "repository at github.com/",
-          repo, "does not have any topics.\n", sep="")
+          repo, "does not have any topics.\n", sep = "")
       cat("No keywords will be added to the DataStore reference.")
     }
   }
@@ -341,9 +343,9 @@ create_datastore_script <- function(owner,
 
   #create the draft reference:
   req <- httr::PUT(post_url,
-                    httr::authenticate(":", "", "ntlm"),
-                    httr::add_headers('Content-Type' = 'application/json'),
-                    body = bdy)
+                   httr::authenticate(":", "", "ntlm"),
+                   httr::add_headers('Content-Type' = 'application/json'),
+                   body = bdy)
   #check status code; suggest logging in to VPN if errors occur:
   status_code <- httr::stop_for_status(req)$status_code
   if (!status_code == 200) {
@@ -360,8 +362,9 @@ create_datastore_script <- function(owner,
 
     cat("Your draft reference can be accessed at:\n")
     if (dev == TRUE) {
-      ds_ref_url <- paste0("https://irmadev.nps.gov/DataStore/Reference/Profile/",
-                  ds_ref)
+      ds_ref_url <- paste0(
+        "https://irmadev.nps.gov/DataStore/Reference/Profile/",
+        ds_ref)
     } else {
       ds_ref_url <- paste0("https://irma.nps.gov/DataStore/Reference/Profile/",
                   ds_ref)
