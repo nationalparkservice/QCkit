@@ -5,6 +5,7 @@
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![CodeFactor](https://www.codefactor.io/repository/github/roblbaker/qckit/badge)](https://www.codefactor.io/repository/github/roblbaker/qckit)
+[![R-CMD-check](https://github.com/nationalparkservice/QCkit/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/nationalparkservice/QCkit/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 # QCkit
