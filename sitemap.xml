@@ -37,6 +37,9 @@
     <loc>/reference/check_te.html</loc>
   </url>
   <url>
+    <loc>/reference/convert_datetime_format.html</loc>
+  </url>
+  <url>
     <loc>/reference/convert_long_to_utm.html</loc>
   </url>
   <url>
@@ -44,6 +47,9 @@
   </url>
   <url>
     <loc>/reference/create_datastore_script.html</loc>
+  </url>
+  <url>
+    <loc>/reference/fix_utc_offset.html</loc>
   </url>
   <url>
     <loc>/reference/fuzz_location.html</loc>
