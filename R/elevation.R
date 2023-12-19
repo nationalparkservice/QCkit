@@ -20,69 +20,77 @@
 #'
 #' @examples
 #'  \dontrun{
-#'  new_dataframe <- get_elevation(dataframe, "decimalLatitude", "decimalLongitude", spatial_ref="4326")
-#'  new_dataframe <- get_elevation(dataframe, "decimalLatitude", "decimalLongitude", spatial_ref="102100", force=TRUE)
+#' new_dataframe <- get_elevation(df,
+#'                               "decimalLatitude",
+#'                               "decimalLongitude",
+#'                               spatial_ref="4326")
+#' new_dataframe <- get_elevation(df,
+#'                               "decimalLatitude",
+#'                               "decimalLongitude",
+#'                               spatial_ref="102100",
+#'                               force=TRUE)
 #'  }
 get_elevation <- function(df,
                           decimal_lat,
                           decimal_long,
                           spatial_ref = c(4326, 102100),
-                          force = FALSE){
+                          force = FALSE) {
 
   #check that spatial ref is either 4326 or 102100:
   spatial_ref <- match.arg(spatial_ref)
 
   #reduce data frame to just unique gps coordinates
-  df2 <- unique(df[,c(decimal_lat, decimal_long)])
+  df2 <- unique(df[, c(decimal_lat, decimal_long)])
 
   #test & warn for correct lat/long specification:
-  if(force == FALSE){
-    lat_test <- df2 %>% dplyr::filter(df2[,1] < 0)
-    if(nrow(lat_test > 0)){
+  if (force == FALSE) {
+    lat_test <- df2 %>% filter(df2[, 1] < 0)
+    if (nrow(lat_test > 0)) {
       cat("Some latitudes appear to be below the equator. Make sure you correctly designated latitude and longitude.\n")
     }
-    long_test <- df2 %>% dplyr::filter(df2[,2] > 0)
-    if(nrow(long_test > 0)){
+    long_test <- df2 %>% filter(df2[, 2] > 0)
+    if (nrow(long_test > 0)) {
       cat("Some latitudes appear to be in the Eastern Hemisphere. Makre sure you correctly designated latitude and longitude.\n")
     }
   }
   #test for numeric data:
-  if(!is.numeric(df2[,1]) | !is.numeric(df2[,2])){
+  if (!is.numeric(df2[, 1]) | !is.numeric(df2[, 2])) {
     message <- "Non-numeric columns supplied. Please supply colums with decimal based GPS coordinates."
     stop(message)
   }
   elev <- NULL
-  for(i in 1:nrow(df2)){
-    lat <- df2[i,1]
+  for (i in 1:nrow(df2)) {
+    lat <- df2[i, 1]
     long <- df2[i, 2]
-    if(!is.na(lat) | !is.na(long)){
+    if (!is.na(lat) | !is.na(long)) {
       url <- paste0("https://epqs.nationalmap.gov/v1/json?x=",
-                               long, "&y=",
-                               lat, "&wkid=",
-                               spatial_ref, "&units=Meters",
-                               "&includDate=false")
+                    long, "&y=",
+                    lat, "&wkid=",
+                    spatial_ref, "&units=Meters",
+                    "&includDate=false")
       req <- httr::GET(url)
       #if the response was good:
-      if(req$status_code == 200){
+      if (req$status_code == 200) {
         elevation <- httr::content(req)$value
         elev <- append(elev, elevation)
-        } else{
-        if(force == FALSE){
-          elev <- append (elev, NA)
+      } else {
+        if (force == FALSE) {
+          elev <- append(elev, NA)
           cat("Bad response for ",
               crayon::blue$bold(lat), ", ",
               crayon::blue$bold(long), ".\n",
               sep = "")
           cat("Missing values (NA) generated.\n")
-          }
         }
-    } else{
-      elev <- append (elev, NA)
+      }
+    } else {
+      elev <- append(elev, NA)
     }
   }
   df2$minimumElevationInMeters <- elev
   df2$maximumElevationInMeters <- elev
 
   #merge elevation data back into original data frame; return a new df (df3)
-  df3 <- df %>% dplyr::right_join(df2, by=c(decimal_lat, decimal_long))
+  df3 <- df %>% dplyr::right_join(df2, by = c(decimal_lat, decimal_long))
+  return(df3)
 }

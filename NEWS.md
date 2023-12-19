@@ -1,4 +1,13 @@
-# QCkit 0.1.0.5 "Work in Progress"
+2023-12-18
+
+* Added automated build check and pkgdown github pages builds via github actions
+* Code cleanup via linter suggests 
+* Added warning about turning off VPN for the `covert_utm_to_ll()` documentation
+
+# QCkit 0.1.1 "Automated Shuttle Pilot"
+2023-11-20
+* Added the function `create_datastore_scipt()`, which given a username and repo for GitHub will generate a draft Script Reference on DataStore based on the information found in the latest Release on GitHub.
+
 24 April 2023
 * fixed bug in `get_custom_flags()`.
 

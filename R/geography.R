@@ -1,6 +1,6 @@
 #' Retrieve the polygon information for the park unit from NPS REST services
 #'
-#' \code{get_park_polygon} retrieves a geoJSON string for a polygon of a park unit. This is not the official boundary.
+#' @description `get_park_polygon()` retrieves a geoJSON string for a polygon of a park unit. This is not the official boundary.
 #' #'
 #' @param unit_code is the four-character unit code as designated by NPS.
 #'
@@ -11,7 +11,9 @@
 #' }
 get_park_polygon <- function(unit_code) {
   # get geography from NPS Rest Services
-  UnitsURL <- paste0("https://irmaservices.nps.gov/v2/rest/unit/", unit_code, "/geography")
+  UnitsURL <- paste0("https://irmaservices.nps.gov/v2/rest/unit/",
+                     unit_code,
+                     "/geography")
   xml <- httr::content(httr::GET(UnitsURL))
 
   # Create spatial feature from polygon info returned from NPS
@@ -22,7 +24,7 @@ get_park_polygon <- function(unit_code) {
 
 #' Check whether a coordinate pair is within the polygon of a park unit
 #'
-#' \code{validate_coord} compares a coordinate pair (in decimal degrees) to the polygon for a park unit as provided through the NPS
+#' @description `validate_coord()` compares a coordinate pair (in decimal degrees) to the polygon for a park unit as provided through the NPS
 #' Units rest services. The function returns a value of TRUE or FALSE.
 #'
 #'
@@ -102,12 +104,14 @@ long2UTM <- function(lon) {
 #' fuzz_location(703977, 4035059, 32616, "Fuzzed - 1km")
 #' fuzz_location(36.43909, -84.72429, 4326, "Fuzzed - 1km")
 #' }
-fuzz_location <- function(lat, lon, coord_ref_sys = 4326, fuzz_level = "Fuzzed - 1km") {
+fuzz_location <- function(lat,
+                          lon,
+                          coord_ref_sys = 4326,
+                          fuzz_level = "Fuzzed - 1km") {
   #ensure require inputs are there
   if (is.numeric(lat) == FALSE || is.numeric(lon) == FALSE) {
     cat("ERROR: Latitude or longitude are missing or non-numeric.")
     return("")
-    #stop()
   }
   #for decimal degrees, convert to UTM locations and identify proper CRS
   if (coord_ref_sys == 4326 || coord_ref_sys == 4269) {
@@ -133,9 +137,8 @@ fuzz_location <- function(lat, lon, coord_ref_sys = 4326, fuzz_level = "Fuzzed -
   #not decimal degrees WGS84/NAD83 or UTM, so we don't have a path forward
   } else {
     #throw an error
-    cat("ERROR: CRS is not decimal degree WGS84 or UTM/WGS84. Please provide coordinates in either of these systems.", sep="")
+    cat("ERROR: CRS is not decimal degree WGS84 or UTM/WGS84. Please provide coordinates in either of these systems.", sep = "")
     return("")
-    #stop()
   }
 
   #do rounding of UTMs based on fuzz_level
@@ -183,7 +186,7 @@ fuzz_location <- function(lat, lon, coord_ref_sys = 4326, fuzz_level = "Fuzzed -
 
 #' Coordinate Conversion from UTM to Latitude and Longitude
 #'
-#' @description `convert_utm_to_ll()` takes your dataframe with UTM coordinates in separate Easting and Northing columns, and adds on an additional two columns with the converted decimalLatitude and decimalLongitude coordinates using the reference coordinate system WGS84.
+#' @description `convert_utm_to_ll()` takes your dataframe with UTM coordinates in separate Easting and Northing columns, and adds on an additional two columns with the converted decimalLatitude and decimalLongitude coordinates using the reference coordinate system WGS84. You may need to turn the VPN OFF for this function to work properly.
 #'
 #' @details Define the name of your dataframe, the easting and northing columns within it, the UTM zone within which those coordinates are located, and the reference coordinate system (datum). UTM Northing and Easting columns must be in separate columns prior to running the function. If a datum is not defined, the function will default to "WGS84". If there are missing coordinates in your dataframe they will be preserved, however they will be moved to the end of your dataframe. Note that some parameter names are not in snake_case but instead reflect DarwinCore naming conventions.
 #'
@@ -206,7 +209,11 @@ fuzz_location <- function(lat, lon, coord_ref_sys = 4326, fuzz_level = "Fuzzed -
 #'   datum = "WGS84"
 #' )
 #' }
-convert_utm_to_ll <- function(df, EastingCol, NorthingCol, zone, datum = "WGS84") {
+convert_utm_to_ll <- function(df,
+                              EastingCol,
+                              NorthingCol,
+                              zone,
+                              datum = "WGS84") {
   Base <- as.data.frame(df)
   Base <- dplyr::rename(Base, "b" = EastingCol, "a" = NorthingCol)
   Mid <- Base[!is.na(Base$"b" & Base$"a"), ]
