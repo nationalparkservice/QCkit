@@ -3,6 +3,8 @@
 * Added automated build check and pkgdown github pages builds via github actions
 * Code cleanup via linter suggests 
 * Added warning about turning off VPN for the `covert_utm_to_ll()` documentation
+* Moved `convert_datetime_format()` from DPchecker to QCkit
+* Added funtion `fix_utc_offset()`
 
 # QCkit 0.1.1 "Automated Shuttle Pilot"
 2023-11-20
