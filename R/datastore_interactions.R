@@ -76,8 +76,7 @@ create_datastore_script <- function(owner,
   #search for title in title list, if force == false:
   if (force == FALSE) {
     if (length(items) > 0) {
-      matches <- items %>% filter(stringr::str_detect(items$title,
-                                                      new_ref_title))
+      matches <- dplyr::filter(items, grepl(new_ref_title, title))
       if (length(seq_along(matches$title) > 0)) {
         cat("One or more DataStore references with title containing: ",
             new_ref_title,
