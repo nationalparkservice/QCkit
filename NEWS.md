@@ -1,4 +1,4 @@
-# QC kit v0.1.2
+# QC kit v0.1.3
 2023-12-18
 * Bugfix for `create_datastore_script()`
 * Added automated build check and pkgdown github pages builds via github actions
@@ -7,7 +7,7 @@
 * Moved `convert_datetime_format()` from DPchecker to QCkit
 * Added funtion `fix_utc_offset()`
 
-# QCkit 0.1.1 "Automated Shuttle Pilot"
+# QCkit 0.1.2 "Automated Shuttle Pilot"
 2023-11-20
 * Added the function `create_datastore_scipt()`, which given a username and repo for GitHub will generate a draft Script Reference on DataStore based on the information found in the latest Release on GitHub.
 
