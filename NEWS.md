@@ -1,5 +1,6 @@
 # QC kit v0.1.2
 2023-12-18
+* Bugfix for `create_datastore_script()`
 * Added automated build check and pkgdown github pages builds via github actions
 * Code cleanup via linter suggests 
 * Added warning about turning off VPN for the `covert_utm_to_ll()` documentation
