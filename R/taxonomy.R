@@ -86,7 +86,7 @@ check_te <- function(x, species_col, park_code, expansion=FALSE) {
   # add column explaining Fed T and E codes. From:
   # https://ecos.fws.gov/ecp0/html/db-status.html
   #---- code folding ----
-  fedspp<-fedspp %>% mutate(status = case_when(
+  fedspp<-fedspp %>% dplyr::mutate(status = dplyr::case_when(
     status_code == "Fed-E" ~ "Endangered",
     status_code == "Fed-T" ~ "Threatened",
     status_code == "Fed-EmE" ~ "Emergency Listing, Endangered",
