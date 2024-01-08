@@ -268,7 +268,7 @@ check_te <- function(x, species_col, park_code, expansion=FALSE) {
 #' }
 #'
 te_check <- function(x, species_col, park_code, expansion = FALSE) {
-  lifecycle::deprecate_warn("0.1.0.3", "te_check", "check_te()")
+  lifecycle::deprecate_soft(when = "0.1.0.3", "te_check()", "check_te()")
   #generate URL for odata services:
   url<-"https://irmadev.nps.gov/PrototypeCSVtoAPI/odata/FederalConservationListTaxaforDataProtection2272462?$filter=ParkCode%20eq%20%27"
   for(i in seq_along(park_code)){
@@ -296,7 +296,7 @@ te_check <- function(x, species_col, park_code, expansion = FALSE) {
   # add column explaining Fed T and E codes. From:
   # https://ecos.fws.gov/ecp0/html/db-status.html
   #---- code folding ----
-  fedspp < -fedspp %>% mutate(status = case_when(
+  fedspp < -fedspp %>% dplyr::mutate(status = dplyr::case_when(
     status_code == "Fed-E" ~ "Endangered",
     status_code == "Fed-T" ~ "Threatened",
     status_code == "Fed-EmE" ~ "Emergency Listing, Endangered",
