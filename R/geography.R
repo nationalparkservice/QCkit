@@ -60,6 +60,10 @@ validate_coord <- function(unit_code, lat, lon) {
 #' @return The function returns a numeric UTM zone (between 1 and 60).
 #' @export
 get_utm_zone <- function(lon) {
+  if (lon > 180 | lon < -180) {
+    cat("Longitude must be <180 and >-180 decimal degrees.")
+    return()
+  }
   ## Function to get the UTM zone for a given longitude
   return((floor((lon + 180) / 6) %% 60) + 1)
 }
@@ -69,7 +73,8 @@ get_utm_zone <- function(lon) {
 
 #' Return UTM Zone
 #'
-#' @description `convert_long_2_utm()` take a longitude coordinate and returns the corresponding UTM zone.
+#' @description `r lifecycle::badge("deprecated")`
+#' `convert_long_2_utm()` was deprecated in favor of `get_utm_zone()` as the new funciton name more accurately reflects what the function does.`convert_long_to_utm()` take a longitude coordinate and returns the corresponding UTM zone.
 #'
 #' @details Input a longitude (decimal degree) coordinate and this simple function returns the number of the UTM zone where that point falls.
 #'
@@ -78,6 +83,7 @@ get_utm_zone <- function(lon) {
 #' @return The function returns a numeric UTM zone (between 1 and 60).
 #' @export
 convert_long_to_utm <- function(lon) {
+  lifecycle::deprecate_soft(when = "0.1.4", "convert_long_to_utm()", "get_utm_zone()")
   ## Function to get the UTM zone for a given longitude
   return((floor((lon + 180) / 6) %% 60) + 1)
 }
