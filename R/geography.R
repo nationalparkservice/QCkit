@@ -138,10 +138,10 @@ fuzz_location <- function(lat,
     #coordinates are in decimal degrees WGS84 or NAD83 and we need to convert to UTM; find the appropriate UTM EPSG code
     if (lat > 0) {
       #northern hemisphere (N) UTM zones start at 32601 and go to 32660
-      tempcrs <- long2UTM(lon) + 32600
+      tempcrs <- get_utm_zone(lon) + 32600
     } else {
       #southern hemisphere (S) UTM zones start at 32701 and go to 32760
-      tempcrs <- long2UTM(lon) + 32700
+      tempcrs <- get_utm_zone(lon) + 32700
     }
 
     #convert the points to UTM given their existing CRS (decimal degree WGS84 or NAD83)
