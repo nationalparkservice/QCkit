@@ -157,7 +157,7 @@ fuzz_location <- function(lat,
   #not decimal degrees WGS84/NAD83 or UTM, so we don't have a path forward
   } else {
     #throw an error
-    cat("ERROR: CRS is not decimal degree WGS84 or UTM/WGS84. Please provide coordinates in either of these systems.", sep = "")
+    cat("ERROR: coord_ref_sys is not decimal degree WGS84 or UTM/WGS84. Please provide coordinates in either of these systems.", sep = "")
     return()
   }
 
