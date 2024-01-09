@@ -68,9 +68,6 @@ get_utm_zone <- function(lon) {
   return((floor((lon + 180) / 6) %% 60) + 1)
 }
 
-
-
-
 #' Return UTM Zone
 #'
 #' @description `r lifecycle::badge("deprecated")`
@@ -134,7 +131,7 @@ fuzz_location <- function(lat,
   #ensure require inputs are there
   if (is.numeric(lat) == FALSE || is.numeric(lon) == FALSE) {
     cat("ERROR: Latitude or longitude are missing or non-numeric.")
-    return("")
+    return()
   }
   #for decimal degrees, convert to UTM locations and identify proper CRS
   if (coord_ref_sys == 4326 || coord_ref_sys == 4269) {
