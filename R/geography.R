@@ -158,7 +158,7 @@ fuzz_location <- function(lat,
   } else {
     #throw an error
     cat("ERROR: CRS is not decimal degree WGS84 or UTM/WGS84. Please provide coordinates in either of these systems.", sep = "")
-    return("")
+    return()
   }
 
   #do rounding of UTMs based on fuzz_level
