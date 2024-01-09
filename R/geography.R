@@ -49,6 +49,23 @@ validate_coord <- function(unit_code, lat, lon) {
   return(result)
 }
 
+#' Return UTM Zone
+#'
+#' @description `get_utm_zone()` replaces `convert_long_2_utm()` as this function name is more descriptive. `get_utm_zone()` takes a longitude coordinate and returns the corresponding UTM zone.
+#'
+#' @details Input a longitude (decimal degree) coordinate and this simple function returns the number of the UTM zone where that point falls.
+#'
+#' @param lon - Decimal degree longitude value
+#'
+#' @return The function returns a numeric UTM zone (between 1 and 60).
+#' @export
+get_utm_zone <- function(lon) {
+  ## Function to get the UTM zone for a given longitude
+  return((floor((lon + 180) / 6) %% 60) + 1)
+}
+
+
+
 
 #' Return UTM Zone
 #'
