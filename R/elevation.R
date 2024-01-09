@@ -67,7 +67,7 @@ get_elevation <- function(df,
                     long, "&y=",
                     lat, "&wkid=",
                     spatial_ref, "&units=Meters",
-                    "&includDate=false")
+                    "&includeDate=false")
       req <- httr::GET(url)
       #if the response was good:
       if (req$status_code == 200) {
