@@ -1,0 +1,53 @@
+
+all_cols <- tibble::tibble(locality = "test",
+                                  basisOfRecord = "test",
+                                  eventDate = "test",
+                                  eventDate_flag = "test",
+                                  scientificName = "test",
+                                  scientificName_flag = "test",
+                                  taxonRank = "test",
+                                  verbatimIdentification = "test",
+                                  vernacularName = "test",
+                                  namePublishedIn = "test",
+                                  custom_TaxonomicNotes = "test",
+                                  recordedBy = "test",
+                                  individualCount = "test",
+                                  decimalLongitude = "test",
+                                  decimalLatitude = "test",
+                                  coordinate_flag = "test",
+                                  geodeticDatum = "test",
+                                  verbatimCoordinates = "test",
+                                  verbatimCoordinateSystem = "test",
+                                  verbatimSRS = "test",
+                                  coordinateUncertaintyInMeters = "test",
+                                  type = "test",
+                                  mynewcolumn = "test")
+
+
+test_that("order_cols returns columns in the expected order", {
+  x <- order_cols(all_cols)
+  expect_equal(names(x), c("locality",
+                           "type",
+                           "basisOfRecord",
+                           "eventDate",
+                           "eventDate_flag",
+                           "scientificName",
+                           "scientificName_flag",
+                           "taxonRank",
+                           "verbatimIdentification",
+                           "vernacularName",
+                           "namePublishedIn",
+                           "custom_TaxonomicNotes",
+                           "recordedBy",
+                           "individualCount",
+                           "decimalLongitude",
+                           "decimalLatitude",
+                           "coordinate_flag",
+                           "geodeticDatum",
+                           "verbatimCoordinates",
+                           "verbatimCoordinateSystem",
+                           "verbatimSRS",
+                           "coordinateUncertaintyInMeters",
+                           "mynewcolumn")
+  )
+})
