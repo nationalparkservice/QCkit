@@ -106,3 +106,22 @@ test_that("fuzz_location returns well known text for souther hemisphere latitude
                      fuzz_level = "Fuzzed - 100m")
   expect_equal(is.na(wk::wk_problems(wk::new_wk_wkt(x))), TRUE)
 })
+
+#### convert_utm_to_ll
+mydataframe <- tibble::tibble(EastingCol = c(-105.70421,
+                                             -105.70431,
+                                             -105.7451),
+                              NorthingCol = c(40.70421,
+                                              40.70431,
+                                              40.70451),
+                              zone = 13)
+test_that("convert_utm_to_ll adds the correct columns", {
+  x <- convert_utm_to_ll(df = mydataframe,
+                       EastingCol = EastingCol,
+                       NorthingCol = NorthingCol,
+                       zone = 13,
+                       datum = "WGS84")
+  expect_equal(names(x), c("EastingCol", "NorthingCol", "zone", "decimalLongitude", "decimalLatitude"))
+})
+
+
