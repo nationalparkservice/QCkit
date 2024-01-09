@@ -124,4 +124,20 @@ test_that("convert_utm_to_ll adds the correct columns", {
   expect_equal(names(x), c("EastingCol", "NorthingCol", "zone", "decimalLongitude", "decimalLatitude"))
 })
 
+#### utm_to_ll (deprecated)
+test_that("utm_to_ll adds the correct columns", {
+  mydataframe <- tibble::tibble(EastingCol = c(-105.70421,
+                                               -105.70431,
+                                               -105.7451),
+                                NorthingCol = c(40.70421,
+                                                40.70431,
+                                                40.70451),
+                                zone = 13)
+  x <- suppressWarnings(utm_to_ll(df = mydataframe,
+                         EastingCol = EastingCol,
+                         NorthingCol = NorthingCol,
+                         zone = 13,
+                         datum = "WGS84"))
+  expect_equal(names(x), c("EastingCol", "NorthingCol", "zone", "decimalLongitude", "decimalLatitude"))
+})
 
