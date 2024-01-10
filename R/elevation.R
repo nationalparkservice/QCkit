@@ -55,7 +55,9 @@ get_elevation <- function(df,
   }
   #test for numeric data:
   if (!is.numeric(df2[, 1]) | !is.numeric(df2[, 2])) {
-    cat("Non-numeric columns supplied. Please supply columns with decimal based GPS coordinates.")
+    if (force == FALSE) {
+      cat("Non-numeric columns supplied. Please supply columns with decimal based GPS coordinates.")
+    }
     return()
   }
   elev <- NULL
