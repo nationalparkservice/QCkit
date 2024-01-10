@@ -66,9 +66,12 @@ get_elevation <- function(df,
     long <- df2[i, 2]
     if (!is.na(lat) | !is.na(long)) {
       url <- paste0("https://epqs.nationalmap.gov/v1/json?x=",
-                    long, "&y=",
-                    lat, "&wkid=",
-                    spatial_ref, "&units=Meters",
+                    long,
+                    "&y=",
+                    lat,
+                    "&wkid=",
+                    spatial_ref,
+                    "&units=Meters",
                     "&includeDate=false")
       req <- httr::GET(url)
       #if the response was good:
