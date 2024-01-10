@@ -71,17 +71,20 @@ get_elevation <- function(df,
       req <- httr::GET(url)
       #if the response was good:
       if (req$status_code == 200) {
-        gh_req_json <- httr::content(req, "text")
+        gh_req_json <- suppressMessages(httr::content(req, "text"))
         # if something else went wrong - likely coordinates outside USA.
         if (gh_req_json == "Invalid or missing input parameters."){
-          if (force == false){
+          if (force == FALSE){
             cat("Invalid input. NAs generated. Are your coordinates inside the US?")
           }
           elev <- append(elev, NA)
-        }
+        } else {
+        # everything checks out, add elevation to df
         elevation <- httr::content(req)$value
         elev <- append(elev, elevation)
+        }
       } else {
+        # if API request fails:
         if (force == FALSE) {
           cat("Bad response for ",
               crayon::blue$bold(lat), ", ",
@@ -92,6 +95,7 @@ get_elevation <- function(df,
         elev <- append(elev, NA)
       }
     } else {
+      # if non-numeric GPS, warn and generate NAs.
       elev <- append(elev, NA)
       if (force == FALSE) {
         cat("Non-numeric data detected. NAs generated.")
