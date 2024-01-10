@@ -94,12 +94,6 @@ get_elevation <- function(df,
         }
         elev <- append(elev, NA)
       }
-    } else {
-      # if non-numeric GPS, warn and generate NAs.
-      elev <- append(elev, NA)
-      if (force == FALSE) {
-        cat("Non-numeric data detected. NAs generated.")
-      }
     }
   }
   df2$minimumElevationInMeters <- elev
