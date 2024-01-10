@@ -88,10 +88,8 @@ get_elevation <- function(df,
       } else {
         # if API request fails:
         if (force == FALSE) {
-          cat("Bad response for ",
-              crayon::blue$bold(lat), ", ",
-              crayon::blue$bold(long), ".\n",
-              sep = "")
+          cat("Bad response for ", crayon::blue$bold(lat), ", ",
+              crayon::blue$bold(long), ".\n", sep = "")
           cat("Missing values (NA) generated.\n")
         }
         elev <- append(elev, NA)
