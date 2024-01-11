@@ -49,10 +49,29 @@ validate_coord <- function(unit_code, lat, lon) {
   return(result)
 }
 
+#' Return UTM Zone
+#'
+#' @description `get_utm_zone()` replaces `convert_long_2_utm()` as this function name is more descriptive. `get_utm_zone()` takes a longitude coordinate and returns the corresponding UTM zone.
+#'
+#' @details Input a longitude (decimal degree) coordinate and this simple function returns the number of the UTM zone where that point falls.
+#'
+#' @param lon - Decimal degree longitude value
+#'
+#' @return The function returns a numeric UTM zone (between 1 and 60).
+#' @export
+get_utm_zone <- function(lon) {
+  if (lon > 180 | lon < -180) {
+    cat("Longitude must be <180 and >-180 decimal degrees.")
+    return()
+  }
+  ## Function to get the UTM zone for a given longitude
+  return((floor((lon + 180) / 6) %% 60) + 1)
+}
 
 #' Return UTM Zone
 #'
-#' @description `convert_long_2_utm()` take a longitude coordinate and returns the corresponding UTM zone.
+#' @description `r lifecycle::badge("deprecated")`
+#' `convert_long_2_utm()` was deprecated in favor of `get_utm_zone()` as the new funciton name more accurately reflects what the function does.`convert_long_to_utm()` take a longitude coordinate and returns the corresponding UTM zone.
 #'
 #' @details Input a longitude (decimal degree) coordinate and this simple function returns the number of the UTM zone where that point falls.
 #'
@@ -61,6 +80,7 @@ validate_coord <- function(unit_code, lat, lon) {
 #' @return The function returns a numeric UTM zone (between 1 and 60).
 #' @export
 convert_long_to_utm <- function(lon) {
+  lifecycle::deprecate_soft(when = "0.1.4", "convert_long_to_utm()", "get_utm_zone()")
   ## Function to get the UTM zone for a given longitude
   return((floor((lon + 180) / 6) %% 60) + 1)
 }
@@ -111,17 +131,17 @@ fuzz_location <- function(lat,
   #ensure require inputs are there
   if (is.numeric(lat) == FALSE || is.numeric(lon) == FALSE) {
     cat("ERROR: Latitude or longitude are missing or non-numeric.")
-    return("")
+    return()
   }
   #for decimal degrees, convert to UTM locations and identify proper CRS
   if (coord_ref_sys == 4326 || coord_ref_sys == 4269) {
     #coordinates are in decimal degrees WGS84 or NAD83 and we need to convert to UTM; find the appropriate UTM EPSG code
     if (lat > 0) {
       #northern hemisphere (N) UTM zones start at 32601 and go to 32660
-      tempcrs <- long2UTM(lon) + 32600
+      tempcrs <- get_utm_zone(lon) + 32600
     } else {
       #southern hemisphere (S) UTM zones start at 32701 and go to 32760
-      tempcrs <- long2UTM(lon) + 32700
+      tempcrs <- get_utm_zone(lon) + 32700
     }
 
     #convert the points to UTM given their existing CRS (decimal degree WGS84 or NAD83)
@@ -137,8 +157,8 @@ fuzz_location <- function(lat,
   #not decimal degrees WGS84/NAD83 or UTM, so we don't have a path forward
   } else {
     #throw an error
-    cat("ERROR: CRS is not decimal degree WGS84 or UTM/WGS84. Please provide coordinates in either of these systems.", sep = "")
-    return("")
+    cat("ERROR: coord_ref_sys is not decimal degree WGS84 or UTM/WGS84. Please provide coordinates in either of these systems.", sep = "")
+    return()
   }
 
   #do rounding of UTMs based on fuzz_level

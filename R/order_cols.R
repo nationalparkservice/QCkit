@@ -7,6 +7,16 @@
 #'
 #' @details Check to see if you have three (highly) recommended columns (locality, type, basisOfRecord) and various suggested columns present in your dataset. Print a list of which columns are present and which are not. Then, order all the columns in your dataset in the following order: (highly) recommended columns, suggested columns, the rest of the Darwin Core columns, "custom_" (non-Darwin Core) columns, and finally sensitive species data columns.
 #'
+#' Any columns that are not darwinCore term names, do not start with "custom_" or are not "scientificName_flag" will be placed after the darwinCore columns and before the "custom_" columns.
+#'
+#' One exception is if your dataset includes the column custom_TaxonomicNotes, it will be placed directly after namePublishedIn, if that column exists.
+#'
+#' Suggested darwinCore column names (plus scientificName_flag) include (in the order they will be placed): eventDate, eventDate_flag, scientificName, scientificName_flag, taxonRank, verbatimIdentification, vernacularName, namePublishedIn, recordedBy, individualCount, decimalLongitude, decimalLatitude, coordinate_flag, geodeticDatum", verbatimCoordinates, verbatimCoordinateSystem, verbatimSRS,coordinateUncertaintyInMeters. Note that suggested names include some custom, non-Darwin Core names such as "scientificName_flag".
+#'
+#' sensitive species data columns are defined as: informationWithheld, dataGeneralizations, and footprintWKT.
+#'
+#'
+#'
 #' @param df - This is the dataframe you want to run against the function. To call, simply type df = "the name of your dataframe".
 #'
 #' @return - The function returns a list of required and suggested columns to include in your dataset. When assigning to an object, the object contains your new dataset with all columns ordered properly.
@@ -19,30 +29,55 @@
 #' }
 order_cols <- function(df) {
 
-  suggested <- c("eventDate", "eventDate_flag", "scientificName",
-                 "scientificName_flag", "taxonRank", "verbatimIdentification",
-                 "vernacularName", "namePublishedIn", "recordedBy",
-                 "individualCount", "decimalLongitude", "decimalLatitude",
-                 "coordinate_flag", "geodeticDatum", "verbatimCoordinates",
-                 "verbatimCoordinateSystem", "verbatimSRS",
+  suggested <- c("eventDate",
+                 "eventDate_flag",
+                 "scientificName",
+                 "scientificName_flag",
+                 "taxonRank",
+                 "verbatimIdentification",
+                 "vernacularName",
+                 "namePublishedIn",
+                 "recordedBy",
+                 "individualCount",
+                 "decimalLongitude",
+                 "decimalLatitude",
+                 "coordinate_flag",
+                 "geodeticDatum",
+                 "verbatimCoordinates",
+                 "verbatimCoordinateSystem",
+                 "verbatimSRS",
                  "coordinateUncertaintyInMeters")
 
-  required <- c("locality", "type", "basisOfRecord")
+  recommended <- c("locality", "type", "basisOfRecord")
 
-  allofem <- c("locality", "type", "basisOfRecord", "eventDate",
-               "eventDate_flag", "scientificName", "scientificName_flag",
-               "taxonRank", "verbatimIdentification", "vernacularName",
-               "namePublishedIn", "custom_TaxonomicNotes", "recordedBy",
-               "individualCount", "decimalLongitude", "decimalLatitude",
-               "coordinate_flag", "geodeticDatum", "verbatimCoordinates",
-               "verbatimCoordinateSystem", "verbatimSRS",
+  allofem <- c("locality",
+               "type",
+               "basisOfRecord",
+               "eventDate",
+               "eventDate_flag",
+               "scientificName",
+               "scientificName_flag",
+               "taxonRank",
+               "verbatimIdentification",
+               "vernacularName",
+               "namePublishedIn",
+               "custom_TaxonomicNotes",
+               "recordedBy",
+               "individualCount",
+               "decimalLongitude",
+               "decimalLatitude",
+               "coordinate_flag",
+               "geodeticDatum",
+               "verbatimCoordinates",
+               "verbatimCoordinateSystem",
+               "verbatimSRS",
                "coordinateUncertaintyInMeters")
 
-  print(lapply(required,
+  print(lapply(recommended,
                function(x) ifelse(x %in% names(df),
-                                  paste0("Looking great! The required field \'",
+                                  paste0("Looking great! The recommended field \'",
                                        x, "\' exists within your data"),
-                                  paste0("Please include the required field \'",
+                                  paste0("Please include the recommended field \'",
                                        x, "\' in your dataset"))))
 
   print(lapply(suggested,
@@ -55,9 +90,9 @@ order_cols <- function(df) {
   df <- lapply(df, function(x) data.table::setcolorder(x,
                                                        intersect(allofem,
                                                                  names(x))))
-  df <- as.data.frame(df)
-  customs <- df[, stringr::str_detect(names(df), "custom_") == TRUE]
-  df <- df[, stringr::str_detect(names(df), "custom_") == FALSE]
+  df <- data.frame(df)
+  customs <- df %>% dplyr::select(tidyselect::starts_with("custom_"))
+  df <-      df %>% dplyr::select(-tidyselect::starts_with("custom_"))
   sensitives <- df %>% dplyr::select(any_of(c("informationWithheld",
                                               "dataGeneralizations",
                                               "footprintWKT")))
@@ -65,6 +100,9 @@ order_cols <- function(df) {
                                               "dataGeneralizations",
                                               "footprintWKT")))
   df <- cbind(df, customs, sensitives)
-  df <- df %>% dplyr::relocate(any_of("custom_TaxonomicNotes"),
+  if (sum(grepl("namePublishedIn", names(df))) > 0){
+    df <- df %>% dplyr::relocate(any_of("custom_TaxonomicNotes"),
                                .after = "namePublishedIn")
+  }
+  return(df)
 }

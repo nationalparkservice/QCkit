@@ -30,7 +30,7 @@ a data frame with two new columns, minimumElevationInMeters and maximumElevation
 \code{get_elevation()} takes a dataframe that includes GPS coordinates (in decimal degrees) and returns a dataframe with two new columns added to it, minimumElevationInMeters and maximumElevationInMeters. The function requires that the data supplied are numeric and that missing values are specified with NA.
 }
 \details{
-\code{get_elevation()} uses the USGS API for \href{https://apps.nationalmap.gov/epqs/}{The National Map} to identify the evevation for a given set of GPS coordinates. To reduce API queries (and time to completion), the function will only search for unique GPS coordinates in your dataframe. This could take some time. If you have lots of GPS coordinates, you can also perform a \href{https://apps.nationalmap.gov/bulkpqs/}{manual bulk upload} (maximum = 500 points).
+\code{get_elevation()} uses the USGS API for \href{https://apps.nationalmap.gov/epqs/}{The National Map} to identify the elevevation for a given set of GPS coordinates. To reduce API queries (and time to completion), the function will only search for unique GPS coordinates in your dataframe. This could take some time. If you have lots of GPS coordinates, you can also perform a \href{https://apps.nationalmap.gov/bulkpqs/}{manual bulk upload} (maximum = 500 points).
 
 Note that both new columns (minimumElevationInMeters and maximumElevationInMeters) contain the same elevation; this is expected behavior as a single GPS coordinate should have the same maximum and minimum elevations. The column names are generated in accordance with the simple \href{https://dwc.tdwg.org/}{Darwin Core Standards}.
 
