@@ -29,12 +29,14 @@ get_park_polygon <- function(unit_code) {
 #'
 #'
 #' @param unit_code is the four-character unit code as designated by NPS.
-#' @param lat latitude, in decimal degrees
+#' @param lat latitude, in decimal degrees.
 #' @param lon longitude, in decimal degrees.
+#'
+#' @export
 #'
 #' @examples
 #' \dontrun{
-#' qc_ValidateCoordinates("OBRI", 36.07951, -84.65610)
+#' validate_coord("OBRI", 36.07951, -84.65610)
 #' }
 validate_coord <- function(unit_code, lat, lon) {
   # get geography from NPS Rest Services
