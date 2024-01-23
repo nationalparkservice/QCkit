@@ -6,7 +6,7 @@
 #'
 #' One exception is if a .csv contains NO data (i.e. just column names and no data in any of the cells). In this case, the blanks will not be replaced with NA (as the function cannot determine how many NAs to include).
 #'
-#' @return
+#' @return list of data frames (invisibly)
 #' @export
 #'
 #' @examples
