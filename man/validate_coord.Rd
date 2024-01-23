@@ -9,7 +9,7 @@ validate_coord(unit_code, lat, lon)
 \arguments{
 \item{unit_code}{is the four-character unit code as designated by NPS.}
 
-\item{lat}{latitude, in decimal degrees}
+\item{lat}{latitude, in decimal degrees.}
 
 \item{lon}{longitude, in decimal degrees.}
 }
@@ -19,6 +19,6 @@ Units rest services. The function returns a value of TRUE or FALSE.
 }
 \examples{
 \dontrun{
-qc_ValidateCoordinates("OBRI", 36.07951, -84.65610)
+validate_coord("OBRI", 36.07951, -84.65610)
 }
 }

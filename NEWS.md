@@ -1,3 +1,7 @@
+# QCkit v0.1.4
+
+* Added function `replace_blanks()` to ingest a directory of .csvs and write them back out to .csv as 
+
 # QC kit v0.1.3
 2023-12-18
 * Bugfix for `create_datastore_script()`
