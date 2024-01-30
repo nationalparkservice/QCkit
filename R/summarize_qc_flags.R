@@ -432,7 +432,7 @@ get_custom_flags <- function(directory = here::here(),
         column <- colnames(cust_cols)[j]
         flags <- assign(
           paste0(names(dfList)[i]),
-          tibble(
+          tibble::tibble(
             filename = names(dfList[i]),
             column,
             Cell_count,
@@ -450,7 +450,7 @@ get_custom_flags <- function(directory = here::here(),
     }
 
     # get just flagging columns:
-    flags_only <- dfList[[i]] %>% dplyr::select(any_of(cols) & contains("_flag"))
+    flags_only <- dfList[[i]] %>% dplyr::select(contains("_flag"))
 
     if (ncol(flags_only) > 0) {
       # for each column in data and each data flags:
@@ -476,7 +476,7 @@ get_custom_flags <- function(directory = here::here(),
         ), na.rm = TRUE))
         Cell_count <- nrow(flags_only[j])
 
-        RRU <- (A_flag + AE_flag) / Cell_count
+        RRU <- ((A_flag + AE_flag) / Cell_count)
 
         filename <- names(dfList)[i]
         column <- colnames(flags_only)[j]
@@ -484,7 +484,7 @@ get_custom_flags <- function(directory = here::here(),
         # make a dataframe with data:
         flags <- assign(
           paste0(names(dfList)[i]),
-          tibble(
+          tibble::tibble(
             filename = names(dfList)[i],
             column,
             Cell_count,
@@ -535,10 +535,22 @@ get_custom_flags <- function(directory = here::here(),
                      "P" = sum(P_flag),
                      "R" = sum(R_flag),
                      "% Accepted" = mean(RRU)) %>%
-    rename("File Name" = filename) %>%
-    mutate(`% Accepted` = scales::percent(`% Accepted`, accuracy = 0.1))
+    dplyr::rename("File Name" = filename) %>%
+    dplyr::mutate(`% Accepted` = paste0(formatC(100 * `% Accepted`, format = "f", digits = 1), "%"))
 
-  cust_flags <- cust_flags %>% mutate(column = str_remove(column, "_flag"), RRU = scales::percent(RRU, accuracy = 0.1)) %>% select("File Name" = filename, "Measure" = column, "Number of Records" = Cell_count, "A" = A_flag, "AE" = AE_flag, "R" = R_flag, "P" = P_flag, "% Accepted" = RRU)
+  cust_flags <- cust_flags %>%
+    dplyr::mutate(
+      column = stringr::str_remove(column, "_flag"),
+      RRU = paste0(formatC(100 * RRU, format = "f", digits = 1), "%")) %>%
+    dplyr::select(
+      "File Name" = filename,
+      "Measure" = column,
+      "Number of Records" = Cell_count,
+      "A" = A_flag,
+      "AE" = AE_flag,
+      "R" = R_flag,
+      "P" = P_flag,
+      "% Accepted" = RRU)
 
 
   qc_summary <- list(cust_flags,
