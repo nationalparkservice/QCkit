@@ -397,7 +397,7 @@ get_dc_flags <- function(directory = here::here()) {
 #'                                                          "locality"),
 #'                                                          output="all")
 #' cols <- colnames(read.csv("mydata.csv"))[c(1:4, 7, 10)]
-#' get_custom_flags(cols = cols, output="package")
+#' get_custom_flags(cols = cols, output="files")
 #' }
 get_custom_flags <- function(directory = here::here(),
                              cols = (""),
@@ -419,7 +419,7 @@ get_custom_flags <- function(directory = here::here(),
 
   for (i in seq_along(dfList)) {
     # get custom columns:
-    cust_cols <- dfList[[i]] %>% dplyr::select(any_of(dataQualityFields) & !contains("_flag"))
+    cust_cols <- dfList[[i]] %>% dplyr::select(any_of(cols) & !contains("_flag"))
     if (ncol(cust_cols) > 0) {
       for (j in seq_along(cust_cols)) {
         A_flag <- sum(!is.na(cust_cols[j]))
@@ -450,7 +450,7 @@ get_custom_flags <- function(directory = here::here(),
     }
 
     # get just flagging columns:
-    flags_only <- dfList[[i]] %>% dplyr::select(any_of(dataQualityFields) & contains("_flag"))
+    flags_only <- dfList[[i]] %>% dplyr::select(any_of(cols) & contains("_flag"))
 
     if (ncol(flags_only) > 0) {
       # for each column in data and each data flags:
@@ -545,9 +545,9 @@ get_custom_flags <- function(directory = here::here(),
                      data_file_summaries)
 
   names(qc_summary) <- c("Column Level QC Summaries",
-                         "Data Package Level QC Summaries")
+                         "Data File Level QC Summaries")
 
-  if (output == "package") {
+  if (output == "files") {
     return(qc_summary[[2]])
   }
   if (output == "columns") {
