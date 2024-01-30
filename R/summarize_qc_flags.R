@@ -345,13 +345,12 @@ get_dc_flags <- function(directory = here::here()) {
 #' @description
 #' `r lifecycle::badge("experimental")`
 #' get_custom_flags returns data frames that that summarize data
-#' quality control flags (one that summarizes at the data package level, one at
-#' the data file level, and one for each column). The summaries include all data
+#' quality control flags (one that summarizes at the data file level and one for each column). The summaries include all data
 #' with quality control flagging (a column name that ends in "_flag") and
 #' optionally any additional custom columns the user specifies, either by column
 #' name or number.
 #'
-#' The use can specify which of the 3 data frames (or all 3, as a list of
+#' The use can specify which of the 2 data frames (or all as a list of
 #' dataframes) should be returned.
 #'
 #' The number of each flag type for each column (A, AE, R, P) is reported.
@@ -361,9 +360,7 @@ get_dc_flags <- function(directory = here::here()) {
 #' Unweighted Relative Response (RRU) is calculated as the total number of
 #' accepted data points (A, AE, and data that are not flagged) divided by the
 #'total number of data points (excluding missing values) in all specified
-#' columns (and the flagged columns). Standard deviations are reported for RRU.
-#' The geometric mean of percent missing and the standard deviation of percent
-#' missing are also reported.
+#' columns (and the flagged columns).
 #'
 #' @details Flagged columns must have names ending in "_flag". Missing values
 #' must be specified as NA.  The function counts cells within "*_flag" columns
@@ -382,9 +379,7 @@ get_dc_flags <- function(directory = here::here()) {
 #' @param output A string indicating what output should be provided. "columns"
 #' returns a summary table of QC flags and RRU values in each specified column
 #' for every data file. "files" returns a summary table of total QC flags and
-#' mean and standard deviations across each data file. "package" provides a
-#' summary table with total, mean (per file) and standard deviation values
-#' for flagged data across the entire data package. "all" will return all three
+#' mean across each data file. "all" will return all three
 #' data frames in a single list.
 #'
 #' @return a dataframe with quality control summary information summarized at
@@ -579,3 +574,4 @@ get_custom_flags <- function(directory = here::here(),
     return(qc_summary)
   }
 }
+
