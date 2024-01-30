@@ -476,7 +476,7 @@ get_custom_flags <- function(directory = here::here(),
         ), na.rm = TRUE))
         Cell_count <- nrow(flags_only[j])
 
-        RRU <- (A_flag + AE_flag) / nrow(flags_only[j])
+        RRU <- (A_flag + AE_flag) / Cell_count
 
         filename <- names(dfList)[i]
         column <- colnames(flags_only)[j]
