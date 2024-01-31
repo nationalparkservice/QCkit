@@ -1,6 +1,6 @@
 #' Fix UTC offset strings
 #'
-#' UTC offsets can be formatted in multiple ways (e.g. -07, -07:00, -0700) and R often struggles to parse these offsets. This function takes date/time strings with valid UTC offsets, and formats them so that they are consistent and readable by R.
+#' UTC offsets can be formatted in multiple ways (e.g. -07, -07:00, -0700) and R often struggles to parse these offsets. This function takes date/time strings with valid UTC offsets, and formats them so that they are consistent and readable by R. Here, you can supply a vector of dates in ISO 8601 format and they will be returned in a consistent format compatible with R. Date strings with missing or invalid UTC offsets will result in a warning.
 #'
 #' @param datetime_strings Character vector of dates in ISO 8601 format
 #'
@@ -8,8 +8,9 @@
 #' @export
 #'
 #' @examples
-#' datetimes <- c("2023-11-16T03:32:49+07:00","2023-11-16T03:32:49-07","2023-11-16T03:32:49","2023-11-16T03:32:49Z")
-#' fix_utc_offset(datetimes)  # returns c("2023-11-16T03:32:49+0700", "2023-11-16T03:32:49-0700", "2023-11-16T03:32:49", "2023-11-16T03:32:49+0000") and warns about missing offset (see third element)
+#' datetimes <- c("2023-11-16T03:32:49+07:00", "2023-11-16T03:32:49-07",
+#' "2023-11-16T03:32:49","2023-11-16T03:32:49Z")
+#' fix_utc_offset(datetimes)
 #'
 fix_utc_offset <- function(datetime_strings) {
   datetime_strings <- stringr::str_replace_all(datetime_strings, "[\u2212\u2010\u2011\u2012\u2013\u2014\u2015\ufe58\ufe63\uff0d]", "-") # replace every possible type of dash with a regular minus sign
@@ -19,8 +20,11 @@ fix_utc_offset <- function(datetime_strings) {
     stringr::str_extract("[Zz]|((?<=[+-])[0-9]{1,2}:?[0-9]{0,2})$") %>%
     stringr::str_remove(":") %>%
     stringr::str_replace("[Zz]", "0000")
-  new_offsets <- dplyr::case_when(nchar(new_offsets) == 1 ~ paste0("0", new_offsets, "00"),
-                                  nchar(new_offsets) == 2 ~ paste0(new_offsets, "00"),
+  new_offsets <- dplyr::case_when(nchar(new_offsets) == 1 ~ paste0("0",
+                                                                   new_offsets,
+                                                                   "00"),
+                                  nchar(new_offsets) == 2 ~ paste0(new_offsets,
+                                                                   "00"),
                                   nchar(new_offsets) == 4 ~ new_offsets,
                                   .default = "")
   if (any(new_offsets == "")) {
