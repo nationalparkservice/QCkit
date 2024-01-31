@@ -345,13 +345,12 @@ get_dc_flags <- function(directory = here::here()) {
 #' @description
 #' `r lifecycle::badge("experimental")`
 #' get_custom_flags returns data frames that that summarize data
-#' quality control flags (one that summarizes at the data package level, one at
-#' the data file level, and one for each column). The summaries include all data
+#' quality control flags (one that summarizes at the data file level and one for each column). The summaries include all data
 #' with quality control flagging (a column name that ends in "_flag") and
 #' optionally any additional custom columns the user specifies, either by column
 #' name or number.
 #'
-#' The use can specify which of the 3 data frames (or all 3, as a list of
+#' The use can specify which of the 2 data frames (or all as a list of
 #' dataframes) should be returned.
 #'
 #' The number of each flag type for each column (A, AE, R, P) is reported.
@@ -361,9 +360,7 @@ get_dc_flags <- function(directory = here::here()) {
 #' Unweighted Relative Response (RRU) is calculated as the total number of
 #' accepted data points (A, AE, and data that are not flagged) divided by the
 #'total number of data points (excluding missing values) in all specified
-#' columns (and the flagged columns). Standard deviations are reported for RRU.
-#' The geometric mean of percent missing and the standard deviation of percent
-#' missing are also reported.
+#' columns (and the flagged columns).
 #'
 #' @details Flagged columns must have names ending in "_flag". Missing values
 #' must be specified as NA.  The function counts cells within "*_flag" columns
@@ -382,9 +379,7 @@ get_dc_flags <- function(directory = here::here()) {
 #' @param output A string indicating what output should be provided. "columns"
 #' returns a summary table of QC flags and RRU values in each specified column
 #' for every data file. "files" returns a summary table of total QC flags and
-#' mean and standard deviations across each data file. "package" provides a
-#' summary table with total, mean (per file) and standard deviation values
-#' for flagged data across the entire data package. "all" will return all three
+#' mean across each data file. "all" will return all three
 #' data frames in a single list.
 #'
 #' @return a dataframe with quality control summary information summarized at
@@ -402,12 +397,11 @@ get_dc_flags <- function(directory = here::here()) {
 #'                                                          "locality"),
 #'                                                          output="all")
 #' cols <- colnames(read.csv("mydata.csv"))[c(1:4, 7, 10)]
-#' get_custom_flags(cols = cols, output="package")
+#' get_custom_flags(cols = cols, output="files")
 #' }
 get_custom_flags <- function(directory = here::here(),
                              cols = (""),
                              output = c("all",
-                                        "package",
                                         "files",
                                         "columns")) {
 
@@ -419,10 +413,13 @@ get_custom_flags <- function(directory = here::here(),
 
   names(dfList) <- base::basename(fileList)
 
+
+
   cust_flags <- NULL
+
   for (i in seq_along(dfList)) {
     # get custom columns:
-    cust_cols <- dfList[[i]] %>% dplyr::select(any_of(cols))
+    cust_cols <- dfList[[i]] %>% dplyr::select(any_of(cols) & !contains("_flag"))
     if (ncol(cust_cols) > 0) {
       for (j in seq_along(cust_cols)) {
         A_flag <- sum(!is.na(cust_cols[j]))
@@ -430,26 +427,22 @@ get_custom_flags <- function(directory = here::here(),
         R_flag <- 0
         P_flag <- 0
         RRU <- A_flag / (nrow(cust_cols[j]))
-        Cell_count <- A_flag
-        percent_missing <- (sum(is.na(cust_cols[j]))) / nrow(cust_cols[j])
-
+        Cell_count <- nrow(cust_cols[j])
         filename <- names(dfList)[i]
         column <- colnames(cust_cols)[j]
         flags <- assign(
           paste0(names(dfList)[i]),
-          data.frame(
-            names(dfList[i]),
+          tibble::tibble(
+            filename = names(dfList[i]),
             column,
+            Cell_count,
             A_flag,
             AE_flag,
             R_flag,
             P_flag,
-            Cell_count,
-            percent_missing,
             RRU
           )
         )
-        colnames(flags)[1] <- "filename"
 
         # add to df_flags dataframe:
         cust_flags <- rbind(cust_flags, flags)
@@ -457,7 +450,7 @@ get_custom_flags <- function(directory = here::here(),
     }
 
     # get just flagging columns:
-    flags_only <- dfList[[i]] %>% dplyr::select(ends_with("_flag"))
+    flags_only <- dfList[[i]] %>% dplyr::select(contains("_flag"))
 
     if (ncol(flags_only) > 0) {
       # for each column in data and each data flags:
@@ -481,13 +474,9 @@ get_custom_flags <- function(directory = here::here(),
           flags_only[j],
           "\\bP"
         ), na.rm = TRUE))
+        Cell_count <- nrow(flags_only[j])
 
-        # get cell count in file, exclude NAs and flags:
-        Cell_count <- sum(!is.na(flags_only[j]))
-
-        percent_missing <- (sum(is.na(flags_only[j]))) / nrow(flags_only[j])
-
-        RRU <- (A_flag + AE_flag) / nrow(flags_only[j])
+        RRU <- ((A_flag + AE_flag) / Cell_count)
 
         filename <- names(dfList)[i]
         column <- colnames(flags_only)[j]
@@ -495,20 +484,17 @@ get_custom_flags <- function(directory = here::here(),
         # make a dataframe with data:
         flags <- assign(
           paste0(names(dfList)[i]),
-          data.frame(
-            names(dfList)[i],
+          tibble::tibble(
+            filename = names(dfList)[i],
             column,
+            Cell_count,
             A_flag,
             AE_flag,
             R_flag,
             P_flag,
-            Cell_count,
-            percent_missing,
             RRU
           )
         )
-
-        colnames(flags)[1] <- "filename"
 
         # add to df_flags dataframe:
         cust_flags <- rbind(cust_flags, flags)
@@ -524,51 +510,55 @@ get_custom_flags <- function(directory = here::here(),
       R_flag <- NA
       P_flag <- NA
       Cell_count <- NA
-      percent_missing <- NA
       RRU <- NA
 
       flags <- data.frame(
-        filename, column, A_flag, AE_flag, R_flag, P_flag,
-        Cell_count, percent_missing, RRU
+        filename = names(dfList)[i],
+        column,
+        Cell_count,
+        A_flag,
+        AE_flag,
+        R_flag,
+        P_flag,
+        RRU
       )
 
       cust_flags <- rbind(cust_flags, flags)
     }
   }
-  colnames(cust_flags)[7] <- "Data Totals"
 
   #generate summary statistics for each column:
   data_file_summaries <- cust_flags %>%
     dplyr::group_by(filename) %>%
-    dplyr::summarize(A_total = sum(A_flag),
-                     AE_total = sum(AE_flag),
-                     P_total = sum(P_flag),
-                     R_total = sum(R_flag),
-                     missing_mean_percent = mean(percent_missing),
-                     RRU_mean = mean(RRU),
-                     RRU_sd = stats::sd(RRU))
+    dplyr::summarize("A" = sum(A_flag),
+                     "AE" = sum(AE_flag),
+                     "P" = sum(P_flag),
+                     "R" = sum(R_flag),
+                     "% Accepted" = mean(RRU)) %>%
+    dplyr::rename("File Name" = filename) %>%
+    dplyr::mutate(`% Accepted` = paste0(formatC(100 * `% Accepted`, format = "f", digits = 1), "%"))
 
-  #generate data package level summaries
-  data_package_summary <- cust_flags %>%
-    plyr::summarize(A_total = sum(A_flag, na.rm = TRUE),
-                    AE_total = sum(AE_flag, na.rm = TRUE),
-                    P_total = sum(P_flag, na.rm = TRUE),
-                    R_total = sum(R_flag, na.rm = TRUE),
-                    missing_mean_percent = mean(percent_missing, na.rm = TRUE),
-                    RRU_mean = mean(RRU, na.rm = TRUE),
-                    RRU_sd = sd(RRU, na.rm = TRUE))
+  cust_flags <- cust_flags %>%
+    dplyr::mutate(
+      column = stringr::str_remove(column, "_flag"),
+      RRU = paste0(formatC(100 * RRU, format = "f", digits = 1), "%")) %>%
+    dplyr::select(
+      "File Name" = filename,
+      "Measure" = column,
+      "Number of Records" = Cell_count,
+      "A" = A_flag,
+      "AE" = AE_flag,
+      "R" = R_flag,
+      "P" = P_flag,
+      "% Accepted" = RRU)
+
 
   qc_summary <- list(cust_flags,
-                     data_file_summaries,
-                     data_package_summary)
+                     data_file_summaries)
 
   names(qc_summary) <- c("Column Level QC Summaries",
-                       "Data File Level QC Summaries",
-                       "Data Package Level QC Summaries")
+                         "Data File Level QC Summaries")
 
-  if (output == "package") {
-    return(qc_summary[[3]])
-  }
   if (output == "files") {
     return(qc_summary[[2]])
   }
