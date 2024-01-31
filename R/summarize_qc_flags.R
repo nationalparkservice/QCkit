@@ -77,7 +77,8 @@ get_custom_flags <- function(directory = here::here(),
 
   for (i in seq_along(dfList)) {
     # get custom columns:
-    cust_cols <- dfList[[i]] %>% dplyr::select(any_of(cols) & !contains("_flag"))
+    cust_cols <- dfList[[i]] %>%
+      dplyr::select(any_of(cols) & !contains("_flag"))
     if (ncol(cust_cols) > 0) {
       for (j in seq_along(cust_cols)) {
         A_flag <- sum(!is.na(cust_cols[j]))
@@ -194,7 +195,9 @@ get_custom_flags <- function(directory = here::here(),
                      "R" = sum(R_flag),
                      "% Accepted" = mean(RRU)) %>%
     dplyr::rename("File Name" = filename) %>%
-    dplyr::mutate(`% Accepted` = paste0(formatC(100 * `% Accepted`, format = "f", digits = 1), "%"))
+    dplyr::mutate(`% Accepted` = paste0(formatC(100 * `% Accepted`,
+                                                format = "f", digits = 1),
+                                        "%"))
 
   cust_flags <- cust_flags %>%
     dplyr::mutate(
@@ -269,7 +272,7 @@ get_custom_flags <- function(directory = here::here(),
 #'
 get_dp_flags <- function(directory = here::here()) {
 
-  lifecycle::deprecate_warn("1.0.1", "get_dp_flags()", "get_custom_flags()")
+  lifecycle::deprecate_soft(when = "0.1.1", "get_dp_flags()", "get_custom_flags()")
 
   fileList <- list.files(path = directory, pattern = "\\.csv$",
                          full.names = TRUE)
@@ -369,7 +372,7 @@ get_dp_flags <- function(directory = here::here()) {
 #'
 get_df_flags <- function(directory = here::here()) {
 
-  lifecycle::deprecate_warn("1.0.1", "get_dp_flags()", "get_custom_flags()")
+  lifecycle::deprecate_soft(when = "0.1.1", "get_df_flags()", "get_custom_flags()")
 
   # get list of .csv files in the specified directory
   fileList <- list.files(path = directory, pattern = "\\.csv$",
@@ -479,7 +482,7 @@ get_df_flags <- function(directory = here::here()) {
 #'
 get_dc_flags <- function(directory = here::here()) {
 
-  lifecycle::deprecate_warn("1.0.1", "get_dp_flags()", "get_custom_flags()")
+  lifecycle::deprecate_soft(when = "0.1.1", "get_dc_flags()", "get_custom_flags()")
 
   fileList <- list.files(path = directory, pattern = "\\.csv$",
                          full.names = TRUE)
@@ -499,7 +502,6 @@ get_dc_flags <- function(directory = here::here()) {
     if (ncol(flags_only) > 0) {
       # for each column in data each data file with flags:
       for (j in seq_along(flags_only)) {
-        print(paste0("j=", j))
         # count each flag type; don't count NAs. Should count all cells that
         # start with the flagging letter and ignore anything (i.e. Quality
         # Assessment codes)
