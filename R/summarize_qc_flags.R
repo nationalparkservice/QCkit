@@ -493,7 +493,6 @@ get_dc_flags <- function(directory = here::here()) {
 
   dc_flags <- NULL
   for (i in seq_along(dfList)) {
-    print(paste0("i=", i))
 
     # get just flagging columns:
     flags_only <- dfList[[i]] %>% dplyr::select(ends_with("_flag"))
