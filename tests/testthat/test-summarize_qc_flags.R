@@ -1,24 +1,30 @@
-dir <- here::here("tests", "testthat", "good", "BICY_Veg_Data_Package_Example")
+dir <- testthat::test_path("good", "BICY_Veg_Data_Package_Example")
 
 ####### testing get_custom_flags
 test_that("get_custom_flags works", {
-  expect_type(get_custom_flags(dir, output = "all"), "list")
+  expect_type(get_custom_flags(directory = dir, output = "all"), "list")
 })
 
 test_that("get_custom_flags outputs 2 data frames when output = all", {
-  x <- get_custom_flags(dir, output = "all")
+  x <- get_custom_flags(directory = dir, output = "all")
   expect_equal(length(seq_along(x)), 2)
 })
 
 test_that("get_custom_flags outputs correct column names for files", {
-  x <- get_custom_flags(dir, output = "files")
+  x <- get_custom_flags(directory = dir, output = "files")
   expect_equal(names(x), c("File Name", "A", "AE", "P",  "R", "% Accepted"))
 })
 
 test_that("get_custom_flags outputs correct column names for columns", {
-  x <- get_custom_flags(dir, output = "columns")
+  x <- get_custom_flags(directory = dir, output = "columns")
   expect_equal(names(x), c("File Name", "Measure", "Number of Records", "A",
                            "AE", "R", "P", "% Accepted" ))
+})
+
+test_that("get_custom_flags works with custom columns", {
+  expect_type(get_custom_flags(directory = dir,
+                               cols = "taxonRank",
+                               output = "columns"), "list")
 })
 
 ##### Tests for deprecated function:
