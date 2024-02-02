@@ -15,8 +15,11 @@ get_utm_zone(lon)
 The function returns a numeric UTM zone (between 1 and 60).
 }
 \description{
-\code{get_utm_zone()} replaces \code{convert_long_2_utm()} as this function name is more descriptive. \code{get_utm_zone()} takes a longitude coordinate and returns the corresponding UTM zone.
+\code{get_utm_zone()} replaces \code{convert_long_2_utm()} as this
+function name is more descriptive. \code{get_utm_zone()} takes a longitude
+coordinate and returns the corresponding UTM zone.
 }
 \details{
-Input a longitude (decimal degree) coordinate and this simple function returns the number of the UTM zone where that point falls.
+Input a longitude (decimal degree) coordinate and this simple
+function returns the number of the UTM zone where that point falls.
 }

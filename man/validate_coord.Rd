@@ -14,7 +14,8 @@ validate_coord(unit_code, lat, lon)
 \item{lon}{longitude, in decimal degrees.}
 }
 \description{
-\code{validate_coord()} compares a coordinate pair (in decimal degrees) to the polygon for a park unit as provided through the NPS
+\code{validate_coord()} compares a coordinate pair (in decimal
+degrees) to the polygon for a park unit as provided through the NPS
 Units rest services. The function returns a value of TRUE or FALSE.
 }
 \examples{
