@@ -7,7 +7,8 @@
 replace_blanks(directory = here::here())
 }
 \arguments{
-\item{directory}{String. Path to the file(s) to have blanks replaced with NAs. Defaults to the working directory of the project (here::here())}
+\item{directory}{String. Path to the file(s) to have blanks replaced with
+NAs. Defaults to the working directory of the project (here::here())}
 }
 \value{
 list of data frames (invisibly)
@@ -29,7 +30,7 @@ data in any of the cells). In this case, the blanks will not be replaced with
 NA (as the function cannot determine how many NAs to include).
 }
 \examples{
-\dontrun {
+\dontrun{
 replace_blanks()
- }
+}
 }
