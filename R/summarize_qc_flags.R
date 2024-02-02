@@ -14,7 +14,7 @@
 #' The number of each flag type for each column (A, AE, R, P) is reported.
 #' Unflagged columns are assumed to have only accepted (or missing) data. The
 #' total number of data points in the specified columns (and data flagging
-#' columns for) each .csv are also reported. NAs considered missign data. An
+#' columns for) each .csv are also reported. NAs considered missing data. An
 #' Unweighted Relative Response (RRU) is calculated as the total number of
 #' accepted data points (A, AE, and data that are not flagged) divided by the
 #'total number of data points (excluding missing values) in all specified
@@ -372,7 +372,9 @@ get_dp_flags <- function(directory = here::here()) {
 #'
 get_df_flags <- function(directory = here::here()) {
 
-  lifecycle::deprecate_soft(when = "0.1.1", "get_df_flags()", "get_custom_flags()")
+  lifecycle::deprecate_soft(when = "0.1.1",
+                            "get_df_flags()",
+                            "get_custom_flags()")
 
   # get list of .csv files in the specified directory
   fileList <- list.files(path = directory, pattern = "\\.csv$",
