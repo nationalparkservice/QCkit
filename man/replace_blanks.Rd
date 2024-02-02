@@ -4,7 +4,10 @@
 \alias{replace_blanks}
 \title{Replaces all blank cells with NA}
 \usage{
-replace_blanks()
+replace_blanks(directory = here::here())
+}
+\arguments{
+\item{directory}{String. Path to the file(s) to have blanks replaced with NAs. Defaults to the working directory of the project (here::here())}
 }
 \value{
 list of data frames (invisibly)
