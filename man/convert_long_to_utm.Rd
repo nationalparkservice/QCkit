@@ -16,8 +16,12 @@ The function returns a numeric UTM zone (between 1 and 60).
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
-\code{convert_long_2_utm()} was deprecated in favor of \code{get_utm_zone()} as the new funciton name more accurately reflects what the function does.\code{convert_long_to_utm()} take a longitude coordinate and returns the corresponding UTM zone.
+\code{convert_long_2_utm()} was deprecated in favor of \code{get_utm_zone()} as the
+new funciton name more accurately reflects what the function does.
+\code{convert_long_to_utm()} take a longitude coordinate and returns the
+corresponding UTM zone.
 }
 \details{
-Input a longitude (decimal degree) coordinate and this simple function returns the number of the UTM zone where that point falls.
+Input a longitude (decimal degree) coordinate and this simple
+function returns the number of the UTM zone where that point falls.
 }

@@ -24,7 +24,11 @@ Authors:
   \item Judd Patterson \email{judd_patterson@nps.gov} (\href{https://orcid.org/0000-0002-0951-7917}{ORCID})
   \item Joe DeVivo
   \item Issac Quevedo (\href{https://orcid.org/0000-0003-0129-981X}{ORCID})
-  \item Amy Sherman (\href{https://orcid.org/0000-0002-9276-0087}{ORCID})
+}
+
+Other contributors:
+\itemize{
+  \item Amy Sherman (\href{https://orcid.org/0000-0002-9276-0087}{ORCID}) [contributor]
 }
 
 }

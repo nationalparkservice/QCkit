@@ -1,3 +1,8 @@
+# QCkit v0.1.4
+2024-01-23
+* Maintenance on `get_custom_flag()` to align with updated DRR requirements
+* Added function `replace_blanks()` to ingest a directory of .csvs and write them back out to .csv (overwriting the original files) with blanks converted to NA (except if a file has NO data - then it remains blank and needs to be dealt with manually)
+
 # QC kit v0.1.3
 2023-12-18
 * Bugfix for `create_datastore_script()`
@@ -5,7 +10,7 @@
 * Code cleanup via linter suggests 
 * Added warning about turning off VPN for the `covert_utm_to_ll()` documentation
 * Moved `convert_datetime_format()` from DPchecker to QCkit
-* Added funtion `fix_utc_offset()`
+* Added function `fix_utc_offset()`
 
 # QCkit 0.1.2 "Automated Shuttle Pilot"
 2023-11-20

@@ -23,3 +23,16 @@ assign("QC_ds_dev_api", "https://irmadevservices.nps.gov/datastore-secure/v6/res
 .QC_ds_dev_api <- function(x){
   get("QC_ds_dev_api", envir = .pkgglobalenv)
 }
+
+#this gets rid of the "no visible binding for global variable 'x'" error in build checks:
+globalVariables(c("any_of",
+                  "contains",
+                  "ends_with",
+                  "filter",
+                  "species_col.y",
+                  "species_col.x",
+                  "x",
+                  "y",
+                  "capture.output",
+                  "title",
+                  "% Accepted"))
