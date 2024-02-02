@@ -1,6 +1,7 @@
 #' Retrieve the polygon information for the park unit from NPS REST services
 #'
-#' @description `get_park_polygon()` retrieves a geoJSON string for a polygon of a park unit. This is not the official boundary.
+#' @description `get_park_polygon()` retrieves a geoJSON string for a polygon of
+#'a park unit. This is not the official boundary.
 #' #'
 #' @param unit_code is the four-character unit code as designated by NPS.
 #'
@@ -11,10 +12,10 @@
 #' }
 get_park_polygon <- function(unit_code) {
   # get geography from NPS Rest Services
-  UnitsURL <- paste0("https://irmaservices.nps.gov/v2/rest/unit/",
-                     unit_code,
-                     "/geography")
-  xml <- httr::content(httr::GET(UnitsURL))
+  units_url <- paste0("https://irmaservices.nps.gov/v2/rest/unit/",
+                      unit_code,
+                      "/geography")
+  xml <- httr::content(httr::GET(units_url))
 
   # Create spatial feature from polygon info returned from NPS
   park_polygon <- sf::st_as_sfc(xml[[1]]$Geography, geoJSON = TRUE)
@@ -24,7 +25,8 @@ get_park_polygon <- function(unit_code) {
 
 #' Check whether a coordinate pair is within the polygon of a park unit
 #'
-#' @description `validate_coord()` compares a coordinate pair (in decimal degrees) to the polygon for a park unit as provided through the NPS
+#' @description `validate_coord()` compares a coordinate pair (in decimal
+#' degrees) to the polygon for a park unit as provided through the NPS
 #' Units rest services. The function returns a value of TRUE or FALSE.
 #'
 #'
@@ -53,9 +55,12 @@ validate_coord <- function(unit_code, lat, lon) {
 
 #' Return UTM Zone
 #'
-#' @description `get_utm_zone()` replaces `convert_long_2_utm()` as this function name is more descriptive. `get_utm_zone()` takes a longitude coordinate and returns the corresponding UTM zone.
+#' @description `get_utm_zone()` replaces `convert_long_2_utm()` as this
+#' function name is more descriptive. `get_utm_zone()` takes a longitude
+#' coordinate and returns the corresponding UTM zone.
 #'
-#' @details Input a longitude (decimal degree) coordinate and this simple function returns the number of the UTM zone where that point falls.
+#' @details Input a longitude (decimal degree) coordinate and this simple
+#' function returns the number of the UTM zone where that point falls.
 #'
 #' @param lon - Decimal degree longitude value
 #'
@@ -73,16 +78,22 @@ get_utm_zone <- function(lon) {
 #' Return UTM Zone
 #'
 #' @description `r lifecycle::badge("deprecated")`
-#' `convert_long_2_utm()` was deprecated in favor of `get_utm_zone()` as the new funciton name more accurately reflects what the function does.`convert_long_to_utm()` take a longitude coordinate and returns the corresponding UTM zone.
+#' `convert_long_2_utm()` was deprecated in favor of `get_utm_zone()` as the
+#' new funciton name more accurately reflects what the function does.
+#' `convert_long_to_utm()` take a longitude coordinate and returns the
+#' corresponding UTM zone.
 #'
-#' @details Input a longitude (decimal degree) coordinate and this simple function returns the number of the UTM zone where that point falls.
+#' @details Input a longitude (decimal degree) coordinate and this simple
+#' function returns the number of the UTM zone where that point falls.
 #'
 #' @param lon - Decimal degree longitude value
 #'
 #' @return The function returns a numeric UTM zone (between 1 and 60).
 #' @export
 convert_long_to_utm <- function(lon) {
-  lifecycle::deprecate_soft(when = "0.1.4", "convert_long_to_utm()", "get_utm_zone()")
+  lifecycle::deprecate_soft(when = "0.1.4",
+                            "convert_long_to_utm()",
+                            "get_utm_zone()")
   ## Function to get the UTM zone for a given longitude
   return((floor((lon + 180) / 6) %% 60) + 1)
 }
@@ -91,11 +102,15 @@ convert_long_to_utm <- function(lon) {
 #'
 #' @description
 #' `r lifecycle::badge("deprecated")`
-#' `long2UTM` was deprecated in favor of `convert_long_to_utm()` to enforce a consistent function naming pattern across the package and to conform to the tidyverse style guide.
+#' `long2UTM` was deprecated in favor of `convert_long_to_utm()` to enforce a
+#' consistent function naming pattern across the package and to conform to the
+#' tidyverse style guide.
 #'
-#' `long2UTM()` take a longitude coordinate and returns the corresponding UTM zone.
+#' `long2UTM()` take a longitude coordinate and returns the corresponding UTM
+#' zone.
 #'
-#' @details Input a longitude (decimal degree) coordinate and this simple function returns the number of the UTM zone where that point falls.
+#' @details Input a longitude (decimal degree) coordinate and this simple
+#' function returns the number of the UTM zone where that point falls.
 #'
 #' @param lon - Decimal degree longitude value
 #'
@@ -110,13 +125,22 @@ long2UTM <- function(lon) {
 
 #' Convert Coordinates Into a Polygon to Obscure Specific Location
 #'
-#' @description `fuzz_location()` "fuzzes" a specific location to something less precise prior to public release of information about sensitive resources for which data are not to be released to the public. This function takes coordinates in either UTM or decimal degrees, converts to UTM (if in decimal degrees), creates a bounding box based on rounding of UTM coordinates, and then creates a polygon from the resultant points. The function returns a string in Well-Known-Text format.
+#' @description `fuzz_location()` "fuzzes" a specific location to something less
+#' precise prior to public release of information about sensitive resources for
+#' which data are not to be released to the public. This function takes
+#' coordinates in either UTM or decimal degrees, converts to UTM (if in decimal
+#' degrees), creates a bounding box based on rounding of UTM coordinates, and
+#' then creates a polygon from the resultant points. The function returns a
+#' string in Well-Known-Text format.
 #'
 #' @details Details will be defined later.
 #'
 #' @param lat - The latitude in either UTMs or decimal degrees.
 #' @param lon - The longitude in either UTMs or decimal degrees
-#' @param coord_ref_sys - The EPSG coordinate system of the latitude and longitude coordinates. Either 4326 for decimal degrees/WGS84 datum, 4269 for decimal degrees/NAD83, or 326xx for UTM/WGS84 datum (where the xx is the northern UTM zone). For example 32616 is for UTM zone 16N.
+#' @param coord_ref_sys - The EPSG coordinate system of the latitude and
+#' longitude coordinates. Either 4326 for decimal degrees/WGS84 datum, 4269 for
+#' decimal degrees/NAD83, or 326xx for UTM/WGS84 datum (where the xx is the
+#' northern UTM zone). For example 32616 is for UTM zone 16N.
 #' @param fuzz_level - Use "Fuzzed - 10km", "Fuzzed - 1km", or "Fuzzed - 100m"
 #'
 #' @export
@@ -137,7 +161,8 @@ fuzz_location <- function(lat,
   }
   #for decimal degrees, convert to UTM locations and identify proper CRS
   if (coord_ref_sys == 4326 || coord_ref_sys == 4269) {
-    #coordinates are in decimal degrees WGS84 or NAD83 and we need to convert to UTM; find the appropriate UTM EPSG code
+    #coordinates are in decimal degrees WGS84 or NAD83 and we need to convert to
+    #UTM; find the appropriate UTM EPSG code
     if (lat > 0) {
       #northern hemisphere (N) UTM zones start at 32601 and go to 32660
       tempcrs <- get_utm_zone(lon) + 32600
@@ -146,7 +171,7 @@ fuzz_location <- function(lat,
       tempcrs <- get_utm_zone(lon) + 32700
     }
 
-    #convert the points to UTM given their existing CRS (decimal degree WGS84 or NAD83)
+    #convert points to UTM given their CRS (decimal degree WGS84 or NAD83)
     point <- sf::st_point(c(lon, lat))
     point <- sf::st_sfc(point, crs = coord_ref_sys)
     pointutm <- sf::st_transform(x = point, crs = tempcrs)
@@ -208,17 +233,33 @@ fuzz_location <- function(lat,
 
 #' Coordinate Conversion from UTM to Latitude and Longitude
 #'
-#' @description `convert_utm_to_ll()` takes your dataframe with UTM coordinates in separate Easting and Northing columns, and adds on an additional two columns with the converted decimalLatitude and decimalLongitude coordinates using the reference coordinate system WGS84. You may need to turn the VPN OFF for this function to work properly.
+#' @description `convert_utm_to_ll()` takes your dataframe with UTM coordinates
+#' in separate Easting and Northing columns, and adds on an additional two
+#' columns with the converted decimalLatitude and decimalLongitude coordinates
+#' using the reference coordinate system WGS84. You may need to turn the VPN OFF
+#' for this function to work properly.
 #'
-#' @details Define the name of your dataframe, the easting and northing columns within it, the UTM zone within which those coordinates are located, and the reference coordinate system (datum). UTM Northing and Easting columns must be in separate columns prior to running the function. If a datum is not defined, the function will default to "WGS84". If there are missing coordinates in your dataframe they will be preserved, however they will be moved to the end of your dataframe. Note that some parameter names are not in snake_case but instead reflect DarwinCore naming conventions.
+#' @details Define the name of your dataframe, the easting and northing columns
+#' within it, the UTM zone within which those coordinates are located, and the
+#' reference coordinate system (datum). UTM Northing and Easting columns must be
+#' in separate columns prior to running the function. If a datum is not defined,
+#' the function will default to "WGS84". If there are missing coordinates in
+#' your dataframe they will be preserved, however they will be moved to the end
+#' of your dataframe. Note that some parameter names are not in snake_case but
+#' instead reflect DarwinCore naming conventions.
 #'
-#' @param df - The dataframe with UTM coordinates you would like to convert. Input the name of your dataframe.
-#' @param EastingCol - The name of your Easting UTM column. Input the name in quotations, ie. "EastingCol".
-#' @param NorthingCol - The name of your Northing UTM column. Input the name in quotations, ie. "NorthingCol".
+#' @param df - The dataframe with UTM coordinates you would like to convert.
+#' Input the name of your dataframe.
+#' @param EastingCol - The name of your Easting UTM column. Input the name in
+#' quotations, ie. "EastingCol".
+#' @param NorthingCol - The name of your Northing UTM column. Input the name in
+#' quotations, ie. "NorthingCol".
 #' @param zone - The UTM Zone. Input the zone number in quotations, ie. "17".
-#' @param datum - The datum used in the coordinate reference system of your coordinates. Input in quotations, ie. "WGS84"
+#' @param datum - The datum used in the coordinate reference system of your
+#' coordinates. Input in quotations, ie. "WGS84"
 #'
-#' @return The function returns your dataframe, mutated with an additional two columns of decimal Longitude and decimal Latitude.
+#' @return The function returns your dataframe, mutated with an additional two
+#' columns of decimal Longitude and decimal Latitude.
 #' @export
 #'
 #' @examples
