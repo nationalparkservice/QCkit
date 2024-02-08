@@ -347,7 +347,7 @@ data_criteria %>%
 # Generates a table summarizing QC at the column level within each file. All flagged columns are included. To add additional non-flagged columns, specify them with column names: cols=("my_unflagged_data1", "my_unflagged_data2)" or numbers: cols=c(1:4). All non-missing data in unflagged columns is assumed accepted.  If a file has no flagged columns and no specified custom columns, all values for that data file will be listed as "NA".
 
 #set directory to the location of your data package:
-path <- "../../DataPackageWorkflow/dataPackages/BICY_Veg_Data_Package_Example"
+path <- "/BICY_Example"
 dc_flags <- QCkit::get_custom_flags(directory = path, output="columns")
 dc_flags$`File Name` <- gsub(".csv", "", dc_flags$`File Name`)
 

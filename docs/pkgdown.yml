@@ -2,6 +2,8 @@ pandoc: 3.1.1
 pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
+  a01_DRR_Background: a01_DRR_Background.html
+  a02_Using_DRR_Template: a02_Using_DRR_Template.html
   QCkit: QCkit.html
-last_built: 2024-02-02T16:00Z
+last_built: 2024-02-08T03:50Z
 
