@@ -33,15 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">QCkit</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.5</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../articles/QCkit.html">Get started</a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -53,6 +50,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/DRR_Purpose_and_Scope.html">DRR Purpose and Scope</a>
+    </li>
+    <li>
       <a href="../articles/Starting-a-DRR.html">Starting a DRR</a>
     </li>
     <li>
@@ -106,15 +106,16 @@ supporting the quality of the measurements. Data Release Reports focus
 on helping others reuse data, rather than presenting results, testing
 hypotheses, or presenting new interpretations, methods or in-depth
 analyses.</p>
-<p>DRRs are intended to document the processing of fully-QAed data to
-their final (QCed) form in a reproducible and transparent manner. DRRs
-document the data collection methods and quality standards used to
-prepare and review data prior to release. DRRs present the quality of
-resultant data in the context of fitness for their intended use.</p>
-<p>Each DRR cites source and resultant datasets that are published
-concurrently and cross-referenced. Associated datasets are made publicly
-available with the exception of data that must be protected from release
-as per NPS and park-specific policies.</p>
+<p>DRRs are intended to document the processing of fully-Quality-Assured
+data to their final (Quality Controlled) form in a reproducible and
+transparent manner. DRRs document the data collection methods and
+quality standards used to prepare and review data prior to release. DRRs
+present the quality of resultant data in the context of fitness for
+their intended use.</p>
+<p>Each DRR cites source and resultant data packages that are published
+concurrently and cross-referenced. Associated data packages are made
+publicly available with the exception of data that must be protected
+from release as per NPS and park-specific policies.</p>
 <p>Data packages that are published concurrently with DRRs are intended
 to be independently citable scientific works that can serve as the basis
 for subsequent analysis and reporting by NPS or third parties.</p>
@@ -122,48 +123,13 @@ for subsequent analysis and reporting by NPS or third parties.</p>
 <div class="section level2">
 <h2 id="project-set-up">Project Set-up<a class="anchor" aria-label="anchor" href="#project-set-up"></a>
 </h2>
-<p>The Template is not a stand-alone file but instead has multiple
-associated and dependent files. New projects can be established using by
-downloading the Zip file associated with the latest <a href="https://github.com/nationalparkservice/DRR_Template/releases" class="external-link">release</a>
-of the DRR template repository on GitHub.</p>
-<div class="section level3">
-<h3 id="folder-structure">Folder Structure<a class="anchor" aria-label="anchor" href="#folder-structure"></a>
-</h3>
-<p>General directory contents are as follows (Figure 1):</p>
-<ul>
-<li>
-<p><code>input</code> This is the only location (other than the
-template script itself) where you you should manually change or edit
-files. This is where data files you need to supply should be placed.</p>
-<ul>
-<li>
-<code>figures</code> If you have figures that are not generated as
-part of running this template, place those files here.</li>
-</ul>
-</li>
-<li><p><code>output</code> Do not edit these files. This is where you
-can find your final products. Edits to files in this folder will not be
-incorporated when you knit the DRR_to_docx.rmd file. Any edits you make
-to files in this directory may be overwritten when you knit the
-template.</p></li>
-<li><p><code>temp</code> Do not edit these files. These are files that
-are either used or generated during when you knit the DRR_to_docx.rmd
-template. They may include graphics, text, or data.</p></li>
-<li><p>You can safely ignore most of the other folders (including
-<code>docs</code>, <code>my-website</code>,
-<code>vignettes</code>,<code>.github</code>) and files (including
-<code>_config.yml</code>, <code>.gitignore</code>,
-<code>.Rhistory</code>, <code>index.html</code>, and
-<code>national-park-service-DRR.csl</code>).</p></li>
-</ul>
-</div>
+<p>To set up a project, follow the instructions in the Article, <a href="Starting-a-DRR.html">“Starting a DRR”</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="reproducible-reports">Reproducible Reports<a class="anchor" aria-label="anchor" href="#reproducible-reports"></a>
 </h2>
-<p>The following is for users who are using the
-<code>DRR_to_docx.rmd</code> template file to generate a data release
-report using RMarkdown.</p>
+<p>The following is for users who are using the DRR template file to
+generate a data release report using RMarkdown.</p>
 <div class="section level3">
 <h3 id="standard-code-chunks">Standard Code Chunks<a class="anchor" aria-label="anchor" href="#standard-code-chunks"></a>
 </h3>
@@ -307,12 +273,12 @@ chunk parameters to eval=TRUE.</p></li>
 <p>To automate citations, add the citation in bibtex format to the file
 “references.bib”. You can manually copy and paste the bibtex for each
 reference in, or you can search for it from within Rstudio. From within
-Rstudio, make sure you are editing this document using the “Visual” view
-(as opposed to “Source”). From the “Insert” drop-down menu, select “@
-Citation…” (shortcut: Cntrl-Shift-F8). This will open a Graphical User
-Interface (GUI) tool where you can view all the citations in your
-reference.bib file as well as search multiple databases for references,
-automatically insert the bibtex for the reference into your
+Rstudio, make sure you are editing the DRR rmarkdown template using the
+“Visual” view (as opposed to “Source”). From the “Insert” drop-down
+menu, select “@ Citation…” (shortcut: Cntrl-Shift-F8). This will open a
+Graphical User Interface (GUI) tool where you can view all the citations
+in your reference.bib file as well as search multiple databases for
+references, automatically insert the bibtex for the reference into your
 references.bib file (and customize the unique identifier if you’d like)
 and insert the in-text citation into the DRR template.</p>
 <p>Once a reference is in your references.bib file, using the Visual
