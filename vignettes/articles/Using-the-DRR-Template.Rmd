@@ -53,14 +53,14 @@ the quality of the measurements. Data Release Reports focus on helping
 others reuse data, rather than presenting results, testing hypotheses,
 or presenting new interpretations, methods or in-depth analyses.
 
-DRRs are intended to document the processing of fully-QAed data to their
-final (QCed) form in a reproducible and transparent manner. DRRs
+DRRs are intended to document the processing of fully-Quality-Assured data to their
+final (Quality Controlled) form in a reproducible and transparent manner. DRRs
 document the data collection methods and quality standards used to
 prepare and review data prior to release. DRRs present the quality of
 resultant data in the context of fitness for their intended use.
 
-Each DRR cites source and resultant datasets that are published
-concurrently and cross-referenced. Associated datasets are made publicly
+Each DRR cites source and resultant data packages that are published
+concurrently and cross-referenced. Associated data packages are made publicly
 available with the exception of data that must be protected from release
 as per NPS and park-specific policies.
 
@@ -70,45 +70,11 @@ for subsequent analysis and reporting by NPS or third parties.
 
 # Project Set-up
 
-The Template is not a stand-alone file but instead has multiple
-associated and dependent files. New projects can be established using by
-downloading the Zip file associated with the latest
-[release](https://github.com/nationalparkservice/DRR_Template/releases)
-of the DRR template repository on GitHub.
-
-## Folder Structure
-
-General directory contents are as follows (Figure 1):
-
-```{r fig1, echo=FALSE, out.width="30%",  fig.align="center", fig.cap="Standard project directory structure for Data Release Reports"}
-#knitr::include_graphics("FileStructure.PNG")
-```
-
--   `input` This is the only location (other than the template script
-    itself) where you you should manually change or edit files. This is
-    where data files you need to supply should be placed.
-
-    -   `figures` If you have figures that are not generated as part of
-        running this template, place those files here.
-
--   `output` Do not edit these files. This is where you can find your
-    final products. Edits to files in this folder will not be
-    incorporated when you knit the DRR_to_docx.rmd file. Any edits you
-    make to files in this directory may be overwritten when you knit the
-    template.
-
--   `temp` Do not edit these files. These are files that are either used
-    or generated during when you knit the DRR_to_docx.rmd template. They
-    may include graphics, text, or data.
-
--   You can safely ignore most of the other folders (including `docs`,
-    `my-website`, `vignettes`,`.github`) and files (including
-    `_config.yml`, `.gitignore`, `.Rhistory`, `index.html`, and
-    `national-park-service-DRR.csl`).
+To set up a project, follow the instructions in the Article, ["Starting a DRR"](Starting-a-DRR.html).
 
 # Reproducible Reports
 
-The following is for users who are using the `DRR_to_docx.rmd` template
+The following is for users who are using the DRR template
 file to generate a data release report using RMarkdown.
 
 ## Standard Code Chunks
@@ -243,7 +209,7 @@ the YAML header.
 To automate citations, add the citation in bibtex format to the file
 "references.bib". You can manually copy and paste the bibtex for each
 reference in, or you can search for it from within Rstudio. From within
-Rstudio, make sure you are editing this document using the "Visual" view
+Rstudio, make sure you are editing the DRR rmarkdown template using the "Visual" view
 (as opposed to "Source"). From the "Insert" drop-down menu, select "\@
 Citation..." (shortcut: Cntrl-Shift-F8). This will open a Graphical User
 Interface (GUI) tool where you can view all the citations in your
