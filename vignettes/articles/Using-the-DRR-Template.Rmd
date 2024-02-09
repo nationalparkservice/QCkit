@@ -65,10 +65,9 @@ To set up a project, follow the instructions in the Article, ["Starting a DRR"](
 
 # Reproducible Reports
 
-The following is for users who are using the DRR template
-file to generate a data release report using RMarkdown.
+## Code Chunks
 
-## Standard Code Chunks
+The DRR Template takes advantage of rmarkdown code chunks to help generate a reproducible report. The template includes all of the required code chunks. Some of these code chunks need to be edited to generate the report, others should not be edited. Below is description of each code chunk in the DRR Template and instructions on how to (and when not to) edit them.
 
 In addition to the report outline and a description of content for each
 section, the template includes four standard code chunks.
@@ -193,62 +192,7 @@ the YAML header.
     chunk in appendix A to eval=TRUE. In that case, change the "session
     info" code chunk parameters to eval=TRUE.
 
-## Citations
-
-### Automating Citations
-
-To automate citations, add the citation in bibtex format to the file
-"references.bib". You can manually copy and paste the bibtex for each
-reference in, or you can search for it from within Rstudio. From within
-Rstudio, make sure you are editing the DRR rmarkdown template using the "Visual" view
-(as opposed to "Source"). From the "Insert" drop-down menu, select "\@
-Citation..." (shortcut: Cntrl-Shift-F8). This will open a Graphical User
-Interface (GUI) tool where you can view all the citations in your
-reference.bib file as well as search multiple databases for references,
-automatically insert the bibtex for the reference into your
-references.bib file (and customize the unique identifier if you'd like)
-and insert the in-text citation into the DRR template.
-
-```{r fig2, echo=FALSE, out.width="50%", out.height="50%",  fig.align="center", fig.cap="Adding Citations - Source vs. Visual editing of the Template and how to access the citation manager."}
-knitr::include_graphics("RMD_vis_source.png")
-```
-
-```{r fig3, echo=FALSE, out.width="50%", out.width="50%",  fig.align="center", fig.cap="Adding Citations - Using the citation manager."}
-knitr::include_graphics("R_citation_manager.png")
-```
-
-Once a reference is in your references.bib file, using the Visual view
-of the template you can simply type the '\@' symbol and select which
-reference to insert in the text.
-
-If you need to edit how the citation is displayed after inserting it
-into the text, switch back to the "Source" view. Each bibtex citation
-should start with a unique identifier; the example reference in the
-supplied references.bib file has the unique identifier
-"@article{Scott1994,". Using the "Source" view in Rstudio, insert the
-reference in your text, by combining the "at" symbol with the portion of
-the unique identifier after the curly bracket: @Scott1994 .
-
-| Syntax                                                               | Result                                       |
-|------------------------------------|-----------------------------------|
-| `@Scott1994` concludes that ...                                      | Scott et al., 1994 concludes that ...                                       |
-| `@Scott1994[p.33]` concludes that ...                                | Scott (1994, p.33) concludes that ...                                       |
-| ... end of sentence `[@Scott1994]`.                                  | ... end of sentence (Scott et al., 1994).                                   |
-| ... end of sentence `[see @Scott1994,p.33]`.                         | ... end of sentence (see Scott et al. 1994,p.33).                           |
-| delineate multiple authors with colon: `[@Scott1994; @aberdeen1958]` | delineate multiple authors with colon: (Scott et al., 1994; Aberdeen, 1958) |
-| Scott et al. conclude that .... [-@Scott1994]                        | Scott et al. conclude that . . . (1994)                                     |
-
-
-The full citation, properly formatted, will be included in a "References" section at the end of the rendered MS Word document. . . though it is also worth visually
-inspecting the .docx for citation completeness and formatting.
-
-### Manual citations
-
-If you would like to format your citations manually, please feel free to
-do so. Make sure to look at the References section for how to
-properly format each citation type.
-
-# Editing the Text 
+## Editing the Text 
 
 The following text in the body of the DRR template will need to be
 edited to customize it to each data package.
@@ -308,11 +252,64 @@ Optional sub-sections within the methods include:
 -   **Data Processing**
 -   **Code availability**
 
-### References
+## References
 
 This required section includes full bibliographic references for each
 paper, chapter, book, data package, dataset, protocol, etc cited within
-the DRR.
+the DRR. Each item in the Reference section should be specifically cited in-text as well.
+
+#### Automating Citations
+
+To automate citations, add the citation in bibtex format to the file
+"references.bib". You can manually copy and paste the bibtex for each
+reference in, or you can search for it from within Rstudio. From within
+Rstudio, make sure you are editing the DRR rmarkdown template using the "Visual" view
+(as opposed to "Source"). From the "Insert" drop-down menu, select "\@
+Citation..." (shortcut: Cntrl-Shift-F8). This will open a Graphical User
+Interface (GUI) tool where you can view all the citations in your
+reference.bib file as well as search multiple databases for references,
+automatically insert the bibtex for the reference into your
+references.bib file (and customize the unique identifier if you'd like)
+and insert the in-text citation into the DRR template.
+
+```{r fig2, echo=FALSE, out.width="50%", out.height="50%",  fig.align="center", fig.cap="Adding Citations - Source vs. Visual editing of the Template and how to access the citation manager."}
+knitr::include_graphics("RMD_vis_source.png")
+```
+
+```{r fig3, echo=FALSE, out.width="50%", out.width="50%",  fig.align="center", fig.cap="Adding Citations - Using the citation manager."}
+knitr::include_graphics("R_citation_manager.png")
+```
+
+Once a reference is in your references.bib file, using the Visual view
+of the template you can simply type the '\@' symbol and select which
+reference to insert in the text.
+
+If you need to edit how the citation is displayed after inserting it
+into the text, switch back to the "Source" view. Each bibtex citation
+should start with a unique identifier; the example reference in the
+supplied references.bib file has the unique identifier
+"@article{Scott1994,". Using the "Source" view in Rstudio, insert the
+reference in your text, by combining the "at" symbol with the portion of
+the unique identifier after the curly bracket: @Scott1994 .
+
+| Syntax                                                               | Result                                       |
+|------------------------------------|-----------------------------------|
+| `@Scott1994` concludes that ...                                      | Scott et al., 1994 concludes that ...                                       |
+| `@Scott1994[p.33]` concludes that ...                                | Scott (1994, p.33) concludes that ...                                       |
+| ... end of sentence `[@Scott1994]`.                                  | ... end of sentence (Scott et al., 1994).                                   |
+| ... end of sentence `[see @Scott1994,p.33]`.                         | ... end of sentence (see Scott et al. 1994,p.33).                           |
+| delineate multiple authors with colon: `[@Scott1994; @aberdeen1958]` | delineate multiple authors with colon: (Scott et al., 1994; Aberdeen, 1958) |
+| Scott et al. conclude that .... [-@Scott1994]                        | Scott et al. conclude that . . . (1994)                                     |
+
+
+The full citation, properly formatted, will be included in a "References" section at the end of the rendered MS Word document. . . though it is also worth visually
+inspecting the .docx for citation completeness and formatting.
+
+#### Manual citations
+
+If you would like to format your citations manually, please feel free to
+do so. Make sure to look at the References section of the DRR Template for how to
+properly format each citation type.
 
 There are numerous examples of proper formatting for each of these.
 Future versions of the DRR will enable automatic reference formatting
@@ -380,6 +377,12 @@ kable(Table2,
       caption="**Table 1.** Monitoring study example Data Records table.") %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),full_width=F)
 ```
+
+# Non-reproducible Reports
+
+You can generate a .docx document manually without ussing the DRR Template. The .docx, if properly formatted, can be ingested by the publication software. Assuming the manually created .docx also has all the required components and information, it can pass the review process and be published. The final product should be indistinguishable from one generated using the DRR Template. 
+
+Manually generating a .docx for DRR publication is not suggested and not supported.
 
 # Publishing DRRs
 
