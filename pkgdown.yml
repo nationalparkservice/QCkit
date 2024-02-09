@@ -2,6 +2,8 @@ pandoc: 2.19.2
 pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
-  QCkit: QCkit.html
-last_built: 2024-02-06T21:53Z
+  DRR_Purpose_and_Scope: DRR_Purpose_and_Scope.html
+  Starting-a-DRR: Starting-a-DRR.html
+  Using-the-DRR-Template: Using-the-DRR-Template.html
+last_built: 2024-02-09T17:32Z
 
