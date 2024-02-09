@@ -1,3 +1,7 @@
+# QCkit v0.1.5
+2024-02-09
+* This version adds the DRR template, example files, and associated documentation to the QCkit package.
+
 # QCkit v0.1.4
 2024-01-23
 * Maintenance on `get_custom_flag()` to align with updated DRR requirements
