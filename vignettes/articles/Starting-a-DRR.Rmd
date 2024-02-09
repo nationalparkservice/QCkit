@@ -59,15 +59,10 @@ knitr::include_graphics(c("new_rmd.png", "new_rmd_template.png"))
 
 5.  After selecting "OK" two things will happen: First, you the DRR Template file will open up. It is called "Untitled.Rmd" by default. Second, a new folder will be created called "Untitled" (Unless you opted to change the default "Name:" in the "New R Markdown" pop up, then these will have whatever name you gave them).
 
-6.  Edit the DRR Template according to your specifications and the instructions in the ["Using the DRR Template"](Using-the-DRR-Template.html) guide.
+6.  **Edit the DRR Template** according to your specifications and the instructions in the ["Using the DRR Template"](Using-the-DRR-Template.html) guide.
 
-7.  When you are done, "knit" the .Rmd file to Word and submit the resulting .docx file for publication.
+7.  **"knit" the .rmd file to Word** when you are done editing it. Submit the resulting .docx file for publication (via a yet-to-be-determined process).
 
-extra text to be moved elsewhere?
-
-5.  [Bibtex reference file](https://github.com/nationalparkservice/DRR_Template/raw/master/reference.bib) is used if you want to automate your citations. Add each citation in bibtex format to this file and save it. Add in-text citations to the DRR Template and your References section will automatically be generated for you when you knit the .Rmd to .docx. You should still visually check the final format in the .docx file for accuracy, completion, and formatting. If you would prefer to manually format your citations, feel free to continue doing so.
-
-6.  [DRR_Report](https://github.com/nationalparkservice/DRR_Template/raw/master/DRR_to_docx.docx) an example of the .docx output file that takes into account your edits and changes to DRR_to_docx.Rmd (assuming you have saved and/or knit the .Rmd to .docx format in Rstudio).
 
 # Examples
 
