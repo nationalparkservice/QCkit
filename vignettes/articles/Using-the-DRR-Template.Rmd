@@ -2,15 +2,6 @@
 title: "Using the DRR Template"
 ---
 
----
-title: "Using the DRR Template"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Using the DRR Template}
-  %\VignetteEnging{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
----
-
 ```{r setup, include=FALSE}
 RRpackages <- c('markdown',     # links to Sundown rendering library
                 'rmarkdown',    # newer rendering via pandoc
@@ -218,12 +209,12 @@ automatically insert the bibtex for the reference into your
 references.bib file (and customize the unique identifier if you'd like)
 and insert the in-text citation into the DRR template.
 
-```{r fig2, echo=FALSE, out.width="75%",  fig.align="center", fig.cap="Adding Citations - Source vs. Visual editing of the Template and how to access the citation manager."}
-#knitr::include_graphics("RMD_vis_source.png")
+```{r fig2, echo=FALSE, out.width="50%", out.height="50%",  fig.align="center", fig.cap="Adding Citations - Source vs. Visual editing of the Template and how to access the citation manager."}
+knitr::include_graphics("RMD_vis_source.png")
 ```
 
-```{r fig3, echo=FALSE, out.width="75%",  fig.align="center", fig.cap="Adding Citations - Using the citation manager."}
-#knitr::include_graphics("R_citation_manager.png")
+```{r fig3, echo=FALSE, out.width="50%", out.width="50%",  fig.align="center", fig.cap="Adding Citations - Using the citation manager."}
+knitr::include_graphics("R_citation_manager.png")
 ```
 
 Once a reference is in your references.bib file, using the Visual view
