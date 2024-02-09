@@ -7,16 +7,23 @@ csl: national-park-service-DRR.csl
 ---
 
 ```{=html}
-<!--- For more information on using this template, please see the accompanying documentation at: 
+<!--- Welcome to the NPS Data Release Report Template!
 
-Overview of DRR Templates: https://nationalparkservice.github.io/DRR_Template/
+For more information on using this template, please see the accompanying documentation at: 
+
+Overview of DRR Templates:
+https://nationalparkservice.github.io/QCkit/articles/DRR_Purpose_and_Scope.html
+
+How to access this template initiate a DRR:
+https://nationalparkservice.github.io/QCkit/articles/Starting-a-DRR.html
 
 Specific Instructions on filling out this template:
-https://nationalparkservice.github.io/DRR_Template/HowToUseThisTemplate.html
+https://nationalparkservice.github.io/QCkit/articles/Using-the-DRR-Template.html
 --->
 ```
+
 ```{r user_edited_parameterss, include=FALSE}
-# The title of your DRR. Should all DRR start with "Data Release Report:"? Should we enforce titles specifically referencing the data package(s) they the report is about?
+# The title of your DRR. Should all DRR start with "Data Release Report:"? Should we enforce titles specifically referencing the data package(s) the Report is about?
 title <- "DRR Title"
 
 # Optional and should only be included if publishing to the semi-official DRR series. Contact Joe if you are. If not, leave as NULL
@@ -47,14 +54,16 @@ authorNames <- c(
 
 #Note that the entirety of each affiliation is enclosed in quotations. Do not worry about indentation or word wrapping.
 authorAffiliations <- c(
-  "NPS Inventory and Monitoring Division, 1201 Oakridge Dr., Suite 150, Fort Collins, Colorado", 
+  "NPS Inventory and Monitoring Division, 1201 Oakridge Dr., Suite 150, Fort Collins, Colorado",
+  
   "Managed Business Solutions (MBS), a Sealaska Company, Contractor to the National Park Service, Natural Resource Stewardship and Science Directorate, 1201 Oakridge Dr., Suite 150, Fort Collins, Colorado",
+  
   "Managed Business Solutions (MBS), a Sealaska Company, Contractor to the National Park Service, Natural Resource Stewardship and Science Directorate, 1201 Oakridge Dr., Suite 150, Fort Collins, Colorado"
 )
 
 # List the ORCID iDs for each author in the format "(xxxx-xxxx-xxxx-xxxx)". If an author does not have an ORCID iD, specify NA (no quotes). If an author is listed more than once (for instance because they have multiple institutional affiliations), the ORCID iD must also be listed more than once. For more information on ORCID iDs and to register an ORCID iD, see https://www.orcid.org. 
 
-#The order of the ORCID iDs must match the order of authors in AuthorNames.In this example, Jane Doe has an ORCID iD but John Doe does not. Jane's ORCID iD is listed twice because she her name is listed twice in authorNames(because she has two authorAffiliations).
+# The order of the ORCID iDs must match the order of authors in AuthorNames.In this example, Jane Doe has an ORCID iD but John Doe does not. Jane's ORCID iD is listed twice because she her name is listed twice in authorNames(because she has two authorAffiliations).
 authorORCID <- c(
   "(0000-1111-2222-3333)", "(0000-1111-2222-3333)", NA
   )
