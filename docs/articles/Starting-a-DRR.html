@@ -102,8 +102,7 @@
 </h2>
 <p><a href="DRR_Purpose_and_Scope.html">Purpose and Scope of Data
 Release Reports</a></p>
-<p>This is a template is for use when drafting Data Release Reports.
-DRRs are created by the National Park Service and provide detailed
+<p>DRRs are created by the National Park Service and provide detailed
 descriptions of valuable research datasets, including the methods used
 to collect the data and technical analyses supporting the quality of the
 measurements. Data Release Reports focus on helping others reuse data
@@ -111,19 +110,23 @@ rather than presenting results, testing hypotheses, or presenting new
 interpretations and in-depth analyses.</p>
 </div>
 <div class="section level2">
-<h2 id="about-this-template">About this Template<a class="anchor" aria-label="anchor" href="#about-this-template"></a>
+<h2 id="about-the-drr-template">About the DRR Template<a class="anchor" aria-label="anchor" href="#about-the-drr-template"></a>
 </h2>
-<p>This template contains an rmarkdown template file, default folder
-structure for project files, and all the necessary template files to
-generate an unformatted .docx file. Upon submission for publication, the
-.docx file will be ingested by EXstyles, converted to an .xml file and
-fully formatted according to NPS branding upon final publication. The
-goal of this process is to relieve data producers, managers, and
-scientists from the burden of formatting and allow them to focus
-primarily on content. Consequently, the .docx generated for the
-publication process may not be visually appealing. The content, however,
-should focus on the production, quality, and utility of NPS data
-packages.</p>
+<p>Opening a new NPS DRR Template will write a folder to the current
+working directory that contains the an rmarkdown (.rmd) file that is the
+DRR Tempate, a references.bib file for bibtex references, a
+national-park-service-DRR,csl file for formatting references, and a
+sub-folder, BICY_Example with an example data package that can be used
+to knit an example DRR to .docx.</p>
+<p>Upon submission for publication, the .docx file will be ingested by
+EXstyles, converted to an .xml file and fully formatted according to NPS
+branding and in compliance with 508 accessibility requirements upon
+final publication. The goal of this process is to relieve data
+producers, managers, and scientists from the burden of formatting and
+allow them to focus primarily on content. Consequently, the .docx
+generated for the publication process may not be visually appealing. The
+content, however, should focus on the production, quality, and utility
+of NPS data packages.</p>
 </div>
 <div class="section level2">
 <h2 id="how-to-start-a-drr">How to Start a DRR<a class="anchor" aria-label="anchor" href="#how-to-start-a-drr"></a>
@@ -132,11 +135,13 @@ packages.</p>
 <li><p><strong>To start your DRR you will need all of your data in flat
 .csv files</strong>. All quality assurance, quality control, and quality
 flagging should be completed. Ideally you have already created or are in
-the process of creating a data package. All of the .csv files you want
-to describe in the DRR should be in a single folder with <strong>no
-additional .csv files</strong> (other files such as .txt and .xml will
-be ignored). This folder can be the same folder you used/are using to
-create a data package.</p></li>
+the process of creating a data package (see the <a href="https://nationalparkservice.github.io/EMLeditor/articles/a02_EML_creation_script.html" class="external-link">documentation</a>
+associated with the R package <a href="https://nationalparkservice.github.io/EMLeditor/index.html" class="external-link">EMLeditor</a>
+for data package creation). All of the .csv files you want to describe
+in the DRR should be in a single folder with <strong>no additional .csv
+files</strong> (other files such as .txt and .xml will be ignored). This
+folder can be the same folder you used/are using to create a data
+package.</p></li>
 <li><p><strong>Using Rstudio, open an R project</strong> (Select: File
 &gt; New Project…) in the same folder as your .csv files. If you already
 have an R project (.Rproj) initiated from creating a data package, you
@@ -166,7 +171,7 @@ install.</p></li>
 <ol start="4" style="list-style-type: decimal">
 <li>
 <strong>Open a new DRR Template</strong>. From within Rstudio,
-select the “File” drop down menu. Choose “New File” and then “R
+select the “File” drop down menu. Choose “New File &gt;” and then “R
 markdown…”. This will open up a pop-up dialog box. Select “From
 Template” on in the right-hand list and choose the template labelled
 “NPS_DRR {QCkit}”. You can change the file and folder name to something
@@ -182,8 +187,8 @@ Template file will open up. It is called “Untitled.Rmd” by default.
 Second, a new folder will be created called “Untitled” (Unless you opted
 to change the default “Name:” in the “New R Markdown” pop up, then these
 will have whatever name you gave them).</p></li>
-<li><p><strong>Edit the DRR Template</strong> according to your
-specifications and the instructions in the <a href="Using-the-DRR-Template.html">“Using the DRR Template”</a>
+<li><p><strong>Edit the DRR Template</strong> to reflect the data you
+would like to descibe and according to the instructions in the <a href="Using-the-DRR-Template.html">“Using the DRR Template”</a>
 guide.</p></li>
 <li><p><strong>“knit” the .rmd file to Word</strong> when you are done
 editing it. Submit the resulting .docx file for publication (via a
@@ -194,10 +199,10 @@ yet-to-be-determined process).</p></li>
 <h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
 </h2>
 <p><strong>Knit your own example DRR:</strong> Assuming you left the
-“Name:” as the default “untitled”, you should be able to knit the DRR
+“Name:” as the default “Untitled”, you should be able to knit the DRR
 template in to an example .docx that could be submitted for publication.
 If you opted to change the Name, you will need to update the the file
-paths before kniting.</p>
+paths before knitting.</p>
 </div>
   </div>
 

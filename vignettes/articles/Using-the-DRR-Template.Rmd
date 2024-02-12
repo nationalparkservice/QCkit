@@ -89,23 +89,25 @@ the YAML header.
         if publishing in the semi-official DRR series. Set to NULL if
         there is no reportNumber.
     -   `DRR_DSRefID`. This is the DataStore reference ID for the
-        report.
-    -   `authorNames`. A list of the author's names.
+        report. It should be 7 digits long.
+    -   `authorNames`. A list of the author's names. If an author has multiple
+        institutional affiliations, the author should be listed once for each
+        affiliation.
     -   `authorAffiliations`. A list of the author's affiliations. The
         order of author affiliations must match the order of the authors
         in the `authorNames` list. Note that the entirety of each
-        affiliation is enclosed in a single set of quotations. Line
-        breaks are indicated with the <br> tag. Do not worry about
-        indentation or word wrapping. If two authors have the same
+        affiliation is enclosed in a single set of quotations. Do not worry
+        about indentation or word wrapping. If two authors have the same
         affiliation, list the affiliation twice.
     -   `authorORCID`. A list of ORCID iDs for each author in the format
-        "xxxx-xxxx-xxxx-xxxx". If an author does not have an ORCID iD,
+        "(xxxx-xxxx-xxxx-xxxx)". If an author does not have an ORCID iD,
         specify NA (no quotes). The order of ORCID iDs (and NAs) must
-        correspond to the order of authors in the `authorNames` list.
-        Future iterations of the DRR Template will pull ORCID iDs from
-        metadata and eventually from Active Directory. See
-        [ORCID](https://www.orcid.org/) for more information about ORCID
-        iDs or to register an ORCID iD.
+        correspond to the order of authors in the `authorNames` list. If an 
+        author was listed more than once in the `authorNames` list, the 
+        corresponding ORCID (or NA) should also be listed more than once. Future
+        iterations of the DRR Template will pull ORCID iDs from metadata and
+        eventually from Active Directory. See [ORCID](https://www.orcid.org/)
+        for more information about ORCID iDs or to register an ORCID iD.
     -   `DRRabstract`. The abstract for the DRR (which may be distinct
         from the data package abstract). Pay careful attention to
         non-standard characters, line breaks, carriage returns, and
@@ -133,7 +135,9 @@ the YAML header.
         reference number.
     -   `dataPackage_fileNames`. List the file names in your data
         package. Do NOT include metadata files. For example, include
-        "my_data.csv" but do NOT include "my_metadata.xml".
+        "my_data.csv" but do NOT include "my_metadata.xml". Note: Because data
+        packages contain only .csv and .xml files, all data files should be
+        .csv.
     -   `dataPackage_fileSizes`. List the approximate size of each data
         file. Make sure the order of the file sizes corresponds to the
         order of file names in `dataPackage_fileNames`.
@@ -144,15 +148,13 @@ the YAML header.
         have already created metadata for your data package in EML
         format, this should be the same text as found in the
         "entityDescription" element for each data file.
-
--   `setup`. Most users will not need to edit this code chunk. There is
-    one code snippet for loading packages; the `RRpackages` section is a
+-   `setup_do_not_edit`. Most users will not need to edit this code chunk. There
+    is one code snippet for loading packages; the `RRpackages` section is a
     suite of packages that are used to assist with reproducible
     reporting. You may not need these for your report, but we have
-    included them as part of the base recommended packages. If you plan
-    to perform you QC as part of the DRR construction process, you can
-    add a second code snipped to import necessary packages for your QC
-    process here.
+    included them as part of the base recommended packages. If you plan to
+    perform you QC as part of the DRR construction process, you can add a second
+    code snipped to import necessary packages for your QC process here.
 
 -   `title_do_not_edit`. These parameters are auto-generated based on
     either the EML you supplied (when that becomes an option) or the
@@ -163,19 +165,38 @@ the YAML header.
     writes the author names, ORCID iDs, and affiliations to the .docx
     document based on information supplied in user-edited-parameters.
 
--   `LoadData`. Any datasets you need to load can go here. For most
-    people these datasets are used to generate summary statistics on
-    proportions of data that were flagged as accepted (A) accepted,
-    estimated (AE) and rejected (R) during the quality control process.
-
--   `FileTable`. Do not edit. Generates a table of file names, sizes,
+-   `file_table`. Do not edit. Generates a table of file names, sizes,
     and descriptions in the data package being described by the DRR.
+    
+-   `data_acceptance_criteria`. If you did not use the standard data quality
+    assurance flags (A = accepted, AE = Accepted (estimated), R = Rejected, P =
+    Provisional), set this code chunk to `eval = FALSE` and generate your own
+    custom code chunk to summarize your custom data flagging procedures. If you
+    did use the standard QA flags, indicate which fields in your data files
+    contain flagged data. Assuming your column names are unique, you do not need
+    to specify which file the columns are in. If your column names are not
+    unique, you will need to design your own summary table. Briefly describe the
+    acceptance criteria for each data quality flagged column in the same order
+    as the you specified the columns.
 
--   `dataFlaggingTable`. This sample code provides a summary table
-    defining the suggested data flagging codes. There is no need to edit
-    this table.
+-   `data_colunn_flagging`. Uses the input from `data_acceptance_criteria` to
+    generate a table summarizing the data quality flagging in the data package.
+    If you set `data_acceptance_criteria` parameter `eval = FALSE`, also set
+    `data_column_flagging` parameter to `eval = FALSE`. Update the first line
+    (which in the example points to BICY_Example) to point to the directory
+    where your data are.
+    
+-   `data_package_flagging`. If you used standard QA flags in your data package,
+    leave the parameter `eval = TRUE`. If you did not use standard QA flags, set
+    `eval = FALSE` and design your own custom summary table to handle your
+    custom flagging protocols. If you set `eval = TRUE`, update the file path
+    to pointing to your data files (in the example, the path points to the
+    directory "BICY_Example").
 
--   `Listing`. Appendix A, by default is the code listing. This will
+-   `figure1`. This is an example code chunk for inserting figures. Edit and
+    re-deploy as necessary to include as many or as few figures as your require.
+
+-   `listing`. Appendix A, by default is the code listing. This will
     generate all code used in generating the report and data packages.
     In most cases, code listing is not required. If all QA/QC processes
     and data manipulations were performed elsewhere, you should cite
@@ -184,7 +205,7 @@ the YAML header.
     If you have developed custom scripts, you can add those to DataStore
     with the reference "Script" and cite them in the DRR.
 
--   `session-info` is the information about the versions of R and
+-   `session_-_info` is the information about the versions of R and
     packages used in generating the report. In most cases, you do not
     need to report session info (leave the session-info code chunk
     parameters in their default state: eval=FALSE). Session and version
