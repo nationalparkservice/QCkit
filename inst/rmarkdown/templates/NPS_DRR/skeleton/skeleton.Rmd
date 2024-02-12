@@ -21,7 +21,6 @@ Specific Instructions on filling out this template:
 https://nationalparkservice.github.io/QCkit/articles/Using-the-DRR-Template.html
 --->
 ```
-
 ```{r user_edited_parameterss, include=FALSE}
 # The title of your DRR. Should all DRR start with "Data Release Report:"? Should we enforce titles specifically referencing the data package(s) the Report is about?
 title <- "DRR Title"
@@ -308,7 +307,7 @@ The Data Records section should be used to explain each data record associated w
 
 This DRR describes the data package *`r dataPackageTitle`* which contains a metadata file and `r length(dataPackage_fileNames)` data files. These data were compiled and processed for dissemination by the National Park Service Inventory and Monitoring Division (IMD) and are available at `r dataPackageDOI` (see Table 1).
 
-```{r FileTable, echo=FALSE}
+```{r file_table, echo=FALSE}
 filelist <- data.frame(dataPackage_fileNames, dataPackage_fileSizes, dataPackage_fileDescript)
 
 knitr::kable(filelist, caption = paste0("**Table 1. ", dataPackageTitle, ": List of data files.**"), col.names = c("**File Name**", "**Size**", "**Description**"), format = "pandoc")
@@ -324,13 +323,13 @@ The Data Quality Evaluation section should present any analyses that are needed 
 
 *Required Table*
 
-```{r dataAcceptanceCriteria, echo=FALSE, eval=TRUE}
+```{r data_acceptance_criteria, echo = FALSE, eval = TRUE}
 # To turn off, set eval=FALSE.
 # Generates a table of acceptance criteria for each of the data quality fields in your data package. Mitigations taken when data did not meet the acceptance criteria should be described textually in the Data Quality Evaluation section.
 
-# Specify which columns in your data package are data quality fields in the dataQualityFields variable. In the example below, data quality fields/columns in the data package are listed in the format [FieldName]_flag. These data quality fields relate to the respective temporal, taxonomic, and  geographic data.
+# Specify which columns in your data package are data quality fields in the data_quality_fields variable. In the example below, data quality fields/columns in the data package are listed in the format [FieldName]_flag. These data quality fields relate to the respective temporal, taxonomic, and  geographic data.
 
-dataQualityFields <- c(
+data_quality_fields <- c(
   "eventDate_flag", 
   "scientificName_flag", 
   "coordinate_flag"
@@ -338,17 +337,23 @@ dataQualityFields <- c(
 
 # Brief description of the acceptance criteria for each respective data quality field. The order of the acceptance criteria must match the order of the data quality fields. 
 
-dataQualityAcceptanceCriteria <- c(
+data_quality_acceptance_criteria <- c(
   "Sampling event date within the start and end dates of the project",
   "Taxon exists within Integrated Taxonomic Information System and GBIF",
   "Sampling location is within the park unit boundaries"
   )
 
-data_criteria<-data.frame(dataQualityFields = str_remove(dataQualityFields, "_flag"), dataQualityAcceptanceCriteria)
+data_criteria <- data.frame(data_quality_fields =
+                              str_remove(data_quality_fields, "_flag"),
+                            data_quality_acceptance_criteria)
 
 data_criteria %>% 
   NMFSReports::format_cells(1:3, 1, "bold") %>% 
-  knitr::kable(caption = "**Table 2. Acceptance criteria for data evaluated.**", col.names=c("**Field**", "**Acceptance Criteria**"), format="pandoc", align = 'c') 
+  knitr::kable(caption = "**Table 2. Acceptance criteria for data evaluated.**",
+               col.names=c("**Field**",
+                           "**Acceptance Criteria**"),
+               format="pandoc",
+               align = 'c') 
 
 ```
 
@@ -357,7 +362,9 @@ data_criteria %>%
 # Generates a table summarizing QC at the column level within each file. All flagged columns are included. To add additional non-flagged columns, specify them with column names: cols=("my_unflagged_data1", "my_unflagged_data2)" or numbers: cols=c(1:4). All non-missing data in unflagged columns is assumed accepted.  If a file has no flagged columns and no specified custom columns, all values for that data file will be listed as "NA".
 
 #set directory to the location of your data package:
-dc_flags <- QCkit::get_custom_flags(here::here("Untitled", "BICY_Example"), output="columns")
+dc_flags <- QCkit::get_custom_flags(here::here("Untitled",
+                                               "BICY_Example"),
+                                    output="columns")
 dc_flags$`File Name` <- gsub(".csv", "", dc_flags$`File Name`)
 
 
@@ -554,7 +561,7 @@ United States Geologic Survey (USGS). 2016. BioData - Aquatic Bioassessment Data
 
 In most cases, Code listing is not required. If all QA/QC and data manipulations were performed elsewhere, you should cite that code in the methods (and leave the "Listing" code chunk as the default settings: eval=FALSE and echo=FALSE). If you have developed custom scripts, you can add those to DataStore with the reference type "Script" and cite them in the DRR. Some people have developed code to perform QA/QC or data manipulation within the DRR itself. In that case, you must set the "Listing" code chunk to eval=TRUE and echo=TRUE to fully document the QA/QC process.
 
-```{r Listing, ref.label=knitr::all_labels(), echo=TRUE, eval=TRUE}
+```{r listing, ref.label=knitr::all_labels(), echo=TRUE, eval=TRUE}
 
 ```
 
@@ -564,7 +571,7 @@ In most cases, Code listing is not required. If all QA/QC and data manipulations
 
 In most cases you do not need to report session info (leave the "session-info" code chunk parameters in their default state: eval=FALSE). Session and version information is only necessary if you have set the "Listing" code chunk to eval=TRUE in appendix A. In that case, change the "session-info" code chunk parameters to eval=TRUE.
 
-```{r session-info, eval=TRUE, echo=FALSE, cache=FALSE}
+```{r session_info, eval=TRUE, echo=FALSE, cache=FALSE}
 sessionInfo()
 Sys.time()
 ```
