@@ -158,24 +158,27 @@ parameters for each DRR.</p>
 Set to NULL if there is no reportNumber.</li>
 <li>
 <code>DRR_DSRefID</code>. This is the DataStore reference ID for the
-report.</li>
+report. It should be 7 digits long.</li>
 <li>
-<code>authorNames</code>. A list of the author’s names.</li>
+<code>authorNames</code>. A list of the author’s names. If an author
+has multiple institutional affiliations, the author should be listed
+once for each affiliation.</li>
 <li>
 <code>authorAffiliations</code>. A list of the author’s
 affiliations. The order of author affiliations must match the order of
 the authors in the <code>authorNames</code> list. Note that the entirety
-of each affiliation is enclosed in a single set of quotations. Line
-breaks are indicated with the <br> tag. Do not worry about indentation
-or word wrapping. If two authors have the same affiliation, list the
-affiliation twice.</li>
+of each affiliation is enclosed in a single set of quotations. Do not
+worry about indentation or word wrapping. If two authors have the same
+affiliation, list the affiliation twice.</li>
 <li>
 <code>authorORCID</code>. A list of ORCID iDs for each author in the
-format “xxxx-xxxx-xxxx-xxxx”. If an author does not have an ORCID iD,
+format “(xxxx-xxxx-xxxx-xxxx)”. If an author does not have an ORCID iD,
 specify NA (no quotes). The order of ORCID iDs (and NAs) must correspond
-to the order of authors in the <code>authorNames</code> list. Future
-iterations of the DRR Template will pull ORCID iDs from metadata and
-eventually from Active Directory. See <a href="https://www.orcid.org/" class="external-link">ORCID</a> for more information about ORCID
+to the order of authors in the <code>authorNames</code> list. If an
+author was listed more than once in the <code>authorNames</code> list,
+the corresponding ORCID (or NA) should also be listed more than once.
+Future iterations of the DRR Template will pull ORCID iDs from metadata
+and eventually from Active Directory. See <a href="https://www.orcid.org/" class="external-link">ORCID</a> for more information about ORCID
 iDs or to register an ORCID iD.</li>
 <li>
 <code>DRRabstract</code>. The abstract for the DRR (which may be
@@ -209,7 +212,9 @@ reference number.</li>
 <li>
 <code>dataPackage_fileNames</code>. List the file names in your data
 package. Do NOT include metadata files. For example, include
-“my_data.csv” but do NOT include “my_metadata.xml”.</li>
+“my_data.csv” but do NOT include “my_metadata.xml”. Note: Because data
+packages contain only .csv and .xml files, all data files should be
+.csv.</li>
 <li>
 <code>dataPackage_fileSizes</code>. List the approximate size of
 each data file. Make sure the order of the file sizes corresponds to the
@@ -223,8 +228,8 @@ text as found in the “entityDescription” element for each data
 file.</li>
 </ul>
 </li>
-<li><p><code>setup</code>. Most users will not need to edit this code
-chunk. There is one code snippet for loading packages; the
+<li><p><code>setup_do_not_edit</code>. Most users will not need to edit
+this code chunk. There is one code snippet for loading packages; the
 <code>RRpackages</code> section is a suite of packages that are used to
 assist with reproducible reporting. You may not need these for your
 report, but we have included them as part of the base recommended
@@ -240,18 +245,39 @@ parameters.</p></li>
 chunk. This writes the author names, ORCID iDs, and affiliations to the
 .docx document based on information supplied in
 user-edited-parameters.</p></li>
-<li><p><code>LoadData</code>. Any datasets you need to load can go here.
-For most people these datasets are used to generate summary statistics
-on proportions of data that were flagged as accepted (A) accepted,
-estimated (AE) and rejected (R) during the quality control
-process.</p></li>
-<li><p><code>FileTable</code>. Do not edit. Generates a table of file
+<li><p><code>file_table</code>. Do not edit. Generates a table of file
 names, sizes, and descriptions in the data package being described by
 the DRR.</p></li>
-<li><p><code>dataFlaggingTable</code>. This sample code provides a
-summary table defining the suggested data flagging codes. There is no
-need to edit this table.</p></li>
-<li><p><code>Listing</code>. Appendix A, by default is the code listing.
+<li><p><code>data_acceptance_criteria</code>. If you did not use the
+standard data quality assurance flags (A = accepted, AE = Accepted
+(estimated), R = Rejected, P = Provisional), set this code chunk to
+<code>eval = FALSE</code> and generate your own custom code chunk to
+summarize your custom data flagging procedures. If you did use the
+standard QA flags, indicate which fields in your data files contain
+flagged data. Assuming your column names are unique, you do not need to
+specify which file the columns are in. If your column names are not
+unique, you will need to design your own summary table. Briefly describe
+the acceptance criteria for each data quality flagged column in the same
+order as the you specified the columns.</p></li>
+<li><p><code>data_colunn_flagging</code>. Uses the input from
+<code>data_acceptance_criteria</code> to generate a table summarizing
+the data quality flagging in the data package. If you set
+<code>data_acceptance_criteria</code> parameter
+<code>eval = FALSE</code>, also set <code>data_column_flagging</code>
+parameter to <code>eval = FALSE</code>. Update the first line (which in
+the example points to BICY_Example) to point to the directory where your
+data are.</p></li>
+<li><p><code>data_package_flagging</code>. If you used standard QA flags
+in your data package, leave the parameter <code>eval = TRUE</code>. If
+you did not use standard QA flags, set <code>eval = FALSE</code> and
+design your own custom summary table to handle your custom flagging
+protocols. If you set <code>eval = TRUE</code>, update the file path to
+pointing to your data files (in the example, the path points to the
+directory “BICY_Example”).</p></li>
+<li><p><code>figure1</code>. This is an example code chunk for inserting
+figures. Edit and re-deploy as necessary to include as many or as few
+figures as your require.</p></li>
+<li><p><code>listing</code>. Appendix A, by default is the code listing.
 This will generate all code used in generating the report and data
 packages. In most cases, code listing is not required. If all QA/QC
 processes and data manipulations were performed elsewhere, you should
@@ -259,7 +285,7 @@ cite that code (in the methods and references) and leave the “listing
 code chunk with the default settings of eval=FALSE and echo=FALSE. If
 you have developed custom scripts, you can add those to DataStore with
 the reference”Script” and cite them in the DRR.</p></li>
-<li><p><code>session-info</code> is the information about the versions
+<li><p><code>session_-_info</code> is the information about the versions
 of R and packages used in generating the report. In most cases, you do
 not need to report session info (leave the session-info code chunk
 parameters in their default state: eval=FALSE). Session and version
