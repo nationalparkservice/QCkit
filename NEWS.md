@@ -1,6 +1,7 @@
 # QCkit v0.1.5
 2024-02-09
 * This version adds the DRR template, example files, and associated documentation to the QCkit package.
+* Bugfix in `get_custom_flag()`: it was counting both A (accepted) and AE (Accepted, estiamted) as Accepted. Fixed the regex such that it Accepted will include all cells that start with A followed by nothing or by any character except AE such that flags can have explanation codes added to them (e.g. A_jenkins if "Jenkins" flagged the data as accepted)
 
 # QCkit v0.1.4
 2024-01-23
