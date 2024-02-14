@@ -65,7 +65,7 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.1.5" id="qckit-v015">QCkit v0.1.5<a class="anchor" aria-label="anchor" href="#qckit-v015"></a></h2>
-<p>2024-02-09 * This version adds the DRR template, example files, and associated documentation to the QCkit package.</p>
+<p>2024-02-09 * This version adds the DRR template, example files, and associated documentation to the QCkit package. * Bugfix in <code>get_custom_flag()</code>: it was counting both A (accepted) and AE (Accepted, estiamted) as Accepted. Fixed the regex such that it Accepted will include all cells that start with A followed by nothing or by any character except AE such that flags can have explanation codes added to them (e.g. A_jenkins if “Jenkins” flagged the data as accepted)</p>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.1.4" id="qckit-v014">QCkit v0.1.4<a class="anchor" aria-label="anchor" href="#qckit-v014"></a></h2>
