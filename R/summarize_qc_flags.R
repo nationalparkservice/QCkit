@@ -119,7 +119,7 @@ get_custom_flags <- function(directory = here::here(),
         # Assessment codes)
         A_flag <- suppressWarnings(sum(stringr::str_count(
           flags_only[j],
-          "\\bA"
+          "\\bA[^E]"
         ), na.rm = TRUE))
         AE_flag <- suppressWarnings(sum(stringr::str_count(
           flags_only[j],
