@@ -72,7 +72,6 @@ check_te <- function(x, species_col, park_code, expansion=FALSE) {
     error = function(e) {
       cat(crayon::red$bold("ERROR: "),
           "Your connection timed out.\n",
-          "Make sure you are logged on to the VPN before running ",
           crayon::green$bold("te_check()"),
           ".", sep="")
       stop()
