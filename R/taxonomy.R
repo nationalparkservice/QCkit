@@ -71,9 +71,7 @@ check_te <- function(x, species_col, park_code, expansion=FALSE) {
       fedlist <- ODataQuery::retrieve_data(odata_url)},
     error = function(e) {
       cat(crayon::red$bold("ERROR: "),
-          "Your connection timed out.\n",
-          crayon::green$bold("te_check()"),
-          ".", sep="")
+          "Your connection timed out.", sep="")
       stop()
     })
   #subset incoming data:
