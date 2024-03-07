@@ -1,3 +1,6 @@
+2024-03-07
+* Update error warning in `check_te()` to not reference VPN since NPS no longer uses VPN.
+
 # QCkit v0.1.5
 2024-02-09
 * This version adds the DRR template, example files, and associated documentation to the QCkit package.
