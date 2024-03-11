@@ -467,9 +467,9 @@ figure caption (fig.cap parameter). Inserting figures this way will
 ensure that the caption is properly formatted and it will apply copy the
 caption to the figure’s “alt text” tag, making it 508-compliant.</p>
 <p>For example:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r fig2, echo=FALSE, out.width="70%", fig.align="center", fig.cap="Example general workflow to incude in the methods section."} </span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="in">knitr::include_graphics("ProcessingWorkflow.png")</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="in">```{r fig2, echo=FALSE, out.width="70%", fig.align="center", fig.cap="Example general workflow to incude in the methods section."} </span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="in">knitr::include_graphics("ProcessingWorkflow.png")</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="in">```</span></span></code></pre></div>
 <p>Results in:</p>
 </div>
 <div class="section level3">
@@ -479,19 +479,19 @@ caption to the figure’s “alt text” tag, making it 508-compliant.</p>
 caption in the kable function call (as opposed to inline markdown text)
 will ensure that the caption is appropriately formatted.</p>
 <p>For example:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r Table2, echo=FALSE}</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="in">c1&lt;-c("Protocol1","Protocol2","Protocol3")</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="in">c2&lt;-c("Park Unit 1","Park Unit 2","Park Unit 3")</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="in">c3&lt;-c("Site 1","Site 2","Site 3")</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="in">c4&lt;-c("Date 1","Date 2","Date 3")</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="in">c5&lt;-c("GEOXXXXX","GEOXXXXX","GEOXXXXX")</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="in">Table2&lt;-data.frame(c1,c2,c3,c4,c5)</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="in">kable(Table2, </span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="in">      col.names=c("Subjects","Park Units","Locations","Sampling Dates","Data"),</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="in">      caption="**Table 1.** Monitoring study example Data Records table.") %&gt;%</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="in">  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),full_width=F)</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="in">```{r Table2, echo=FALSE}</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="in">c1&lt;-c("Protocol1","Protocol2","Protocol3")</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="in">c2&lt;-c("Park Unit 1","Park Unit 2","Park Unit 3")</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="in">c3&lt;-c("Site 1","Site 2","Site 3")</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="in">c4&lt;-c("Date 1","Date 2","Date 3")</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="in">c5&lt;-c("GEOXXXXX","GEOXXXXX","GEOXXXXX")</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="in">Table2&lt;-data.frame(c1,c2,c3,c4,c5)</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="in">kable(Table2, </span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="in">      col.names=c("Subjects","Park Units","Locations","Sampling Dates","Data"),</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="in">      caption="**Table 1.** Monitoring study example Data Records table.") %&gt;%</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="in">  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),full_width=F)</span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="in">```</span></span></code></pre></div>
 <p>Results in:</p>
 <table class="table table table-striped table-hover table-condensed table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
