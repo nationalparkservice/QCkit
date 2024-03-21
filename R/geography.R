@@ -1,3 +1,38 @@
+.get_unit_boundary <- function(park_units, lifecycle = "Active") {
+
+  all_localities <- data.frame()
+
+  temp_output <- file.path("temp.geojson")
+  feature_service_url <- "https://services1.arcgis.com/fBc8EJBxQRMcHlei/arcgis/rest/services/NPS_Land_Resources_Division_Boundary_and_Tract_Data_Service/FeatureServer/2" # NPS unit boundary polygons, updated quarterly
+
+  unique_localities <- unique(park_units)
+
+  for (locality in unique_localities) {
+    # Request feature in WGS84 spatial reference (outSR=4326)
+    feature_service_path <- paste0('query?where=UNIT_CODE+%3D+%27', locality, '%27&outFields=*&returnGeometry=true&outSR=4326&f=pjson')
+    feature_service_request <- paste0(feature_service_url,
+                                     feature_service_path)
+    geo_json_feature <- jsonlite::fromJSON(feature_service_request)
+
+    # Have to save to temp file
+    jsonFeature <- utils::download.file(feature_service_request,
+                                        temp_output,
+                                        mode = "w",
+                                        quiet = TRUE)
+    # For rgdal 1.2+, layer (format) does not need to be specified
+    feature_polygon <- sf::st_read(dsn = temp_output, quiet = TRUE)
+    # featurePoly <- readOGR(dsn = tempOutput)
+
+    all_localities <- rbind(all_localities, feature_polygon)
+  }
+
+  #featurePoly <- readOGR(dsn = tempOutput, layer = "OGRGeoJSON")
+  return(all_localities)
+
+}
+
+
+
 #' Retrieve the polygon information for the park unit from NPS REST services
 #'
 #' @description `get_park_polygon()` retrieves a geoJSON string for a polygon of
