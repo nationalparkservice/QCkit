@@ -1,3 +1,87 @@
+
+#' Test whether decimal GPS coordinates are inside a park unit
+#'
+#' @param lat numeric. An individual or vector of numeric values representing the decimal degree latitude of a coordinate
+#' @param lon numeric. An individual or vector of numeric values representing the decimal degree longitude of a coordinate
+#' @param park_unit String. Or list of strings each containin the four-letter park unit designation
+#'
+#' @return dataframe
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' test_coord(105.555, -47.4332, "DRTO")
+#' }
+test_coord <- function(lat, lon, park_unit) {
+
+  # get geography from NPS Rest Services
+  park <- .get_unit_boundary(park_unit)
+
+  # create sf dataframe from coordinates
+  points_df <- data.frame(lon = lon, lat = lat)
+  points <- sf::st_as_sf(points_df, coords = c("lon", "lat"), crs = 4326, na.fail = FALSE)
+
+  # Test whether the coordinates provided are within the polygon spatial feature
+  results <- sf::st_covers(park, points, sparse = FALSE)
+
+  # convert dataframe from wide to long format
+  results_long <- tidyr::gather(results)
+
+  # drop key column
+  results_long <- dplyr::select(results_long, -key)
+
+  # combine coordinates and results into a dataframe
+  result_df <- data.frame(lon = lon, lat = lat, in_polygon = results_long)
+
+
+  return(invisible(result_df))
+}
+
+#' Gets NPS unit boundaries from Arc GIS
+#'
+#' @param park_units String. Or list of strings.
+#'
+#' @return sf dataframe
+#' @examples
+#' \dontrun{
+#' .get_unit_boundary("ROMO")
+#' }
+.get_unit_boundary <- function(park_units) {
+
+  all_localities <- data.frame()
+
+  temp_output <- file.path("temp.geojson")
+  feature_service_url <- "https://services1.arcgis.com/fBc8EJBxQRMcHlei/arcgis/rest/services/NPS_Land_Resources_Division_Boundary_and_Tract_Data_Service/FeatureServer/2" # NPS unit boundary polygons, updated quarterly
+
+  unique_localities <- unique(park_units)
+
+  for (locality in unique_localities) {
+    # Request feature in WGS84 spatial reference (outSR=4326)
+    feature_service_path <- paste0('query?where=UNIT_CODE+%3D+%27', locality, '%27&outFields=*&returnGeometry=true&outSR=4326&f=pjson')
+    feature_service_request <- paste(feature_service_url,
+                                     feature_service_path,
+                                     sep = "/")
+    geo_json_feature <- jsonlite::fromJSON(feature_service_request)
+
+    # Have to save to temp file
+    jsonFeature <- utils::download.file(feature_service_request,
+                                        temp_output,
+                                        mode = "w",
+                                        quiet = TRUE)
+    # For rgdal 1.2+, layer (format) does not need to be specified
+    feature_polygon <- sf::st_read(dsn = temp_output, quiet = TRUE)
+    # featurePoly <- readOGR(dsn = tempOutput)
+
+    all_localities <- rbind(all_localities, feature_polygon)
+  }
+  file.remove("temp.geojson")
+  #featurePoly <- readOGR(dsn = tempOutput, layer = "OGRGeoJSON")
+  return(all_localities)
+
+}
+
+
+
 #' Retrieve the polygon information for the park unit from NPS REST services
 #'
 #' @description `get_park_polygon()` retrieves a geoJSON string for a polygon of
