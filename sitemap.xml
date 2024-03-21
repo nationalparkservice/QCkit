@@ -55,6 +55,9 @@
     <loc>/reference/create_datastore_script.html</loc>
   </url>
   <url>
+    <loc>/reference/dot-get_unit_boundary.html</loc>
+  </url>
+  <url>
     <loc>/reference/fix_utc_offset.html</loc>
   </url>
   <url>
@@ -98,6 +101,9 @@
   </url>
   <url>
     <loc>/reference/te_check.html</loc>
+  </url>
+  <url>
+    <loc>/reference/test_coord.html</loc>
   </url>
   <url>
     <loc>/reference/utm_to_ll.html</loc>
