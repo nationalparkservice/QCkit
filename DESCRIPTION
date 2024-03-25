@@ -1,7 +1,7 @@
 Package: QCkit
 Type: Package
 Title: NPS Inventory and Monitoring Quality Control Toolkit
-Version: 0.1.5
+Version: 0.1.6
 Authors@R: c(
   person(given = "Robert",
            family = "Baker",
@@ -20,6 +20,9 @@ Authors@R: c(
            family = "Quevedo",
            role = "aut",
            comment = c(ORCID = "0000-0003-0129-981X")),
+  person(given = "Sarah",
+           family = "Kelson",
+           role = "ctb"),
   person(given = "Amy",
            family = "Sherman",
            role = "ctb",
