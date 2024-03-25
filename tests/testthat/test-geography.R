@@ -1,3 +1,15 @@
+##### validate_coord_list
+test_that("validate_coord_list returns a logical", {
+  x <- validate_coord_list(47.84532, -105.23451, "ROMO")
+  expect_equal(class(x)[1], "logical")
+})
+
+##### .get_unit_boundary
+test_that(".get_unit_boundary returns an sf object",{
+  x <- .get_unit_boundary("ROMO")
+  expect_equal(class(x)[1], "sf")
+})
+
 ##### get_park_polygon
 test_that("get_park_polygon returns an object of class sfc_POLYGON", {
   x <- get_park_polygon("ROMO")
