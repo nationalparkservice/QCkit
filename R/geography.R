@@ -8,7 +8,7 @@
 #' the decimal degree latitude of a coordinate
 #' @param lon numeric. An individual or vector of numeric values representing
 #' the decimal degree longitude of a coordinate
-#' @param park_unit String. Or list of strings each containing the four letter
+#' @param park_units String. Or list of strings each containing the four letter
 #' park unit designation
 #'
 #' @return logical
