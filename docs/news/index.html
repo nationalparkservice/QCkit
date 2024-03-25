@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">QCkit</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.6</span>
       </span>
     </div>
 
@@ -64,8 +64,12 @@
     </div>
 
     <div class="section level2">
+<h2 class="page-header" data-toc-text="0.1.6" id="qckit-v016">QCkit v0.1.6<a class="anchor" aria-label="anchor" href="#qckit-v016"></a></h2>
+<p>2024-03-07 * Update error warning in <code><a href="../reference/check_te.html">check_te()</a></code> to not reference VPN since NPS no longer uses VPN. * add private function <code>.get_unit_bondaries()</code>: hits ArcGIS API to pull more precise park unit boundaries than <code>get_park_polgyon()</code> * add <code><a href="../reference/validate_coord_list.html">validate_coord_list()</a></code> function that takes advantage of improved precision of <code>.get_unit_boundaries()</code> and is vectorized, enabling users to input multiple coordinate combinations and park units directly from a data frame.</p>
+</div>
+    <div class="section level2">
 <h2 class="page-header" data-toc-text="0.1.5" id="qckit-v015">QCkit v0.1.5<a class="anchor" aria-label="anchor" href="#qckit-v015"></a></h2>
-<p>2024-02-09 * This version adds the DRR template, example files, and associated documentation to the QCkit package. * Bugfix in <code>get_custom_flag()</code>: it was counting both A (accepted) and AE (Accepted, estiamted) as Accepted. Fixed the regex such that it Accepted will include all cells that start with A followed by nothing or by any character except AE such that flags can have explanation codes added to them (e.g. A_jenkins if “Jenkins” flagged the data as accepted)</p>
+<p>2024-02-09 * This version adds the DRR template, example files, and associated documentation to the QCkit package. * Bugfix in <code>get_custom_flag()</code>: it was counting both A (accepted) and AE (Accepted, estimated) as Accepted. Fixed the regex such that it Accepted will include all cells that start with A followed by nothing or by any character except AE such that flags can have explanation codes added to them (e.g. A_jenkins if “Jenkins” flagged the data as accepted)</p>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.1.4" id="qckit-v014">QCkit v0.1.4<a class="anchor" aria-label="anchor" href="#qckit-v014"></a></h2>

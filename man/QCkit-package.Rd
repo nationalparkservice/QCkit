@@ -28,6 +28,7 @@ Authors:
 
 Other contributors:
 \itemize{
+  \item Sarah Kelson [contributor]
   \item Amy Sherman (\href{https://orcid.org/0000-0002-9276-0087}{ORCID}) [contributor]
 }
 

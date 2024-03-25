@@ -1,5 +1,9 @@
 ---
 title: "DRR Purpose and Scope"
+resource_files:
+  - WorkflowModelGeneral.png
+  - WorkflowModelInventories.png
+  - WorkflowModelMonitoring.png
 ---
 
 ```{r setup1, include=FALSE}
@@ -313,7 +317,7 @@ contribute to an inventory or may be used as ancillary data to explain
 monitoring observations).
 
 ```{r figure1, echo=FALSE, fig.align="center", out.width="70%", fig.cap="Workflow for data collection, processing, dissemination, and use for general studies. Teal-colored boxes are subject to reproducibility requirements."}
-include_graphics("WorkflowModelGeneral.png")
+knitr::include_graphics("WorkflowModelGeneral.png")
 
 ```
 
