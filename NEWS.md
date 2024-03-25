@@ -1,10 +1,13 @@
+# QCkit v0.1.6
 2024-03-07
 * Update error warning in `check_te()` to not reference VPN since NPS no longer uses VPN.
+* add private function `.get_unit_bondaries()`: hits ArcGIS API to pull more precise park unit boundaries than `get_park_polgyon()`
+* add `validate_coord_list()` function that takes advantage of improved precision of `.get_unit_boundaries()` and is vectorized, enabling users to input multiple coordinate combinations and park units directly from a data frame.
 
 # QCkit v0.1.5
 2024-02-09
 * This version adds the DRR template, example files, and associated documentation to the QCkit package.
-* Bugfix in `get_custom_flag()`: it was counting both A (accepted) and AE (Accepted, estiamted) as Accepted. Fixed the regex such that it Accepted will include all cells that start with A followed by nothing or by any character except AE such that flags can have explanation codes added to them (e.g. A_jenkins if "Jenkins" flagged the data as accepted)
+* Bugfix in `get_custom_flag()`: it was counting both A (accepted) and AE (Accepted, estimated) as Accepted. Fixed the regex such that it Accepted will include all cells that start with A followed by nothing or by any character except AE such that flags can have explanation codes added to them (e.g. A_jenkins if "Jenkins" flagged the data as accepted)
 
 # QCkit v0.1.4
 2024-01-23
