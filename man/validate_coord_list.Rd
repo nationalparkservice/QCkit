@@ -13,7 +13,7 @@ the decimal degree latitude of a coordinate}
 \item{lon}{numeric. An individual or vector of numeric values representing
 the decimal degree longitude of a coordinate}
 
-\item{park_unit}{String. Or list of strings each containing the four letter
+\item{park_units}{String. Or list of strings each containing the four letter
 park unit designation}
 }
 \value{
