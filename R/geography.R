@@ -1,41 +1,48 @@
 
 #' Test whether decimal GPS coordinates are inside a park unit
 #'
+#' This function can take a list of coordinates and park units as input. In addition to being vectorized, depending on the park borders, it can be a major improvement on `validate_coord()`. Known issues with this function include problems with overlapping unit boundaries. If two park unit boundaries overlap the function will through an error (e.g. Dry Tortugas National Park and Big Cypress National Preserve).
+#'
 #' @param lat numeric. An individual or vector of numeric values representing the decimal degree latitude of a coordinate
 #' @param lon numeric. An individual or vector of numeric values representing the decimal degree longitude of a coordinate
-#' @param park_unit String. Or list of strings each containin the four-letter park unit designation
+#' @param park_unit String. Or list of strings each containing the four letter park unit designation
 #'
-#' @return dataframe
+#' @return logical
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' test_coord(105.555, -47.4332, "DRTO")
+#' x <- validate_coord_list(lat = 105.555, long = -47.4332, park_units = "DRTO")
+#'
+#' # or a dataframe with many coordinates and potentially many park units:
+#' x <- validate_coord_list(lat = df$decimalLatitutde,
+#'                 lon = df$decimalLongitude,
+#'                 park_units = df$park_units)
+#' # you can then merge it back in to the original dataframe:
+#' df$test_GPS_coord <- x
 #' }
-test_coord <- function(lat, lon, park_unit) {
-
+validate_coord_list <- function(lat, lon, park_units) {
   # get geography from NPS Rest Services
-  park <- .get_unit_boundary(park_unit)
+  nps_unit <- .get_unit_boundary(park_units)
 
   # create sf dataframe from coordinates
   points_df <- data.frame(lon = lon, lat = lat)
-  points <- sf::st_as_sf(points_df, coords = c("lon", "lat"), crs = 4326, na.fail = FALSE)
-
+  points_sf <- sf::st_as_sf(points_df, coords = c("lon", "lat"), crs = 4326, na.fail = FALSE)
   # Test whether the coordinates provided are within the polygon spatial feature
-  results <- sf::st_covers(park, points, sparse = FALSE)
-
-  # convert dataframe from wide to long format
-  results_long <- tidyr::gather(results)
-
-  # drop key column
-  results_long <- dplyr::select(results_long, -key)
-
-  # combine coordinates and results into a dataframe
-  result_df <- data.frame(lon = lon, lat = lat, in_polygon = results_long)
-
-
-  return(invisible(result_df))
+  results <- as.data.frame(sf::st_contains(nps_unit,
+                                         points_sf,
+                                         sparse = FALSE))
+  in_park <- NULL
+  for (i in 1:ncol(results)) {
+    if (sum(results[,i]) > 0) {
+      in_park <- append(in_park, TRUE)
+    } else {
+      in_park <- append(in_park, FALSE)
+    }
+  }
+  return(in_park)
 }
+
 
 #' Gets NPS unit boundaries from Arc GIS
 #'
@@ -77,7 +84,6 @@ test_coord <- function(lat, lon, park_unit) {
   file.remove("temp.geojson")
   #featurePoly <- readOGR(dsn = tempOutput, layer = "OGRGeoJSON")
   return(all_localities)
-
 }
 
 
