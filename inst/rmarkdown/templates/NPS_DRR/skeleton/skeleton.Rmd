@@ -379,7 +379,7 @@ dc_flags %>%
     format = "pandoc", 
     digits = 2, 
     align = 'c', 
-    col.names = c("**File Name**", "**Measure^1^**", "**Number of Reocrds**", "**A^2^**", "**AE**", "**R**", "**P**", "**% Accepted^3^**")) %>%
+    col.names = c("**File Name**", "**Measure^1^**", "**Number of Records**", "**A^2^**", "**AE**", "**R**", "**P**", "**% Accepted^3^**")) %>%
 kableExtra::add_footnote(
   c("The '_flag' suffix has been omitted from column names for brevity.",
     "All non-missing data in specified unflagged columns are considered accepted.",
