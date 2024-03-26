@@ -29,7 +29,7 @@ title <- "DRR Title"
 reportNumber <- ": get this number from Joe DeVivo"
 
 # This should match the Data Store Reference ID for this DRR. Eventually we should be able to pull this directly from the data package metadata.
-DRR_DSRefID <- 7654321
+DRR_DSRefID <- 0000000
 
 #Author names and affiliations:
 
@@ -75,7 +75,7 @@ Note that if you need multiple paragraphs or line breaks you can generate them u
 The abstract should succinctly describe the study, the assay(s) performed, the resulting data, and their reuse potential, but should not make any claims regarding new scientific findings. No references are allowed in this section."
 
 # DataStore reference ID for the data package associated with this report. You must have at least one data package.Eventually, we will automate importing much of this information from metadata.
-dataPackageRefID <- c(12342567)
+dataPackageRefID <- c(0000000)
 
 # Must match title in DataStore and metadata
 dataPackageTitle <- "Data Package Title"
