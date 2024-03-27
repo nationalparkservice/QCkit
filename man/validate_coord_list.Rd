@@ -21,7 +21,7 @@ logical
 }
 \description{
 This function can take a list of coordinates and park units as input. In
-adddition to being vectorized, depending on the park borders, it can be a
+addition to being vectorized, depending on the park borders, it can be a
 major improvement on \code{validate_coord()}.
 }
 \examples{

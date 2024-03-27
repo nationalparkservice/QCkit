@@ -1,7 +1,7 @@
 #' Test whether decimal GPS coordinates are inside a park unit
 #'
 #' This function can take a list of coordinates and park units as input. In
-#' adddition to being vectorized, depending on the park borders, it can be a
+#' addition to being vectorized, depending on the park borders, it can be a
 #' major improvement on `validate_coord()`.
 #'
 #' @param lat numeric. An individual or vector of numeric values representing
