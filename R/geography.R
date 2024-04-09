@@ -276,36 +276,43 @@ convert_utm_to_ll <- function(df,
                               EastingCol,
                               NorthingCol,
                               zone,
-                              datum = "WGS84") {
-  Base <- as.data.frame(df)
-  Base <- dplyr::rename(Base, "b" = EastingCol, "a" = NorthingCol)
-  Mid <- Base[!is.na(Base$"b" & Base$"a"), ]
-  Mid2 <- Base[is.na(Base$"b" & Base$"a"), ]
-  Final <- dplyr::select(Mid, "b", "a")
-  Final[1:2] <- lapply(Final[1:2], FUN = function(z) {
-    as.numeric(z)
-  })
+                              datum = "NAD83") {
+  # Check for missing data
+  row_count <- nrow(df)
+  na_row_count <- nrow(dplyr::filter(df, is.na({{EastingCol}}) | is.na({{NorthingCol}})))
 
-  Final <- cbind(Final$b, Final$a)
+  if (na_row_count > 0) {
+    df %<>% dplyr::filter(!is.na({{EastingCol}}) & !is.na({{NorthingCol}}))
+    warning(paste(na_row_count, "rows are missing UTM data"))
+  }
 
-  v <- terra::vect(Final, crs = paste0(
-    "+proj=utm +zone=",
-    zone,
-    " +datum=",
-    datum, "
-                                       +units=m"
-  ))
+  ## Set up CRS for lat/long data
+  latlong_CRS <- sp::CRS("+proj=longlat +datum=NAD83")  # CRS for our new lat/long values
 
-  converted <- terra::project(v, "+proj=longlat +datum=WGS84")
+  # Loop through each datum and zone in the data
+  datums <- unique(df[[rlang::ensym(datum)]])  # Get vector of datums present in data
+  zones <- unique(df[[rlang::ensym(zone)]])  # Get vector of zones present in data
+  for (datum in datums) {
+    for (zone in zones) {
+      utm_CRS <- sp::CRS(paste0("+proj=utm +zone=", zone, " +datum=", datum))  # Set coordinate reference system for incoming UTM data
 
-  lonlat <- terra::geom(converted)[, c("x", "y")]
+      sp_utm <- sp::SpatialPoints(df %>% dplyr::filter({{zone}} == zone, {{datum}} == datum) %>% dplyr::select({{EastingCol}}, {{NorthingCol}}) %>% as.matrix(), proj4string = utm_CRS)  # Convert UTM columns into a SpatialPoints object
+      sp_geo <- sp::spTransform(sp_utm, latlong_CRS) %>%  # Transform UTM to Lat/Long
+        tibble::as_tibble()
 
-  df <- cbind(Mid, lonlat)
-  df <- plyr::rbind.fill(df, Mid2)
-  df <- dplyr::rename(df,
-    EastingCol = "b", NorthingCol = "a",
-    "decimalLongitude" = x, "decimalLatitude" = y
-  )
+      # Set data$Long and data$Lat to newly converted values, but only for the zone and datum we are currently on in our for loop
+      df[as.vector((df[, rlang::ensym(zone)] == zone) & (df[, rlang::ensym(datum)] == datum)), "Long"] <- sp_geo[, rlang::ensym(EastingCol)]
+      df[as.vector((df[, rlang::ensym(zone)] == zone) & (df[, rlang::ensym(datum)] == datum)), "Lat"] <- sp_geo[, rlang::ensym(NorthingCol)]
+    }
+  }
+
+  # Remove UTM columns if keep_utm == FALSE
+  if (!keep_utm) {
+    df <- dplyr::select(df, -c({{EastingCol}}, {{NorthingCol}}, {{zone}}, {{datum}}))
+  }
+
+  df$LatLonWKID <- lat_long_wkid  # Store the wkid in the dataframe
+
   return(df)
 }
 
