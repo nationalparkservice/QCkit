@@ -129,7 +129,7 @@ library(QCkit)
 ```{r title_do_not_edit, echo=FALSE, results="asis"}
 date <- format(Sys.time(), "%d %B, %Y")
 cat("#", title, "\n")
-if (!is.null(report_numberr)) {
+if (!is.null(report_number)) {
   subtitle <- paste0("Data Release Report ", report_number)
   cat("###", subtitle)
 }
