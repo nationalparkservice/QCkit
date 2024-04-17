@@ -1,3 +1,8 @@
+# QCkit v0.1.7
+2024-04-17
+* Major updates to the DRR template including: using snake case instead of camel case for variables; updating Table 3 to only display filenames only when there are multiple files, fixed multiple issues with footnotes, added citations to NPSdataverse packages, added a section that prints the R code needed to download the data package and load it in to R.
+* Updated the DRR documentation to account for new variable names.
+
 # QCkit v0.1.6
 2024-03-07
 * Update error warning in `check_te()` to not reference VPN since NPS no longer uses VPN.
