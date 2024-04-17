@@ -107,7 +107,80 @@ test_that("fuzz_location returns well known text for souther hemisphere latitude
   expect_equal(is.na(wk::wk_problems(wk::new_wk_wkt(x))), TRUE)
 })
 
-#### convert_utm_to_ll
+#### generate_ll_from_utm
+test_that("generate_ll_from_utm adds the correct columns", {
+  mydataframe <- tibble::tibble(EastingCol = c(-105.70421,
+                                               -105.70431,
+                                               -105.7451),
+                                NorthingCol = c(40.70421,
+                                                40.70431,
+                                                40.70451),
+                                zone = 13,
+                                datum = "NAD83")
+  x <- generate_ll_from_utm(df = mydataframe,
+                         EastingCol = EastingCol,
+                         NorthingCol = NorthingCol,
+                         ZoneCol = zone,
+                         DatumCol = datum)
+  expect_equal(names(x), c("EastingCol", "NorthingCol", "zone", "datum", "decimalLatitude", "decimalLongitude", "LatLong_CRS"))
+})
+
+#### generate_ll_from_utm
+test_that("generate_ll_from_utm outputs the same number of rows as the input dataframe", {
+  mydataframe <- tibble::tibble(EastingCol = c(-105.70421,
+                                               -105.70431,
+                                               -105.7451),
+                                NorthingCol = c(40.70421,
+                                                40.70431,
+                                                40.70451),
+                                zone = 13,
+                                datum = "NAD83")
+  mydataframe_na <- mydataframe
+  mydataframe_na$EastingCol[1] <- NA
+
+  x <- generate_ll_from_utm(df = mydataframe,
+                            EastingCol = EastingCol,
+                            NorthingCol = NorthingCol,
+                            ZoneCol = zone,
+                            DatumCol = datum)
+  y <- generate_ll_from_utm(df = mydataframe,
+                            EastingCol = EastingCol,
+                            NorthingCol = NorthingCol,
+                            ZoneCol = zone,
+                            DatumCol = datum)
+
+  expect_equal(nrow(x), nrow(mydataframe))
+  expect_equal(nrow(y), nrow(mydataframe_na))
+})
+
+#### generate_ll_from_utm
+test_that("generate_ll_from_utm conversion matches that of convert_utm_to_ll", {
+  mydataframe <- tibble::tibble(EastingCol = c(-105.70421,
+                                               -105.70431,
+                                               -105.7451),
+                                NorthingCol = c(40.70421,
+                                                40.70431,
+                                                40.70451),
+                                zone = 13,
+                                datum = "WGS84")
+
+  x <- generate_ll_from_utm(df = mydataframe,
+                            EastingCol = EastingCol,
+                            NorthingCol = NorthingCol,
+                            ZoneCol = zone,
+                            DatumCol = datum,
+                            latlong_datum = "WGS84")
+  y <- convert_utm_to_ll(df = mydataframe,
+                            EastingCol = EastingCol,
+                            NorthingCol = NorthingCol,
+                            zone = 13,
+                            datum = "WGS84")
+
+  expect_equal(x$decimalLatitude, y$decimalLatitude)
+  expect_equal(x$decimalLongitude, y$decimalLongitude)
+})
+
+#### convert_utm_to_ll (superseded)
 test_that("convert_utm_to_ll adds the correct columns", {
   mydataframe <- tibble::tibble(EastingCol = c(-105.70421,
                                                -105.70431,
