@@ -4,14 +4,7 @@
 \alias{convert_utm_to_ll}
 \title{Coordinate Conversion from UTM to Latitude and Longitude}
 \usage{
-convert_utm_to_ll(
-  df,
-  EastingCol,
-  NorthingCol,
-  ZoneCol,
-  DatumCol,
-  latlong_datum = "NAD83"
-)
+convert_utm_to_ll(df, EastingCol, NorthingCol, zone, datum = "WGS84")
 }
 \arguments{
 \item{df}{\itemize{
@@ -20,64 +13,59 @@ Input the name of your dataframe.
 }}
 
 \item{EastingCol}{\itemize{
-\item The name of your Easting UTM column. You may input the name
-with or without quotations, ie. EastingCol and "EastingCol" are both valid.
+\item The name of your Easting UTM column. Input the name in
+quotations, ie. "EastingCol".
 }}
 
 \item{NorthingCol}{\itemize{
-\item The name of your Northing UTM column. You may input the name
-with or without quotations, ie. NorthingCol and "NorthingCol" are both valid.
+\item The name of your Northing UTM column. Input the name in
+quotations, ie. "NorthingCol".
 }}
 
-\item{ZoneCol}{\itemize{
-\item The column containing the UTM zone, with or without quotations.
+\item{zone}{\itemize{
+\item The UTM Zone. Input the zone number in quotations, ie. "17".
 }}
 
-\item{DatumCol}{\itemize{
-\item The column containing the datum for your UTM coordinates,
-with or without quotations.
+\item{datum}{\itemize{
+\item The datum used in the coordinate reference system of your
+coordinates. Input in quotations, ie. "WGS84"
 }}
 }
 \value{
 The function returns your dataframe, mutated with an additional two
-columns of decimal Longitude and decimal Latitude plus a column LatLong_CRS containing
-a PROJ string that specifies the coordinate reference system for these data.
+columns of decimal Longitude and decimal Latitude.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
+\code{convert_utm_to_ll()} was superseded in favor of \code{generate_ll_from_utm()} to
+support and encourage including zone and datum columns in datasets. \code{generate_ll_from_utm()}
+also adds the ability to specify the coordinate reference system for lat/long coordinates,
+and accepts column names either quoted or unquoted for better compatibility with
+tidyverse piping.
 \code{convert_utm_to_ll()} takes your dataframe with UTM coordinates
 in separate Easting and Northing columns, and adds on an additional two
 columns with the converted decimalLatitude and decimalLongitude coordinates
-using the reference coordinate system NAD83. Your data must also contain columns
-specifying the zone and datum of your UTM coordinates.
+using the reference coordinate system WGS84. You may need to turn the VPN OFF
+for this function to work properly.
 }
 \details{
 Define the name of your dataframe, the easting and northing columns
 within it, the UTM zone within which those coordinates are located, and the
 reference coordinate system (datum). UTM Northing and Easting columns must be
-in separate columns prior to running the function. If a datum for the lat/long output
-is not defined, the function will default to "NAD83". If there are missing coordinates in
+in separate columns prior to running the function. If a datum is not defined,
+the function will default to "WGS84". If there are missing coordinates in
 your dataframe they will be preserved, however they will be moved to the end
 of your dataframe. Note that some parameter names are not in snake_case but
 instead reflect DarwinCore naming conventions.
 }
 \examples{
 \dontrun{
-
-my_dataframe \%>\%
-convert_utm_to_ll(
-  EastingCol = UTM_X,
-  NorthingCol = UTM_Y,
-  ZoneCol = Zone,
-  DatumCol = Datum
-)
-
 convert_utm_to_ll(
   df = mydataframe,
   EastingCol = "EastingCoords",
   NorthingCol = "NorthingCoords",
-  ZoneCol = "zone",
-  DatumCol = "datum",
-  latlong_datum = "WGS84"
+  zone = "17",
+  datum = "WGS84"
 )
 }
 }

@@ -233,11 +233,15 @@ fuzz_location <- function(lat,
 
 #' Coordinate Conversion from UTM to Latitude and Longitude
 #'
-#' @description `convert_utm_to_ll()` takes your dataframe with UTM coordinates
+#' @description `generate_ll_from_utm()` takes your dataframe with UTM coordinates
 #' in separate Easting and Northing columns, and adds on an additional two
 #' columns with the converted decimalLatitude and decimalLongitude coordinates
 #' using the reference coordinate system NAD83. Your data must also contain columns
 #' specifying the zone and datum of your UTM coordinates.
+#' In contrast to `convert_utm_to_ll()` (superseded), `generate_ll_from_utm()` requires
+#' zone and datum columns. It supports quoted or unquoted column names and a user-specified datum for lat/long
+#' coordinates. It also adds an extra column to the output data table that documents the
+#' lat/long coordinate reference system.
 #'
 #' @details Define the name of your dataframe, the easting and northing columns
 #' within it, the UTM zone within which those coordinates are located, and the
@@ -259,7 +263,7 @@ fuzz_location <- function(lat,
 #' with or without quotations.
 #'
 #' @return The function returns your dataframe, mutated with an additional two
-#' columns of decimal Longitude and decimal Latitude plus a column LatLong_CRS containing
+#' columns of decimalLongitude and decimalLatitude plus a column LatLong_CRS containing
 #' a PROJ string that specifies the coordinate reference system for these data.
 #' @export
 #'
@@ -267,14 +271,14 @@ fuzz_location <- function(lat,
 #' \dontrun{
 #'
 #' my_dataframe %>%
-#' convert_utm_to_ll(
+#' generate_ll_from_utm(
 #'   EastingCol = UTM_X,
 #'   NorthingCol = UTM_Y,
 #'   ZoneCol = Zone,
 #'   DatumCol = Datum
 #' )
 #'
-#' convert_utm_to_ll(
+#' generate_ll_from_utm(
 #'   df = mydataframe,
 #'   EastingCol = "EastingCoords",
 #'   NorthingCol = "NorthingCoords",
@@ -283,7 +287,7 @@ fuzz_location <- function(lat,
 #'   latlong_datum = "WGS84"
 #' )
 #' }
-convert_utm_to_ll <- function(df,
+generate_ll_from_utm <- function(df,
                               EastingCol,
                               NorthingCol,
                               ZoneCol,
@@ -338,20 +342,104 @@ convert_utm_to_ll <- function(df,
           tibble::as_tibble()
 
         # Set data$Long and data$Lat to newly converted values, but only for the zone and datum we are currently on in our for loop
-        filtered_df <- filtered_df %>% dplyr::mutate(Latitude = sp_geo[[2]],
-                                                     Longitude = sp_geo[[1]])
+        filtered_df <- filtered_df %>% dplyr::mutate(decimalLatitude = sp_geo[[2]],
+                                                     decimalLongitude = sp_geo[[1]],
+                                                     LatLong_CRS = latlong_CRS@projargs)  # Store the coordinate reference system PROJ string in the dataframe
         coord_df <- dplyr::left_join(coord_df, filtered_df, by = "_UTMJOINCOL")
       }
     }
   })
 
   df <- dplyr::left_join(df,
-                         dplyr::select(coord_df, Lat, Long, `_UTMJOINCOL`),
+                         dplyr::select(coord_df, decimalLatitude, decimalLongitude, LatLong_CRS, `_UTMJOINCOL`),
                          by = "_UTMJOINCOL") %>%
     dplyr::select(-`_UTMJOINCOL`)
 
-  df$LatLong_CRS <- latlong_CRS@projargs  # Store the wkid in the dataframe
+  return(df)
+}
 
+#' Coordinate Conversion from UTM to Latitude and Longitude
+#'
+#' @description
+#' `r lifecycle::badge("superseded")`
+#' `convert_utm_to_ll()` was superseded in favor of `generate_ll_from_utm()` to
+#' support and encourage including zone and datum columns in datasets. `generate_ll_from_utm()`
+#' also adds the ability to specify the coordinate reference system for lat/long coordinates,
+#' and accepts column names either quoted or unquoted for better compatibility with
+#' tidyverse piping.
+#' `convert_utm_to_ll()` takes your dataframe with UTM coordinates
+#' in separate Easting and Northing columns, and adds on an additional two
+#' columns with the converted decimalLatitude and decimalLongitude coordinates
+#' using the reference coordinate system WGS84. You may need to turn the VPN OFF
+#' for this function to work properly.
+#'
+#' @details Define the name of your dataframe, the easting and northing columns
+#' within it, the UTM zone within which those coordinates are located, and the
+#' reference coordinate system (datum). UTM Northing and Easting columns must be
+#' in separate columns prior to running the function. If a datum is not defined,
+#' the function will default to "WGS84". If there are missing coordinates in
+#' your dataframe they will be preserved, however they will be moved to the end
+#' of your dataframe. Note that some parameter names are not in snake_case but
+#' instead reflect DarwinCore naming conventions.
+#'
+#' @param df - The dataframe with UTM coordinates you would like to convert.
+#' Input the name of your dataframe.
+#' @param EastingCol - The name of your Easting UTM column. Input the name in
+#' quotations, ie. "EastingCol".
+#' @param NorthingCol - The name of your Northing UTM column. Input the name in
+#' quotations, ie. "NorthingCol".
+#' @param zone - The UTM Zone. Input the zone number in quotations, ie. "17".
+#' @param datum - The datum used in the coordinate reference system of your
+#' coordinates. Input in quotations, ie. "WGS84"
+#'
+#' @return The function returns your dataframe, mutated with an additional two
+#' columns of decimal Longitude and decimal Latitude.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' convert_utm_to_ll(
+#'   df = mydataframe,
+#'   EastingCol = "EastingCoords",
+#'   NorthingCol = "NorthingCoords",
+#'   zone = "17",
+#'   datum = "WGS84"
+#' )
+#' }
+convert_utm_to_ll <- function(df,
+                              EastingCol,
+                              NorthingCol,
+                              zone,
+                              datum = "WGS84") {
+  Base <- as.data.frame(df)
+  Base <- dplyr::rename(Base, "b" = EastingCol, "a" = NorthingCol)
+  Mid <- Base[!is.na(Base$"b" & Base$"a"), ]
+  Mid2 <- Base[is.na(Base$"b" & Base$"a"), ]
+  Final <- dplyr::select(Mid, "b", "a")
+  Final[1:2] <- lapply(Final[1:2], FUN = function(z) {
+    as.numeric(z)
+  })
+
+  Final <- cbind(Final$b, Final$a)
+
+  v <- terra::vect(Final, crs = paste0(
+    "+proj=utm +zone=",
+    zone,
+    " +datum=",
+    datum, "
+                                       +units=m"
+  ))
+
+  converted <- terra::project(v, "+proj=longlat +datum=WGS84")
+
+  lonlat <- terra::geom(converted)[, c("x", "y")]
+
+  df <- cbind(Mid, lonlat)
+  df <- plyr::rbind.fill(df, Mid2)
+  df <- dplyr::rename(df,
+                      EastingCol = "b", NorthingCol = "a",
+                      "decimalLongitude" = x, "decimalLatitude" = y
+  )
   return(df)
 }
 
