@@ -373,7 +373,7 @@ colnames(dc_flags)[4]<-paste0("A", "^2^")
 colnames(dc_flags)[8]<-paste0("% Accepted", "^3^")
 
 file_names <- NULL
-if (seq_along(unique(dc_flags$`File Name`)) < 2) {
+if (length(seq_along(unique(dc_flags$`File Name`))) < 2) {
   file_names <- 1
   dc_flags <- dc_flags[,-1]
 }
