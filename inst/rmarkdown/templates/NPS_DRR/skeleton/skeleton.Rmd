@@ -29,7 +29,7 @@ title <- "Sample DRR Title"
 reportNumber <- ": get this number from Joe DeVivo"
 
 # This should match the Data Store Reference ID for this DRR. Eventually we should be able to pull this directly from the data package metadata.
-DRR_DSRefID <- 7654321
+DRR_DSRefID <- "0000000"
 
 #Author names and affiliations:
 
@@ -75,7 +75,7 @@ Note that if you need multiple paragraphs or line breaks you can generate them u
 The abstract should succinctly describe the study, the assay(s) performed, the resulting data, and their reuse potential, but should not make any claims regarding new scientific findings. No references are allowed in this section."
 
 # DataStore reference ID for the data package associated with this report. You must have at least one data package.Eventually, we will automate importing much of this information from metadata.
-dataPackageRefID <- c(12342567)
+dataPackageRefID <- c(9999999)
 
 # Must match title in DataStore and metadata
 dataPackageTitle <- "Data Package Title"
@@ -372,6 +372,12 @@ colnames(dc_flags)[2]<-paste0("Measure", "^1^")
 colnames(dc_flags)[4]<-paste0("A", "^2^")
 colnames(dc_flags)[8]<-paste0("% Accepted", "^3^")
 
+file_names <- NULL
+if (seq_along(unique(dc_flags$`File Name`)) < 2) {
+  file_names <- 1
+  dc_flags <- dc_flags[,-1]
+}
+
 #Generate the table:
 dc_flags %>% 
   knitr::kable(
@@ -379,11 +385,17 @@ dc_flags %>%
     format = "pandoc", 
     digits = 2, 
     align = 'c', 
-    col.names = c("**File Name**", "**Measure^1^**", "**Number of Reocrds**", "**A^2^**", "**AE**", "**R**", "**P**", "**% Accepted^3^**")) %>%
+    col.names = if (is.null(file_names)) {
+       c("**File Name**", "**Measure^1^**", "**Number of Records**",
+                    "**A^2^**", "**AE**", "**R**", "**P**", "**% Accepted^3^**")
+    } else {
+       c( "**Measure^1^**", "**Number of Records**", "**A^2^**", "**AE**",
+          "**R**", "**P**", "**% Accepted^3^**")
+    }) %>%
 kableExtra::add_footnote(
-  c("The '_flag' suffix has been omitted from column names for brevity.",
-    "All non-missing data in specified unflagged columns are considered accepted.",
-    "% Accepted is calculated as the number of accepted (where A and AE are both considered accepted) divided by the total number of observations plus the number of missing observations."), 
+  c(" The '_flag' suffix has been omitted from column names for brevity.",
+    " All non-missing data in specified unflagged columns are considered accepted.",
+    " % Accepted is calculated as the number of accepted (where A and AE are both considered accepted) divided by the total number of observations (including any missing observations."), 
   notation = "number"
   ) 
 
@@ -403,8 +415,8 @@ dp_flags %>%
                   col.names = c("**File Name**", "**A^1^**", "**AE**", "**R**", "**P**", "**% Accepted^2^**"),
                   digits=2, 
                   align = 'c') %>% 
-  kableExtra::add_footnote(c("All non-missing data in specified unflagged columns are considered accepted.",
-                             "% Accepted is calculated as the number of accepted (where A and AE are both considered accepted) divided by the total number of observations plus the number of missing observations."), notation = "number") 
+  kableExtra::add_footnote(c(" All non-missing data in specified unflagged columns are considered accepted.",
+                             " % Accepted is calculated as the number of accepted (where A and AE are both considered accepted) divided by the total number of observations (including any missing observations."), notation = "number") 
 ```
 
 Possible content **strongly Suggested to Include**
@@ -436,7 +448,11 @@ For studies involving privacy or safety controls on public access to the data, t
 
 ## Acquiring the Data Package
 
-This data package is available for download from the NPS DataStore at `r dataPackageDOI` and can be directly imported into R data frames using the NPSutils package <https://doi.org/10.57830/2300651>
+This data package is available for download from the NPS DataStore at `r dataPackageDOI` and can be directly imported into R data frames using the NPSutils package (Baker et al., 2024) and the following code:
+
+```{r acquisition_code_do_not_edit, echo = FALSE, results = 'asis'}
+cat(paste0("```\ndevtools::install_github('nationalparkservice/NPSutils')\nNPSutils::get_data_packages(", dataPackageRefID, ")\ndat <- NPSutils::load_data_package(", dataPackageRefID, ")\nlist2env(dat, envir = .GlobalEnv)\n```"))
+```
 
 # Methods
 
