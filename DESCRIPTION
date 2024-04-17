@@ -21,8 +21,9 @@ Authors@R: c(
            role = "aut",
            comment = c(ORCID = "0000-0003-0129-981X")),
   person(given = "Sarah",
-           family = "Kelson",
-           role = "ctb"),
+           family = "Kelso",
+           role = "ctb",
+           comment = c(ORCID = "0009-0002-8468-6945")),
   person(given = "Amy",
            family = "Sherman",
            role = "ctb",
@@ -52,7 +53,7 @@ Imports:
     here,
     tibble,
     tidyselect
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Suggests: 
     knitr,
     rmarkdown,
