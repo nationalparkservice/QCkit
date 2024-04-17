@@ -21,7 +21,7 @@ Specific Instructions on filling out this template:
 https://nationalparkservice.github.io/QCkit/articles/Using-the-DRR-Template.html
 --->
 ```
-```{r user_edited_parameterss, include=FALSE}
+```{r user_edited_parameters, include=FALSE}
 # The title of your DRR. Should all DRR start with "Data Release Report:"? Should we enforce titles specifically referencing the data package(s) the Report is about?
 title <- "Sample DRR Title"
 
