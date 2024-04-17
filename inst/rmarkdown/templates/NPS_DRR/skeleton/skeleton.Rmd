@@ -29,11 +29,8 @@ title <- "Sample DRR Title"
 report_number <- ": get this number from Joe DeVivo"
 
 # This should match the Data Store Reference ID for this DRR. Eventually we should be able to pull this directly from the data package metadata.
-<<<<<<< HEAD
+
 drr_ds_ref_id <- "0000000"
-=======
-DRR_DSRefID <- 0000000
->>>>>>> 60bbe73162a3ec0a96bfde68041aa7c05284ea2f
 
 #Author names and affiliations:
 
@@ -79,11 +76,7 @@ Note that if you need multiple paragraphs or line breaks you can generate them u
 The abstract should succinctly describe the study, the assay(s) performed, the resulting data, and their reuse potential, but should not make any claims regarding new scientific findings. No references are allowed in this section."
 
 # DataStore reference ID for the data package associated with this report. You must have at least one data package.Eventually, we will automate importing much of this information from metadata.
-<<<<<<< HEAD
 data_package_ref_id <- c(9999999)
-=======
-dataPackageRefID <- c(9999999)
->>>>>>> 60bbe73162a3ec0a96bfde68041aa7c05284ea2f
 
 # Must match title in DataStore and metadata
 data_package_title <- "Data Package Title"
@@ -393,7 +386,6 @@ dc_flags %>%
     format = "pandoc", 
     digits = 2, 
     align = 'c', 
-<<<<<<< HEAD
     col.names = if (is.null(file_names)) {
        c("**File Name**", "**Measure^1^**", "**Number of Records**",
                     "**A^2^**", "**AE**", "**R**", "**P**", "**% Accepted^3^**")
@@ -401,9 +393,6 @@ dc_flags %>%
        c( "**Measure^1^**", "**Number of Records**", "**A^2^**", "**AE**",
           "**R**", "**P**", "**% Accepted^3^**")
     }) %>%
-=======
-    col.names = c("**File Name**", "**Measure^1^**", "**Number of Records**", "**A^2^**", "**AE**", "**R**", "**P**", "**% Accepted^3^**")) %>%
->>>>>>> 60bbe73162a3ec0a96bfde68041aa7c05284ea2f
 kableExtra::add_footnote(
   c(" The '_flag' suffix has been omitted from column names for brevity.",
     " All non-missing data in specified unflagged columns are considered accepted.",
@@ -450,11 +439,7 @@ Generally, this **should not include:**
 
 *Stock Text to include:*
 
-<<<<<<< HEAD
 The data within the data records listed above have been reviewed by staff in the NPS Inventory and Monitoring Division to ensure accuracy, completeness, and consistency with documented data quality standards, as well as for usability and reproducibility (Table 3). Of the data that were evaluated for quality, XX.X% of fields in this data package met data quality standards. The *`r data_package_title`* is suitable for its intended use as of the date of processing (`r Sys.Date()`).
-=======
-The data within the data records listed above have been reviewed by staff in the NPS Inventory and Monitoring Division to ensure accuracy, completeness, and consistency with documented data quality standards, as well as for usability and reproducibility (Table 3). Of the data that were evaluated for quality, XX.X% met data quality standards. The *`r dataPackageTitle`* is suitable for its intended use as of the date of processing (`r Sys.Date()`).
->>>>>>> 60bbe73162a3ec0a96bfde68041aa7c05284ea2f
 
 # Usage Notes (required)
 
