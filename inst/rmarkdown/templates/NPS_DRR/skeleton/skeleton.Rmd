@@ -26,10 +26,10 @@ https://nationalparkservice.github.io/QCkit/articles/Using-the-DRR-Template.html
 title <- "Sample DRR Title"
 
 # Optional and should only be included if publishing to the semi-official DRR series. Contact Joe if you are. If not, leave as NULL
-reportNumber <- ": get this number from Joe DeVivo"
+report_number <- ": get this number from Joe DeVivo"
 
 # This should match the Data Store Reference ID for this DRR. Eventually we should be able to pull this directly from the data package metadata.
-DRR_DSRefID <- "0000000"
+drr_ds_ref_id <- "0000000"
 
 #Author names and affiliations:
 
@@ -43,16 +43,16 @@ DRR_DSRefID <- "0000000"
 #once the table is built, authors can be associated with the appropriate institute via relevant superscripts and the institutes can be listed only once in the DRR.
 
 # list the authors. If an author has multiple institutional affiliations, you must list the author multiple times. In this example, Jane Doe is listed twice because she has two affiliations.
-authorNames <- c(
+author_names <- c(
   "Jane Doe",
   "Jane Doe",
   "John Doe"
 )
 
-# List author affiliations. The order of author affiliations must match the order of the authors in AuthorNames. If an author has multiple affiliations, the author must be listed 2 (or more) times under authorNames (above) and each affiliation should be listed in order. If authors share the same affiliation, the affiliation should be listed once for each author. In this case, Managed Business Solutions (MBS) is listed twice because it is associated with two authors. MBS will only print to the DRR once.
+# List author affiliations. The order of author affiliations must match the order of the authors in author_namess. If an author has multiple affiliations, the author must be listed 2 (or more) times under author_names (above) and each affiliation should be listed in order. If authors share the same affiliation, the affiliation should be listed once for each author. In this case, Managed Business Solutions (MBS) is listed twice because it is associated with two authors. MBS will only print to the DRR once.
 
 #Note that the entirety of each affiliation is enclosed in quotations. Do not worry about indentation or word wrapping.
-authorAffiliations <- c(
+author_affiliations <- c(
   "NPS Inventory and Monitoring Division, 1201 Oakridge Dr., Suite 150, Fort Collins, Colorado",
   
   "Managed Business Solutions (MBS), a Sealaska Company, Contractor to the National Park Service, Natural Resource Stewardship and Science Directorate, 1201 Oakridge Dr., Suite 150, Fort Collins, Colorado",
@@ -62,47 +62,47 @@ authorAffiliations <- c(
 
 # List the ORCID iDs for each author in the format "(xxxx-xxxx-xxxx-xxxx)". If an author does not have an ORCID iD, specify NA (no quotes). If an author is listed more than once (for instance because they have multiple institutional affiliations), the ORCID iD must also be listed more than once. For more information on ORCID iDs and to register an ORCID iD, see https://www.orcid.org. 
 
-# The order of the ORCID iDs must match the order of authors in AuthorNames.In this example, Jane Doe has an ORCID iD but John Doe does not. Jane's ORCID iD is listed twice because she her name is listed twice in authorNames(because she has two authorAffiliations).
-authorORCID <- c(
+# The order of the ORCID iDs must match the order of authors in author_names. In this example, Jane Doe has an ORCID iD but John Doe does not. Jane's ORCID iD is listed twice because she her name is listed twice in author_names (because she has two author_affiliations).
+author_orcid <- c(
   "(0000-1111-2222-3333)", "(0000-1111-2222-3333)", NA
   )
 
 # Replace the text below with your abstract.
-DRRabstract <- "Abstract Should go here. Multiple Lines are okay; it'll format correctly. Pay careful attention to non-standard characters, line breaks (<br>), carriage returns, and curly-quotes. You may find it useful to write the abstract in NotePad++ or some other text editor and not a word processor (such as Microsoft Word).\n\n
+drr_abstract <- "Abstract Should go here. Multiple Lines are okay; it'll format correctly. Pay careful attention to non-standard characters, line breaks (<br>), carriage returns, and curly-quotes. You may find it useful to write the abstract in NotePad++ or some other text editor and not a word processor (such as Microsoft Word).\n\n
 
 Note that if you need multiple paragraphs or line breaks you can generate them using a combination of backslashes and n's. \n\n
 
 The abstract should succinctly describe the study, the assay(s) performed, the resulting data, and their reuse potential, but should not make any claims regarding new scientific findings. No references are allowed in this section."
 
 # DataStore reference ID for the data package associated with this report. You must have at least one data package.Eventually, we will automate importing much of this information from metadata.
-dataPackageRefID <- c(9999999)
+data_package_ref_id <- c(9999999)
 
 # Must match title in DataStore and metadata
-dataPackageTitle <- "Data Package Title"
+data_package_title <- "Data Package Title"
 
 # Must match descriptions in the data package metadata
-dataPackageDescription <- "Short title for data package1"
+data_package_description <- "Short title for data package1"
 
 # generates your data package DOI based on the data package DataStore reference ID. This is different from the DRR DOI! No need to edit this.
-dataPackageDOI <- paste0("https://doi.org/10.57830/", dataPackageRefID)
+data_package_doi <- paste0("https://doi.org/10.57830/", data_package_ref_id)
 
 # list the file names in your data package. Do NOT include metadata files.
-dataPackage_fileNames <- c(
+data_package_file_names <- c(
   "my_data.csv",
   "my_data2.csv"
 )
 
-# list the approximate size of each data file. Make sure the order corresponds to the order of of the file names in dataPackage_fileNames
-dataPackage_fileSizes <- c("0.8 MB", "10 GB")
+# list the approximate size of each data file. Make sure the order corresponds to the order of of the file names in data_package_file_names
+data_package_file_sizes <- c("0.8 MB", "10 GB")
 
 # list a short, one-line description of each data file. Descriptions must be in the same order as the filenames.
-dataPackage_fileDescript <- c(
+data_package_file_descript <- c(
   "This is a short description of my_data.csv (a good guideline is 10 words or less).",
   "This is a short description of my_data2.csv.")
 ```
 
 ```{r setup_do_not_edit, include=FALSE}
-Rpackages <- c("markdown",
+r_packages <- c("markdown",
                 "rmarkdown",
                 "pander",
                 "knitr",
@@ -112,11 +112,11 @@ Rpackages <- c("markdown",
                 "tidyverse",
                 "here")
 
-inst <- Rpackages %in% installed.packages()
-if (length(Rpackages[!inst]) > 0) {
-  install.packages(Rpackages[!inst], dep = TRUE, repos = "https://cloud.r-project.org")
+inst <- r_packages %in% installed.packages()
+if (length(r_packages[!inst]) > 0) {
+  install.packages(r_packages[!inst], dep = TRUE, repos = "https://cloud.r-project.org")
 }
-lapply(Rpackages, library, character.only = TRUE)
+lapply(r_packages, library, character.only = TRUE)
 
 devtools::install_github("EmilyMarkowitz-NOAA/NMFSReports")
 library(NMFSReports)
@@ -124,37 +124,37 @@ devtools::install_github("nationalparkservice/QCkit")
 library(QCkit)
 ```
 
-*`r (paste0("https://doi.org/10.38750/", DRR_DSRefID))`*
+*`r (paste0("https://doi.org/10.38750/", drr_ds_ref_id))`*
 
 ```{r title_do_not_edit, echo=FALSE, results="asis"}
 date <- format(Sys.time(), "%d %B, %Y")
 cat("#", title, "\n")
-if (!is.null(reportNumber)) {
-  subtitle <- paste0("Data Release Report ", reportNumber)
+if (!is.null(report_numberr)) {
+  subtitle <- paste0("Data Release Report ", report_number)
   cat("###", subtitle)
 }
 ```
 
 ```{r authors_do_not_edit, echo=FALSE, results="asis"}
-author_list <- data.frame(authorNames, authorAffiliations, authorORCID)
-unique_authors <- author_list %>% distinct(authorNames,
+author_list <- data.frame(author_names, author_affiliations, author_orcid)
+unique_authors <- author_list %>% distinct(author_names,
                                            .keep_all = TRUE)
-unique_affiliation <- author_list %>% distinct(authorAffiliations,
+unique_affiliation <- author_list %>% distinct(author_affiliations,
                                               .keep_all = TRUE)
 
 #single author documents:
-if(length(seq_along(unique_authors$authorNames)) == 1){
+if(length(seq_along(unique_authors$author_names)) == 1){
 
-  for (i in seq_along(unique_authors$authorNames)) {
+  for (i in seq_along(unique_authors$author_names)) {
     curr <- unique_authors[i, ]
     
     #find all author affiliations
-    aff <- author_list[which(authorNames == curr$authorNames),]
-    aff <- aff$authorAffiliations  
+    aff <- author_list[which(author_names == curr$author_names),]
+    aff <- aff$author_affiliations  
     
     #identify order of affiliation(s) in a unique list of affiliations
     #build the superscripts for author affiliations
-    super_script <- unique_affiliation$authorAffiliations %in% aff 
+    super_script <- unique_affiliation$author_affiliations %in% aff 
     super <- which(super_script == TRUE)
     script <- super
     
@@ -170,35 +170,35 @@ if(length(seq_along(unique_authors$authorNames)) == 1){
       }
     }
   }
-   cat("#### ", curr$authorNames, sep="")
-        if (is.na(curr$authorORCID)) {
+   cat("#### ", curr$author_names, sep="")
+        if (is.na(curr$author_orcidD)) {
         }
-        if (!is.na(curr$authorORCID)) {
-          orc <- paste0(" ", curr$authorORCID, "")
+        if (!is.na(curr$author_orcid)) {
+          orc <- paste0(" ", curr$author_orcid, "")
           cat({{ orc }})
         }
    cat(" ^",script,"^", " ", " ", sep="")
   
-  #cat("#### ", unique_authors$authorNames, "^1^", sep="")
-  #if(!is.na(authorORCID)){
-  #  orc <- paste0(" https://orcid.org/", unique_authors$authorORCID)
+  #cat("#### ", unique_authors$author_names, "^1^", sep="")
+  #if(!is.na(author_orcid)){
+  #  orc <- paste0(" https://orcid.org/", unique_authors$author_orcid)
   #  cat({{ orc }}, "\n")
   #}
-  #cat("#### ", unique_authors$authorAffiliations, sep="")
+  #cat("#### ", unique_authors$author_affiliations, sep="")
 }
   
 #multi author documents:
-if(length(seq_along(unique_authors$authorNames)) > 1){
-  for (i in seq_along(unique_authors$authorNames)) {
+if(length(seq_along(unique_authors$author_names)) > 1){
+  for (i in seq_along(unique_authors$author_names)) {
     curr <- unique_authors[i, ]
     
     #find all author affiliations
-    aff <- author_list[which(authorNames == curr$authorNames),]
-    aff <- aff$authorAffiliations  
+    aff <- author_list[which(author_names == curr$author_names),]
+    aff <- aff$author_affiliations  
     
     #identify order of affiliation(s) in a unique list of affiliations
     #build the superscripts for author affiliations
-    super_script <- unique_affiliation$authorAffiliations %in% aff 
+    super_script <- unique_affiliation$author_affiliations %in% aff 
     super <- which(super_script == TRUE)
     script <- super
     
@@ -215,27 +215,27 @@ if(length(seq_along(unique_authors$authorNames)) > 1){
     }
     
     # if NOT the second-to-last author:
-    if(i < (length(seq_along(unique_authors$authorNames)) - 1)){
-      cat("#### ", curr$authorNames, " ", sep="")
-        if (is.na(curr$authorORCID)) {
+    if(i < (length(seq_along(unique_authors$author_names)) - 1)){
+      cat("#### ", curr$author_names, " ", sep="")
+        if (is.na(curr$author_orcid)) {
         }
-        if (!is.na(curr$authorORCID)) {
-          orc <- paste0(" ", curr$authorORCID, " ")
+        if (!is.na(curr$author_orcidD)) {
+          orc <- paste0(" ", curr$author_orcid, " ")
           cat({{ orc }})
         }
       cat( " ^", script, "^", ", ", " ", sep = "")
     }
     
     # if IS the second-to-last author
-    if(i == (length(seq_along(unique_authors$authorNames)) - 1)){ 
+    if(i == (length(seq_along(unique_authors$author_names)) - 1)){ 
        
       #if 3 or more authors, include a comma before the "and":
-      if(length(seq_along(unique_authors$authorNames)) > 2){
-        cat(curr$authorNames, sep="")
-        if (is.na(curr$authorORCID)) {
+      if(length(seq_along(unique_authors$author_names)) > 2){
+        cat(curr$author_names, sep="")
+        if (is.na(curr$author_orcid)) {
         }
-        if (!is.na(curr$authorORCID)) {
-          orc <- paste0(" ", curr$authorORCID, " ")
+        if (!is.na(curr$author_orcid)) {
+          orc <- paste0(" ", curr$author_orcid, " ")
           cat({{ orc }})
         }
         cat(" ^",script,"^", ", ", sep="")
@@ -243,12 +243,12 @@ if(length(seq_along(unique_authors$authorNames)) > 1){
       }
       
       #If only 2 authors, omit comma before "and":
-      if(length(seq_along(unique_authors$authorNames)) == 2){
-        cat("#### ", curr$authorNames, sep="")
-        if (is.na(curr$authorORCID)) {
+      if(length(seq_along(unique_authors$author_names)) == 2){
+        cat("#### ", curr$author_names, sep="")
+        if (is.na(curr$author_orcid)) {
         }
-        if (!is.na(curr$authorORCID)) {
-          orc <- paste0(" ", curr$authorORCID, " ")
+        if (!is.na(curr$author_orcid)) {
+          orc <- paste0(" ", curr$author_orcid, " ")
           cat({{ orc }})
         }
         cat(" ^",script,"^ ", sep = "")
@@ -257,12 +257,12 @@ if(length(seq_along(unique_authors$authorNames)) > 1){
     }
     
     # if IS the Last author :
-    if(i == length(seq_along(unique_authors$authorNames))){
-      cat(curr$authorNames, sep="")
-        if (is.na(curr$authorORCID)) {
+    if(i == length(seq_along(unique_authors$author_namess))){
+      cat(curr$author_names, sep="")
+        if (is.na(curr$author_orcid)) {
         }
-        if (!is.na(curr$authorORCID)) {
-          orc <- paste0(" ", curr$authorORCID, " ")
+        if (!is.na(curr$author_orcid)) {
+          orc <- paste0(" ", curr$author_orcid, " ")
           cat({{ orc }})
         }
       cat(" ^", script, "^", sep = "")
@@ -277,7 +277,7 @@ for(i in 1:nrow(unique_affiliation)){
 
 # Abstract
 
-`r DRRabstract` <!-- pulls from the abstract you supplied is user_edited_parameters - don't edit here! -->
+`r drr_abstract` <!-- pulls from the abstract you supplied is user_edited_parameters - don't edit here! -->
 
 <hr>
 
@@ -305,12 +305,12 @@ If the data package being described was generated based on one or more pre-exist
 
 The Data Records section should be used to explain each data record associated with this work (for instance, a data package), including the DOI indicating where this information is stored, and provide an overview of the data files and their formats. Each external data record should be cited. Below is some sample text:
 
-This DRR describes the data package *`r dataPackageTitle`* which contains a metadata file and `r length(dataPackage_fileNames)` data files. These data were compiled and processed for dissemination by the National Park Service Inventory and Monitoring Division (IMD) and are available at `r dataPackageDOI` (see Table 1).
+This DRR describes the data package *`r data_package_title`* which contains a metadata file and `r length(data_package_file_names)` data files. These data were compiled and processed for dissemination by the National Park Service Inventory and Monitoring Division (IMD) and are available at `r data_package_doi` (see Table 1).
 
 ```{r file_table, echo=FALSE}
-filelist <- data.frame(dataPackage_fileNames, dataPackage_fileSizes, dataPackage_fileDescript)
+filelist <- data.frame(data_package_file_names, data_package_file_sizes, data_package_file_descript)
 
-knitr::kable(filelist, caption = paste0("**Table 1. ", dataPackageTitle, ": List of data files.**"), col.names = c("**File Name**", "**Size**", "**Description**"), format = "pandoc")
+knitr::kable(filelist, caption = paste0("**Table 1. ", data_package_title, ": List of data files.**"), col.names = c("**File Name**", "**Size**", "**Description**"), format = "pandoc")
 ```
 
 See Appendix for additional notes and examples.
@@ -438,7 +438,7 @@ Generally, this **should not include:**
 
 *Stock Text to include:*
 
-The data within the data records listed above have been reviewed by staff in the NPS Inventory and Monitoring Division to ensure accuracy, completeness, and consistency with documented data quality standards, as well as for usability and reproducibility (Table 3). Of the data that were evaluated for quality, XX.X% of fields in this data package met data quality standards. The *`r dataPackageTitle`* is suitable for its intended use as of the date of processing (`r Sys.Date()`).
+The data within the data records listed above have been reviewed by staff in the NPS Inventory and Monitoring Division to ensure accuracy, completeness, and consistency with documented data quality standards, as well as for usability and reproducibility (Table 3). Of the data that were evaluated for quality, XX.X% of fields in this data package met data quality standards. The *`r data_package_title`* is suitable for its intended use as of the date of processing (`r Sys.Date()`).
 
 # Usage Notes (required)
 
@@ -448,10 +448,10 @@ For studies involving privacy or safety controls on public access to the data, t
 
 ## Acquiring the Data Package
 
-This data package is available for download from the NPS DataStore at `r dataPackageDOI` and can be directly imported into R data frames using the NPSutils package (Baker et al., 2024) and the following code:
+This data package is available for download from the NPS DataStore at `r data_package_doi` and can be directly imported into R data frames using the NPSutils package (Baker et al., 2024) and the following code:
 
 ```{r acquisition_code_do_not_edit, echo = FALSE, results = 'asis'}
-cat(paste0("```\ndevtools::install_github('nationalparkservice/NPSutils')\nNPSutils::get_data_packages(", dataPackageRefID, ")\ndat <- NPSutils::load_data_package(", dataPackageRefID, ")\nlist2env(dat, envir = .GlobalEnv)\n```"))
+cat(paste0("```\ndevtools::install_github('nationalparkservice/NPSutils')\nNPSutils::get_data_packages(", data_package_ref_id, ")\ndat <- NPSutils::load_data_package(", data_package_ref_id, ")\nlist2env(dat, envir = .GlobalEnv)\n```"))
 ```
 
 # Methods
