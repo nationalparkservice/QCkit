@@ -375,6 +375,7 @@ colnames(dc_flags)[8]<-paste0("% Accepted", "^3^")
 file_names <- NULL
 if (seq_along(unique(dc_flags$`File Name`)) < 2) {
   file_names <- 1
+  dc_flags <- dc_flags[,-1]
 }
 
 #Generate the table:
@@ -388,13 +389,13 @@ dc_flags %>%
        c("**File Name**", "**Measure^1^**", "**Number of Records**",
                     "**A^2^**", "**AE**", "**R**", "**P**", "**% Accepted^3^**")
     } else {
-       c("**Measure^1^**", "**Number of Records**", "**A^2^**",
-                    "**R**", "**P**", "**% Accepted^3^**")
+       c( "**Measure^1^**", "**Number of Records**", "**A^2^**", "**AE**",
+          "**R**", "**P**", "**% Accepted^3^**")
     }) %>%
 kableExtra::add_footnote(
   c("The '_flag' suffix has been omitted from column names for brevity.",
     "All non-missing data in specified unflagged columns are considered accepted.",
-    "% Accepted is calculated as the number of accepted (where A and AE are both considered accepted) divided by the total number of observations plus the number of missing observations."), 
+    "% Accepted is calculated as the number of accepted (where A and AE are both considered accepted) divided by the total number of observations (including any missing observations."), 
   notation = "number"
   ) 
 
