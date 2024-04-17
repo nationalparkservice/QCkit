@@ -307,7 +307,7 @@ The Data Records section should be used to explain each data record associated w
 
 This DRR describes the data package *`r data_package_title`* which contains a metadata file and `r length(data_package_file_names)` data files. These data were compiled and processed for dissemination by the National Park Service Inventory and Monitoring Division (IMD) and are available at `r data_package_doi` (see Table 1).
 
-```{r file_table, echo=FALSE}
+```{r file_table_do_not_edit, echo=FALSE}
 filelist <- data.frame(data_package_file_names, data_package_file_sizes, data_package_file_descript)
 
 knitr::kable(filelist, caption = paste0("**Table 1. ", data_package_title, ": List of data files.**"), col.names = c("**File Name**", "**Size**", "**Description**"), format = "pandoc")
