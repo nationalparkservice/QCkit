@@ -448,7 +448,7 @@ For studies involving privacy or safety controls on public access to the data, t
 
 ## Acquiring the Data Package
 
-This data package is available for download from the NPS DataStore at `r data_package_doi` and can be directly imported into R data frames using the NPSutils package (@bakerNPSutils2023) and the following code:
+This data package is available for download from the NPS DataStore at `r data_package_doi` and can be directly imported into R data frames using the NPSutils package [@bakerNPSutils2023] and the following code:
 
 ```{r acquisition_code_do_not_edit, echo = FALSE, results = 'asis'}
 cat(paste0("```\ndevtools::install_github('nationalparkservice/NPSutils')\nNPSutils::get_data_packages(", data_package_ref_id, ")\ndat <- NPSutils::load_data_package(", data_package_ref_id, ")\nlist2env(dat, envir = .GlobalEnv)\n```"))
@@ -480,11 +480,11 @@ Provide descriptions (with citations) of other data sources used.
 
 ## Data Processing (required if done)
 
-Summarize process and results of any QC processes done that manipulate, change, or qualify data. You may wish to cite the R package, QCkit (@bakerQCkit2024) if you used any of the functions therein.
+Summarize process and results of any QC processes done that manipulate, change, or qualify data. You may wish to cite the R package, QCkit [@bakerQCkit2024] if you used any of the functions therein.
 
 ## Code Availability (required)
 
-For all studies using custom code in the generation or processing of datasets, a statement must be included indicating whether and how the code can be accessed and any restrictions to access. This section should also include information on the versions of any software used, if relevant, and any specific variables or parameters used to generate, test, or process the current dataset. Actual analytical code should be provided in Appendices (or as a citation to a DataStore reference). You may wish to cite the NPSdataverse (@bakerNPSdataverse2024), QCkit (@bakerQCkit2024), EMLeditor ( @bakerEMLeditor2024a), DPchecker (@bakerDPchecker2024) or NPSutils (@bakerNPSutils2023). For best practices on how to upload any custom code to DataStore, see the Data Publication SharePoint cite under ["Citing Supporting Code"](https://doimspp.sharepoint.com/sites/nps-nrss-imdiv/data-publication/SitePages/Documenting-Code.aspx).
+For all studies using custom code in the generation or processing of datasets, a statement must be included indicating whether and how the code can be accessed and any restrictions to access. This section should also include information on the versions of any software used, if relevant, and any specific variables or parameters used to generate, test, or process the current dataset. Actual analytical code should be provided in Appendices (or as a citation to a DataStore reference). You may wish to cite the NPSdataverse [@bakerNPSdataverse2024], QCkit [@bakerQCkit2024], EMLeditor [ @bakerEMLeditor2024a], DPchecker [@bakerDPchecker2024] or NPSutils [@bakerNPSutils2023]. For best practices on how to upload any custom code to DataStore, see the Data Publication SharePoint cite under ["Citing Supporting Code"](https://doimspp.sharepoint.com/sites/nps-nrss-imdiv/data-publication/SitePages/Documenting-Code.aspx).
 
 # References (required)
 
