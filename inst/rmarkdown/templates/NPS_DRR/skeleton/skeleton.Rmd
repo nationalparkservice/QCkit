@@ -395,7 +395,7 @@ dc_flags %>%
 kableExtra::add_footnote(
   c(" The '_flag' suffix has been omitted from column names for brevity.",
     " All non-missing data in specified unflagged columns are considered accepted.",
-    " % Accepted is calculated as the number of accepted (where A and AE are both considered accepted) divided by the total number of observations (including any missing observations."), 
+    " % Accepted is calculated as the number of accepted (where A and AE are both considered accepted) divided by the total number of observations (including any missing observations)."), 
   notation = "number"
   ) 
 
@@ -416,7 +416,7 @@ dp_flags %>%
                   digits=2, 
                   align = 'c') %>% 
   kableExtra::add_footnote(c(" All non-missing data in specified unflagged columns are considered accepted.",
-                             " % Accepted is calculated as the number of accepted (where A and AE are both considered accepted) divided by the total number of observations (including any missing observations."), notation = "number") 
+                             " % Accepted is calculated as the number of accepted (where A and AE are both considered accepted) divided by the total number of observations (including any missing observations)."), notation = "number") 
 ```
 
 Possible content **strongly Suggested to Include**
