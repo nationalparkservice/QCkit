@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">QCkit</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.7</span>
       </span>
     </div>
 
@@ -153,35 +153,35 @@ parameters for each DRR.</p>
 <li>
 <code>title</code>. The title of the Data Release Report.</li>
 <li>
-<code>reportNumber</code>. This is optional, and should
+<code>report_number</code>. This is optional, and should
 <em>only</em> be included if publishing in the semi-official DRR series.
 Set to NULL if there is no reportNumber.</li>
 <li>
-<code>DRR_DSRefID</code>. This is the DataStore reference ID for the
-report. It should be 7 digits long.</li>
+<code>drr_ds_ref_id</code>. This is the DataStore reference ID for
+the report. It should be 7 digits long.</li>
 <li>
 <code>authorNames</code>. A list of the author’s names. If an author
 has multiple institutional affiliations, the author should be listed
 once for each affiliation.</li>
 <li>
-<code>authorAffiliations</code>. A list of the author’s
+<code>author_affiliations</code>. A list of the author’s
 affiliations. The order of author affiliations must match the order of
 the authors in the <code>authorNames</code> list. Note that the entirety
 of each affiliation is enclosed in a single set of quotations. Do not
 worry about indentation or word wrapping. If two authors have the same
 affiliation, list the affiliation twice.</li>
 <li>
-<code>authorORCID</code>. A list of ORCID iDs for each author in the
-format “(xxxx-xxxx-xxxx-xxxx)”. If an author does not have an ORCID iD,
-specify NA (no quotes). The order of ORCID iDs (and NAs) must correspond
-to the order of authors in the <code>authorNames</code> list. If an
-author was listed more than once in the <code>authorNames</code> list,
-the corresponding ORCID (or NA) should also be listed more than once.
-Future iterations of the DRR Template will pull ORCID iDs from metadata
-and eventually from Active Directory. See <a href="https://www.orcid.org/" class="external-link">ORCID</a> for more information about ORCID
+<code>author_orcid</code>. A list of ORCID iDs for each author in
+the format “(xxxx-xxxx-xxxx-xxxx)”. If an author does not have an ORCID
+iD, specify NA (no quotes). The order of ORCID iDs (and NAs) must
+correspond to the order of authors in the <code>authorNames</code> list.
+If an author was listed more than once in the <code>authorNames</code>
+list, the corresponding ORCID (or NA) should also be listed more than
+once. Future iterations of the DRR Template will pull ORCID iDs from
+metadata and eventually from Active Directory. See <a href="https://www.orcid.org/" class="external-link">ORCID</a> for more information about ORCID
 iDs or to register an ORCID iD.</li>
 <li>
-<code>DRRabstract</code>. The abstract for the DRR (which may be
+<code>drr_abstract</code>. The abstract for the DRR (which may be
 distinct from the data package abstract). Pay careful attention to
 non-standard characters, line breaks, carriage returns, and
 curly-quotes. You may find it useful to write the abstract in NotePad or
@@ -193,33 +193,34 @@ potential, but should not make any claims regarding new scientific
 findings. No references are allowed in this section. A good suggested
 length for abstracts is less than 250 words.</li>
 <li>
-<code>dataPackageRefID</code>. DataStore reference ID for the data
-package associated with this report. You must have at least one data
-package. Eventually, we will automate importing much of this information
-from metadata and include the ability to describe multiple data packages
-in a single DRR.</li>
+<code>data_package_ref_id</code>. DataStore reference ID for the
+data package associated with this report. You must have at least one
+data package. Eventually, we will automate importing much of this
+information from metadata and include the ability to describe multiple
+data packages in a single DRR.</li>
 <li>
-<code>dataPackageTitle</code>. The title of the data package. Must
-match the title on DataStore (and metadata).</li>
+<code>data_P_package_T_title</code>. The title of the data package.
+Must match the title on DataStore (and metadata).</li>
 <li>
-<code>dataPackageDescription</code>. A short title/subtitle or short
-description for the data package. Must match the data package
+<code>data_package_description</code>. A short title/subtitle or
+short description for the data package. Must match the data package
 metadata.</li>
 <li>
-<code>dataPackageDOI</code>. Auto-generated, no need to edit or
-update. This is the data package DOI. It is based on the DataStore
+<code>data_package_DOI_doi</code>. Auto-generated, no need to edit
+or update. This is the data package DOI. It is based on the DataStore
 reference number.</li>
 <li>
-<code>dataPackage_fileNames</code>. List the file names in your data
-package. Do NOT include metadata files. For example, include
+<code>data_package_file_names</code>. List the file names in your
+data package. Do NOT include metadata files. For example, include
 “my_data.csv” but do NOT include “my_metadata.xml”. Note: Because data
 packages contain only .csv and .xml files, all data files should be
 .csv.</li>
 <li>
-<code>dataPackage_fileSizes</code>. List the approximate size of
+<code>data_package_file_sizes</code>. List the approximate size of
 each data file. Make sure the order of the file sizes corresponds to the
-order of file names in <code>dataPackage_fileNames</code>.
-<code>dataPackage_fileDescript</code>. A short description of the
+order of file names in <code>dataPackage_fileNames</code>.</li>
+<li>
+<code>data_package_file_descript</code>. A short description of the
 corresponding data file that helps distinguish it from other data files.
 A good guideline is 10 words or less. This will be used in a table
 summary table so brevity is a priority. If you have already created
@@ -230,7 +231,7 @@ file.</li>
 </li>
 <li><p><code>setup_do_not_edit</code>. Most users will not need to edit
 this code chunk. There is one code snippet for loading packages; the
-<code>RRpackages</code> section is a suite of packages that are used to
+<code>r_packages</code> section is a suite of packages that are used to
 assist with reproducible reporting. You may not need these for your
 report, but we have included them as part of the base recommended
 packages. If you plan to perform you QC as part of the DRR construction
@@ -285,7 +286,7 @@ cite that code (in the methods and references) and leave the “listing
 code chunk with the default settings of eval=FALSE and echo=FALSE. If
 you have developed custom scripts, you can add those to DataStore with
 the reference”Script” and cite them in the DRR.</p></li>
-<li><p><code>session_-_info</code> is the information about the versions
+<li><p><code>session_info</code> is the information about the versions
 of R and packages used in generating the report. In most cases, you do
 not need to report session info (leave the session-info code chunk
 parameters in their default state: eval=FALSE). Session and version
