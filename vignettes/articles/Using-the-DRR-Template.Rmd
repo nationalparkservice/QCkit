@@ -85,21 +85,21 @@ the YAML header.
     parameters for each DRR.
 
     -   `title`. The title of the Data Release Report.
-    -   `reportNumber`. This is optional, and should *only* be included
+    -   `report_number`. This is optional, and should *only* be included
         if publishing in the semi-official DRR series. Set to NULL if
         there is no reportNumber.
-    -   `DRR_DSRefID`. This is the DataStore reference ID for the
+    -   `drr_ds_ref_id`. This is the DataStore reference ID for the
         report. It should be 7 digits long.
     -   `authorNames`. A list of the author's names. If an author has multiple
         institutional affiliations, the author should be listed once for each
         affiliation.
-    -   `authorAffiliations`. A list of the author's affiliations. The
+    -   `author_affiliations`. A list of the author's affiliations. The
         order of author affiliations must match the order of the authors
         in the `authorNames` list. Note that the entirety of each
         affiliation is enclosed in a single set of quotations. Do not worry
         about indentation or word wrapping. If two authors have the same
         affiliation, list the affiliation twice.
-    -   `authorORCID`. A list of ORCID iDs for each author in the format
+    -   `author_orcid`. A list of ORCID iDs for each author in the format
         "(xxxx-xxxx-xxxx-xxxx)". If an author does not have an ORCID iD,
         specify NA (no quotes). The order of ORCID iDs (and NAs) must
         correspond to the order of authors in the `authorNames` list. If an 
@@ -108,7 +108,7 @@ the YAML header.
         iterations of the DRR Template will pull ORCID iDs from metadata and
         eventually from Active Directory. See [ORCID](https://www.orcid.org/)
         for more information about ORCID iDs or to register an ORCID iD.
-    -   `DRRabstract`. The abstract for the DRR (which may be distinct
+    -   `drr_abstract`. The abstract for the DRR (which may be distinct
         from the data package abstract). Pay careful attention to
         non-standard characters, line breaks, carriage returns, and
         curly-quotes. You may find it useful to write the abstract in
@@ -120,28 +120,28 @@ the YAML header.
         should not make any claims regarding new scientific findings. No
         references are allowed in this section. A good suggested length
         for abstracts is less than 250 words.
-    -   `dataPackageRefID`. DataStore reference ID for the data package
+    -   `data_package_ref_id`. DataStore reference ID for the data package
         associated with this report. You must have at least one data
         package. Eventually, we will automate importing much of this
         information from metadata and include the ability to describe
         multiple data packages in a single DRR.
-    -   `dataPackageTitle`. The title of the data package. Must match
+    -   `data_P_package_T_title`. The title of the data package. Must match
         the title on DataStore (and metadata).
-    -   `dataPackageDescription`. A short title/subtitle or short
+    -   `data_package_description`. A short title/subtitle or short
         description for the data package. Must match the data package
         metadata.
-    -   `dataPackageDOI`. Auto-generated, no need to edit or update.
+    -   `data_package_DOI_doi`. Auto-generated, no need to edit or update.
         This is the data package DOI. It is based on the DataStore
         reference number.
-    -   `dataPackage_fileNames`. List the file names in your data
+    -   `data_package_file_names`. List the file names in your data
         package. Do NOT include metadata files. For example, include
         "my_data.csv" but do NOT include "my_metadata.xml". Note: Because data
         packages contain only .csv and .xml files, all data files should be
         .csv.
-    -   `dataPackage_fileSizes`. List the approximate size of each data
+    -   `data_package_file_sizes`. List the approximate size of each data
         file. Make sure the order of the file sizes corresponds to the
         order of file names in `dataPackage_fileNames`.
-        `dataPackage_fileDescript`. A short description of the
+    -   `data_package_file_descript`. A short description of the
         corresponding data file that helps distinguish it from other
         data files. A good guideline is 10 words or less. This will be
         used in a table summary table so brevity is a priority. If you
@@ -149,7 +149,7 @@ the YAML header.
         format, this should be the same text as found in the
         "entityDescription" element for each data file.
 -   `setup_do_not_edit`. Most users will not need to edit this code chunk. There
-    is one code snippet for loading packages; the `RRpackages` section is a
+    is one code snippet for loading packages; the `r_packages` section is a
     suite of packages that are used to assist with reproducible
     reporting. You may not need these for your report, but we have
     included them as part of the base recommended packages. If you plan to
@@ -205,7 +205,7 @@ the YAML header.
     If you have developed custom scripts, you can add those to DataStore
     with the reference "Script" and cite them in the DRR.
 
--   `session_-_info` is the information about the versions of R and
+-   `session_info` is the information about the versions of R and
     packages used in generating the report. In most cases, you do not
     need to report session info (leave the session-info code chunk
     parameters in their default state: eval=FALSE). Session and version
