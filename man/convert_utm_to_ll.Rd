@@ -36,6 +36,12 @@ The function returns your dataframe, mutated with an additional two
 columns of decimal Longitude and decimal Latitude.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
+\code{convert_utm_to_ll()} was superseded in favor of \code{generate_ll_from_utm()} to
+support and encourage including zone and datum columns in datasets. \code{generate_ll_from_utm()}
+also adds the ability to specify the coordinate reference system for lat/long coordinates,
+and accepts column names either quoted or unquoted for better compatibility with
+tidyverse piping.
 \code{convert_utm_to_ll()} takes your dataframe with UTM coordinates
 in separate Easting and Northing columns, and adds on an additional two
 columns with the converted decimalLatitude and decimalLongitude coordinates
