@@ -52,7 +52,10 @@ Imports:
     jsonlite,
     here,
     tibble,
-    tidyselect
+    tidyselect,
+    glue,
+    sp,
+    withr
 RoxygenNote: 7.3.1
 Suggests: 
     knitr,

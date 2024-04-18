@@ -362,6 +362,7 @@ fuzz_location <- function(lat,
 #' @param ZoneCol - The column containing the UTM zone, with or without quotations.
 #' @param DatumCol - The column containing the datum for your UTM coordinates,
 #' with or without quotations.
+#' @param latlong_datum - The datum to use for lat/long coordinates. Defaults to NAD83.
 #'
 #' @return The function returns your dataframe, mutated with an additional two
 #' columns of decimalLongitude and decimalLatitude plus a column LatLong_CRS containing

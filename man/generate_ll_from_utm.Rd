@@ -37,6 +37,10 @@ with or without quotations, ie. NorthingCol and "NorthingCol" are both valid.
 \item The column containing the datum for your UTM coordinates,
 with or without quotations.
 }}
+
+\item{latlong_datum}{\itemize{
+\item The datum to use for lat/long coordinates. Defaults to NAD83.
+}}
 }
 \value{
 The function returns your dataframe, mutated with an additional two
