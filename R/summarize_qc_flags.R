@@ -191,8 +191,8 @@ get_custom_flags <- function(directory = here::here(),
     dplyr::group_by(filename) %>%
     dplyr::summarize("A" = sum(A_flag),
                      "AE" = sum(AE_flag),
-                     "P" = sum(P_flag),
                      "R" = sum(R_flag),
+                     "P" = sum(P_flag),
                      "% Accepted" = mean(RRU)) %>%
     dplyr::rename("File Name" = filename) %>%
     dplyr::mutate(`% Accepted` = paste0(formatC(100 * `% Accepted`,

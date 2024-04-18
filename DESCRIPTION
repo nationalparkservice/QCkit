@@ -1,7 +1,7 @@
 Package: QCkit
 Type: Package
 Title: NPS Inventory and Monitoring Quality Control Toolkit
-Version: 0.1.5
+Version: 0.1.7
 Authors@R: c(
   person(given = "Robert",
            family = "Baker",
@@ -20,6 +20,10 @@ Authors@R: c(
            family = "Quevedo",
            role = "aut",
            comment = c(ORCID = "0000-0003-0129-981X")),
+  person(given = "Sarah",
+           family = "Kelso",
+           role = "ctb",
+           comment = c(ORCID = "0009-0002-8468-6945")),
   person(given = "Amy",
            family = "Sherman",
            role = "ctb",
@@ -55,7 +59,8 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0),
     rlang,
-    wk
+    wk,
+    tidyr
 VignetteBuilder: knitr
 URL: https://github.com/nationalparkservice/QCkit/
 BugReports: https://nationalparkservice.github.io/QCkit/

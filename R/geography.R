@@ -1,3 +1,105 @@
+#' Test whether decimal GPS coordinates are inside a park unit
+#'
+#' This function can take a list of coordinates and park units as input. In
+#' addition to being vectorized, depending on the park borders, it can be a
+#' major improvement on `validate_coord()`.
+#'
+#' @param lat numeric. An individual or vector of numeric values representing
+#' the decimal degree latitude of a coordinate
+#' @param lon numeric. An individual or vector of numeric values representing
+#' the decimal degree longitude of a coordinate
+#' @param park_units String. Or list of strings each containing the four letter
+#' park unit designation
+#'
+#' @return logical
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' x <- validate_coord_list(lat = 105.555, long = -47.4332, park_units = "DRTO")
+#'
+#' # or a dataframe with many coordinates and potentially many park units:
+#' x <- validate_coord_list(lat = df$decimalLatitutde,
+#'                 lon = df$decimalLongitude,
+#'                 park_units = df$park_units)
+#' # you can then merge it back in to the original dataframe:
+#' df$test_GPS_coord <- x
+#' }
+validate_coord_list <- function(lat, lon, park_units) {
+  # get geography from ArcGIS Rest Services
+  park <- .get_unit_boundary(park_units)
+
+  #create a multipolygon sf object
+  valid_park <- sf::st_make_valid(park)
+  # create sf dataframe from coordinates
+  points_df <- data.frame(lon = lon, lat = lat)
+  points <- sf::st_as_sf(points_df,
+                         coords = c("lon", "lat"),
+                         crs = 4326,
+                         na.fail = FALSE)
+  # Test whether the coordinates provided are within the polygon spatial feature
+  results <- as.data.frame(sf::st_covers(valid_park,
+                                         points,
+                                         sparse = FALSE))
+  # Turn data frame into a list of logicals
+  colnames(results) <- park_units
+  rownames(results) <- unique(park_units)
+  in_park <- NULL
+  for (i in seq(ncol(results))) {
+    for (j in seq(nrow(results))) {
+      if (colnames(results)[i] == rownames(results)[j]) {
+        in_park <- append(in_park, results[j,i])
+      }
+    }
+  }
+return(in_park)
+}
+
+#' Gets NPS unit boundaries from Arc GIS
+#'
+#' @param park_units String. Or list of strings.
+#'
+#' @return sf dataframe
+#' @examples
+#' \dontrun{
+#' .get_unit_boundary("ROMO")
+#' }
+.get_unit_boundary <- function(park_units) {
+
+  all_localities <- data.frame()
+
+  temp_output <- file.path("temp.geojson")
+  feature_service_url <- "https://services1.arcgis.com/fBc8EJBxQRMcHlei/arcgis/rest/services/NPS_Land_Resources_Division_Boundary_and_Tract_Data_Service/FeatureServer/2" # NPS unit boundary polygons, updated quarterly
+
+  unique_localities <- unique(park_units)
+
+  for (locality in unique_localities) {
+    # Request feature in WGS84 spatial reference (outSR=4326)
+    feature_service_path <- paste0(
+      "query?where=UNIT_CODE+%3D+%27",
+      locality,
+      "%27&outFields=*&returnGeometry=true&outSR=4326&f=pjson")
+    feature_service_request <- paste(feature_service_url,
+                                     feature_service_path,
+                                     sep = "/")
+    geo_json_feature <- jsonlite::fromJSON(feature_service_request)
+
+    # Have to save to temp file
+    json_feature <- utils::download.file(feature_service_request,
+                                        temp_output,
+                                        mode = "w",
+                                        quiet = TRUE)
+    # For rgdal 1.2+, layer (format) does not need to be specified
+    feature_polygon <- sf::st_read(dsn = temp_output, quiet = TRUE)
+    # featurePoly <- readOGR(dsn = tempOutput)
+
+    all_localities <- rbind(all_localities, feature_polygon)
+  }
+  suppressWarnings(file.remove("temp.geojson"))
+  #featurePoly <- readOGR(dsn = tempOutput, layer = "OGRGeoJSON")
+  return(all_localities)
+}
+
 #' Retrieve the polygon information for the park unit from NPS REST services
 #'
 #' @description `get_park_polygon()` retrieves a geoJSON string for a polygon of
@@ -49,7 +151,6 @@ validate_coord <- function(unit_code, lat, lon) {
 
   # Test whether the coordinates provided are within the polygon spatial feature
   result <- sf::st_covers(park, point, sparse = FALSE)[, 1]
-
   return(result)
 }
 

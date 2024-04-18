@@ -52,6 +52,9 @@
     <loc>/reference/DC_col_check.html</loc>
   </url>
   <url>
+    <loc>/reference/dot-get_unit_boundary.html</loc>
+  </url>
+  <url>
     <loc>/reference/fix_utc_offset.html</loc>
   </url>
   <url>
@@ -104,5 +107,8 @@
   </url>
   <url>
     <loc>/reference/validate_coord.html</loc>
+  </url>
+  <url>
+    <loc>/reference/validate_coord_list.html</loc>
   </url>
 </urlset>
