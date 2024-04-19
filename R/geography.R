@@ -334,7 +334,142 @@ fuzz_location <- function(lat,
 
 #' Coordinate Conversion from UTM to Latitude and Longitude
 #'
-#' @description `convert_utm_to_ll()` takes your dataframe with UTM coordinates
+#' @description `generate_ll_from_utm()` takes your dataframe with UTM coordinates
+#' in separate Easting and Northing columns, and adds on an additional two
+#' columns with the converted decimalLatitude and decimalLongitude coordinates
+#' using the reference coordinate system NAD83. Your data must also contain columns
+#' specifying the zone and datum of your UTM coordinates.
+#' In contrast to `convert_utm_to_ll()` (superseded), `generate_ll_from_utm()` requires
+#' zone and datum columns. It supports quoted or unquoted column names and a user-specified datum for lat/long
+#' coordinates. It also adds an extra column to the output data table that documents the
+#' lat/long coordinate reference system.
+#'
+#' @details Define the name of your dataframe, the easting and northing columns
+#' within it, the UTM zone within which those coordinates are located, and the
+#' reference coordinate system (datum). UTM Northing and Easting columns must be
+#' in separate columns prior to running the function. If a datum for the lat/long output
+#' is not defined, the function will default to "NAD83". If there are missing coordinates in
+#' your dataframe they will be preserved, however they will be moved to the end
+#' of your dataframe. Note that some parameter names are not in snake_case but
+#' instead reflect DarwinCore naming conventions.
+#'
+#' @param df - The dataframe with UTM coordinates you would like to convert.
+#' Input the name of your dataframe.
+#' @param EastingCol - The name of your Easting UTM column. You may input the name
+#' with or without quotations, ie. EastingCol and "EastingCol" are both valid.
+#' @param NorthingCol - The name of your Northing UTM column. You may input the name
+#' with or without quotations, ie. NorthingCol and "NorthingCol" are both valid.
+#' @param ZoneCol - The column containing the UTM zone, with or without quotations.
+#' @param DatumCol - The column containing the datum for your UTM coordinates,
+#' with or without quotations.
+#' @param latlong_datum - The datum to use for lat/long coordinates. Defaults to NAD83.
+#'
+#' @return The function returns your dataframe, mutated with an additional two
+#' columns of decimalLongitude and decimalLatitude plus a column LatLong_CRS containing
+#' a PROJ string that specifies the coordinate reference system for these data.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#'
+#' my_dataframe %>%
+#' generate_ll_from_utm(
+#'   EastingCol = UTM_X,
+#'   NorthingCol = UTM_Y,
+#'   ZoneCol = Zone,
+#'   DatumCol = Datum
+#' )
+#'
+#' generate_ll_from_utm(
+#'   df = mydataframe,
+#'   EastingCol = "EastingCoords",
+#'   NorthingCol = "NorthingCoords",
+#'   ZoneCol = "zone",
+#'   DatumCol = "datum",
+#'   latlong_datum = "WGS84"
+#' )
+#' }
+generate_ll_from_utm <- function(df,
+                              EastingCol,
+                              NorthingCol,
+                              ZoneCol,
+                              DatumCol,
+                              latlong_datum = "NAD83") {
+
+  df <- dplyr::mutate(df, `_UTMJOINCOL` = seq_len(nrow(df))) %>%  # Add a temporary column for joining lat/long data back to orig. df. This is needed in case UTM data are missing and we need to remove those rows to do the conversion.
+    dplyr::ungroup()  # Ungroup df in case it comes in with unwanted groups.
+
+  # Separate df with just coordinates. We'll filter out any NA rows.
+  coord_df <- df %>%
+    dplyr::select(`_UTMJOINCOL`, {{EastingCol}}, {{NorthingCol}}, {{ZoneCol}}, {{DatumCol}})
+
+  withr::with_envvar(c("PROJ_LIB" = ""), {  # This is a fix for the proj library bug in R (see pinned post "sf::st_read() of geojson not getting CRS" in IMData General Discussion).
+    # filter out rows that are missing UTM, zone, or datum
+    coord_df <- coord_df %>%
+      dplyr::filter(!is.na({{EastingCol}}) &
+                      !is.na({{NorthingCol}}) &
+                      !is.na({{ZoneCol}}) &
+                      !is.na({{DatumCol}}))
+
+    na_row_count <- nrow(df) - nrow(coord_df)
+    if (na_row_count > 0) {
+      warning(paste(na_row_count, "rows are missing UTM coordinates, zone, and/or datum information."))
+    }
+
+    ## Set up CRS for lat/long data
+    latlong_CRS <- sp::CRS(glue::glue("+proj=longlat +datum={latlong_datum}"))  # CRS for our new lat/long values
+
+    # Loop through each datum and zone in the data
+    zones <- unique(dplyr::pull(coord_df, {{ZoneCol}}))  # Get vector of zones present in data
+    datums <- unique(dplyr::pull(coord_df, {{DatumCol}}))  # Get vector of datums present in data
+    new_coords <- tibble::tibble()
+    for (datum in datums) {
+      for (zone in zones) {
+        zone_num <- stringr::str_extract(zone, "\\d+")  # sp::CRS wants zone number only, e.g. 11, not 11N
+        # Figure out if zone is in N or S hemisphere. If unspecified, assume N. If S, add "+south" to proj string.
+        zone_letter <- tolower(stringr::str_extract(zone, "[A-Za-z]"))
+        if (!is.na(zone_letter) && zone_letter == "s") {
+          north_south <- " +south"
+        } else {
+          north_south <- ""
+        }
+        utm_CRS <- sp::CRS(glue::glue("+proj=utm +zone={zone_num} +datum={datum}{north_south}"))  # Set coordinate reference system for incoming UTM data
+        filtered_df <- coord_df %>%
+          dplyr::filter(!!rlang::ensym(ZoneCol) == zone, !!rlang::ensym(DatumCol) == datum)
+        sp_utm <- sp::SpatialPoints(filtered_df %>%
+                                      dplyr::select({{EastingCol}}, {{NorthingCol}}) %>%
+                                      as.matrix(),
+                                    proj4string = utm_CRS)  # Convert UTM columns into a SpatialPoints object
+        sp_geo <- sp::spTransform(sp_utm, latlong_CRS) %>%  # Transform UTM to Lat/Long
+          tibble::as_tibble()
+
+        # Set data$Long and data$Lat to newly converted values, but only for the zone and datum we are currently on in our for loop
+        filtered_df <- filtered_df %>% dplyr::mutate(decimalLatitude = sp_geo[[2]],
+                                                     decimalLongitude = sp_geo[[1]],
+                                                     LatLong_CRS = latlong_CRS@projargs)  # Store the coordinate reference system PROJ string in the dataframe
+        coord_df <- dplyr::left_join(coord_df, filtered_df, by = "_UTMJOINCOL")
+      }
+    }
+  })
+
+  df <- dplyr::left_join(df,
+                         dplyr::select(coord_df, decimalLatitude, decimalLongitude, LatLong_CRS, `_UTMJOINCOL`),
+                         by = "_UTMJOINCOL") %>%
+    dplyr::select(-`_UTMJOINCOL`)
+
+  return(df)
+}
+
+#' Coordinate Conversion from UTM to Latitude and Longitude
+#'
+#' @description
+#' `r lifecycle::badge("superseded")`
+#' `convert_utm_to_ll()` was superseded in favor of `generate_ll_from_utm()` to
+#' support and encourage including zone and datum columns in datasets. `generate_ll_from_utm()`
+#' also adds the ability to specify the coordinate reference system for lat/long coordinates,
+#' and accepts column names either quoted or unquoted for better compatibility with
+#' tidyverse piping.
+#' `convert_utm_to_ll()` takes your dataframe with UTM coordinates
 #' in separate Easting and Northing columns, and adds on an additional two
 #' columns with the converted decimalLatitude and decimalLongitude coordinates
 #' using the reference coordinate system WGS84. You may need to turn the VPN OFF
@@ -404,8 +539,8 @@ convert_utm_to_ll <- function(df,
   df <- cbind(Mid, lonlat)
   df <- plyr::rbind.fill(df, Mid2)
   df <- dplyr::rename(df,
-    EastingCol = "b", NorthingCol = "a",
-    "decimalLongitude" = x, "decimalLatitude" = y
+                      EastingCol = "b", NorthingCol = "a",
+                      "decimalLongitude" = x, "decimalLatitude" = y
   )
   return(df)
 }

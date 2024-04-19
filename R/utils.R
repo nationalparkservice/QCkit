@@ -35,4 +35,8 @@ globalVariables(c("any_of",
                   "y",
                   "capture.output",
                   "title",
-                  "% Accepted"))
+                  "% Accepted",
+                  "_UTMJOINCOL",
+                  "decimalLatitude",
+                  "decimalLongitude",
+                  "LatLong_CRS"))
