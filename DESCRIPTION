@@ -20,7 +20,7 @@ Authors@R: c(
            family = "Quevedo",
            role = "aut",
            comment = c(ORCID = "0000-0003-0129-981X")),
-  person(given = "sarah",
+  person(given = "Sarah",
            family = "Wright",
            role = "aut",
            comment = c(ORCID = "0009-0004-5060-2189")),
