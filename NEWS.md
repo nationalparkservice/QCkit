@@ -1,4 +1,6 @@
 # QCkit v0.1.7
+2024-04-18
+* Added the function `generate_ll_from_utm()` which supersedes `convert_utm_to_ll()` and improves upon it in several ways, included accepting a column of UTMs and also returns a column of CRS along with the decimal degrees latitude and longitude.
 2024-04-17
 * Major updates to the DRR template including: using snake case instead of camel case for variables; updating Table 3 to only display filenames only when there are multiple files, fixed multiple issues with footnotes, added citations to NPSdataverse packages, added a section that prints the R code needed to download the data package and load it in to R.
 * Updated the DRR documentation to account for new variable names.

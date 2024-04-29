@@ -1,9 +1,9 @@
 pandoc: 3.1.1
-pkgdown: 2.0.6
+pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   DRR_Purpose_and_Scope: DRR_Purpose_and_Scope.html
   Starting-a-DRR: Starting-a-DRR.html
   Using-the-DRR-Template: Using-the-DRR-Template.html
-last_built: 2024-04-18T15:51Z
+last_built: 2024-04-19T15:29Z
 
