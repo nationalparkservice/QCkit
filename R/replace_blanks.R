@@ -23,7 +23,7 @@
 #' \dontrun{
 #' replace_blanks()
 #' }
-replace_blanks <- function(directory = here::here()) {
+replace_blanks <- function(directory = here::here(), missing_val_code = NA) {
   #get list of .csv file names
   my_path <- list.files(path = directory, pattern="*.csv",
                         full.names = TRUE)
@@ -36,6 +36,13 @@ replace_blanks <- function(directory = here::here()) {
 
   #give each dataframe a name basd on the filename where it originated
   names(my_data) <- gsub(".csv", "", my_path)
+
+  #replace all <NA> with the designated missing value code.
+  if (!is.na(missing_val_code)) {
+    for (i in seq_along(my_data)) {
+      my_data[i] %>% replace(is.na(.), missing_val_code)
+    }
+  }
   #write each dataframe back to .csv
   for (i in seq_along(my_data)) {
     readr::write_csv(my_data[[i]], file = paste0(directory, "/",
