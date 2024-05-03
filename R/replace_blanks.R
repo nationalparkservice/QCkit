@@ -27,9 +27,16 @@ replace_blanks <- function(directory = here::here(), missing_val_code = NA) {
   #get list of .csv file names
   my_path <- list.files(path = directory, pattern="*.csv",
                         full.names = TRUE)
+
   #import .csvs as dataframes; each dataframe is an item in the list "my_data"
   my_data <- lapply(my_path, function(x) readr::read_csv(x,
                                                          show_col_types=FALSE))
+  #if there is only one dataframe, for some reason it imports as a list;
+  #change it to a dataframe
+  if (length(seq_along(my_path) == 1)) {
+    my_data <- data.frame(my_data)
+    my_data <- list(my_data)
+  }
 
   #extract just the file name
   my_path <- basename(my_path)
@@ -39,9 +46,11 @@ replace_blanks <- function(directory = here::here(), missing_val_code = NA) {
 
   #replace all <NA> with the designated missing value code.
   if (!is.na(missing_val_code)) {
-    for (i in seq_along(my_data)) {
-      my_data[i] %>% replace(is.na(.), missing_val_code)
-    }
+    my_data <- lapply(my_data,
+                      function(x) replace(x,
+                                          is.na(x),
+                                          missing_val_code))
+
   }
   #write each dataframe back to .csv
   for (i in seq_along(my_data)) {
