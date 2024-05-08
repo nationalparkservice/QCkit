@@ -9,6 +9,8 @@ replace_blanks(directory = here::here(), missing_val_code = NA)
 \arguments{
 \item{directory}{String. Path to the file(s) to have blanks replaced with
 NAs. Defaults to the working directory of the project (here::here())}
+
+\item{missing_val_code}{String, integer, double, or float. Defaults to NA.}
 }
 \value{
 list of data frames (invisibly)
@@ -20,10 +22,12 @@ Replaces all blank cells with NA
 \code{replace_blanks()} is particularly useful for exporting data from a
 database (such as access) and converting it to a data package with metadata.
 
-\code{replace_blanks()} will import all .csv files in the current working
+\code{replace_blanks()} will import all .csv files in the specified working
 directory. The files are then written back out to the same directory,
-overwriting the old .csv files. Any blank cells in the original .csv files
-will be replaced with NA.
+overwriting the old .csv files. Any blank cells (or cells with "NA" in the
+original .csv files) will be replaced with the specified string or integer.
+If no missing value is specified, the function defaults to replacing all
+blanks with "NA".
 
 One exception is if a .csv contains NO data (i.e. just column names and no
 data in any of the cells). In this case, the blanks will not be replaced with
@@ -31,6 +35,14 @@ NA (as the function cannot determine how many NAs to include).
 }
 \examples{
 \dontrun{
-replace_blanks()
+replaces all blank cells in .csvs in the current directory with NA:
+ replace_blanks()
+
+replace all blank cells in .csvs in the directory ./test_data with "NODATA"
+ dir <- here::here("test_data")
+ replace_blanks(directory = dir, missing_val_code = "NODATA")
+
+replace all blank cells in .csvs in the current directory with -99999
+replace_blanks(missing_val_code = -99999)
 }
 }
