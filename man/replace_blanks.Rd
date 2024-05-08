@@ -4,7 +4,7 @@
 \alias{replace_blanks}
 \title{Replaces all blank cells with NA}
 \usage{
-replace_blanks(directory = here::here())
+replace_blanks(directory = here::here(), missing_val_code = NA)
 }
 \arguments{
 \item{directory}{String. Path to the file(s) to have blanks replaced with

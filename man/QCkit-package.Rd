@@ -24,6 +24,7 @@ Authors:
   \item Judd Patterson \email{judd_patterson@nps.gov} (\href{https://orcid.org/0000-0002-0951-7917}{ORCID})
   \item Joe DeVivo
   \item Issac Quevedo (\href{https://orcid.org/0000-0003-0129-981X}{ORCID})
+  \item Sarah Wright (\href{https://orcid.org/0009-0004-5060-2189}{ORCID})
 }
 
 Other contributors:
