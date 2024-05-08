@@ -1,4 +1,6 @@
 # QCkit v0.1.7
+2024-05-08
+* Updated the `replace_blanks()` function to accept any missing value code a user inputs (but it still defaults to NA).
 2024-04-18
 * Added the function `generate_ll_from_utm()` which supersedes `convert_utm_to_ll()` and improves upon it in several ways, included accepting a column of UTMs and also returns a column of CRS along with the decimal degrees latitude and longitude.
 2024-04-17
