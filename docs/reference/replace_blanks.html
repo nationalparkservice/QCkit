@@ -78,6 +78,10 @@
 <dd><p>String. Path to the file(s) to have blanks replaced with
 NAs. Defaults to the working directory of the project (here::here())</p></dd>
 
+
+<dt>missing_val_code</dt>
+<dd><p>String, integer, double, or float. Defaults to NA.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -89,10 +93,12 @@ NAs. Defaults to the working directory of the project (here::here())</p></dd>
     <h2>Details</h2>
     <p><code>replace_blanks()</code> is particularly useful for exporting data from a
 database (such as access) and converting it to a data package with metadata.</p>
-<p><code>replace_blanks()</code> will import all .csv files in the current working
+<p><code>replace_blanks()</code> will import all .csv files in the specified working
 directory. The files are then written back out to the same directory,
-overwriting the old .csv files. Any blank cells in the original .csv files
-will be replaced with NA.</p>
+overwriting the old .csv files. Any blank cells (or cells with "NA" in the
+original .csv files) will be replaced with the specified string or integer.
+If no missing value is specified, the function defaults to replacing all
+blanks with "NA".</p>
 <p>One exception is if a .csv contains NO data (i.e. just column names and no
 data in any of the cells). In this case, the blanks will not be replaced with
 NA (as the function cannot determine how many NAs to include).</p>
@@ -100,10 +106,7 @@ NA (as the function cannot determine how many NAs to include).</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="fu">replace_blanks</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
-</code></pre></div>
+    
     </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
