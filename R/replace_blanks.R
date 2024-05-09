@@ -24,7 +24,7 @@
 #' @export
 #'
 #' @examples
-#'  \donttest{
+#'  \dontrun{
 #' #replaces all blank cells in .csvs in the current directory with NA:
 #'  replace_blanks()
 #'
