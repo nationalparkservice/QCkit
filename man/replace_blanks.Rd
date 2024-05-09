@@ -34,15 +34,15 @@ data in any of the cells). In this case, the blanks will not be replaced with
 NA (as the function cannot determine how many NAs to include).
 }
 \examples{
-\dontrun{
-replaces all blank cells in .csvs in the current directory with NA:
+ \donttest{
+#replaces all blank cells in .csvs in the current directory with NA:
  replace_blanks()
 
-replace all blank cells in .csvs in the directory ./test_data with "NODATA"
+#replace all blank cells in .csvs in the directory ./test_data with "NODATA"
  dir <- here::here("test_data")
  replace_blanks(directory = dir, missing_val_code = "NODATA")
 
-replace all blank cells in .csvs in the current directory with -99999
+#replace all blank cells in .csvs in the current directory with -99999
 replace_blanks(missing_val_code = -99999)
 }
 }
