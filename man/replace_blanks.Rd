@@ -34,7 +34,7 @@ data in any of the cells). In this case, the blanks will not be replaced with
 NA (as the function cannot determine how many NAs to include).
 }
 \examples{
- \donttest{
+ \dontrun{
 #replaces all blank cells in .csvs in the current directory with NA:
  replace_blanks()
 
