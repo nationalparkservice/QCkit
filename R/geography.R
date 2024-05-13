@@ -413,47 +413,59 @@ generate_ll_from_utm <- function(df,
 
     na_row_count <- nrow(df) - nrow(coord_df)
     if (na_row_count > 0) {
-      warning(paste(na_row_count, "rows are missing UTM coordinates, zone, and/or datum information."))
+      warning(paste(na_row_count, "rows are missing UTM coordinates, zone, and/or datum information."), call. = FALSE)
     }
 
     ## Set up CRS for lat/long data
     latlong_CRS <- sp::CRS(glue::glue("+proj=longlat +datum={latlong_datum}"))  # CRS for our new lat/long values
 
     # Loop through each datum and zone in the data
-    zones <- unique(dplyr::pull(coord_df, {{ZoneCol}}))  # Get vector of zones present in data
-    datums <- unique(dplyr::pull(coord_df, {{DatumCol}}))  # Get vector of datums present in data
-    new_coords <- tibble::tibble()
-    for (datum in datums) {
-      for (zone in zones) {
-        zone_num <- stringr::str_extract(zone, "\\d+")  # sp::CRS wants zone number only, e.g. 11, not 11N
-        # Figure out if zone is in N or S hemisphere. If unspecified, assume N. If S, add "+south" to proj string.
-        zone_letter <- tolower(stringr::str_extract(zone, "[A-Za-z]"))
+    zones_datums <- dplyr::select(coord_df, {{ZoneCol}}, {{DatumCol}}) %>%  # Get vector of zones present in data
+      unique()
+
+    new_coords <- sapply(1:nrow(zones_datums), function(zone_datum_index) {
+      # Get zone and datum
+      current_zone <- zones_datums[[zone_datum_index, 1]]
+      if (is.numeric(current_zone)) {
+        zone_num <- current_zone
+        north_south <- ""
+      } else {
+        zone_num <- stringr::str_extract(current_zone, "\\d+")  # sp::CRS wants zone number only, e.g. 11, not 11N
+        zone_letter <- tolower(stringr::str_extract(current_zone, "[A-Za-z]"))
         if (!is.na(zone_letter) && zone_letter == "s") {
           north_south <- " +south"
         } else {
           north_south <- ""
         }
-        utm_CRS <- sp::CRS(glue::glue("+proj=utm +zone={zone_num} +datum={datum}{north_south}"))  # Set coordinate reference system for incoming UTM data
-        filtered_df <- coord_df %>%
-          dplyr::filter(!!rlang::ensym(ZoneCol) == zone, !!rlang::ensym(DatumCol) == datum)
-        sp_utm <- sp::SpatialPoints(filtered_df %>%
-                                      dplyr::select({{EastingCol}}, {{NorthingCol}}) %>%
-                                      as.matrix(),
-                                    proj4string = utm_CRS)  # Convert UTM columns into a SpatialPoints object
-        sp_geo <- sp::spTransform(sp_utm, latlong_CRS) %>%  # Transform UTM to Lat/Long
-          tibble::as_tibble()
-
-        # Set data$Long and data$Lat to newly converted values, but only for the zone and datum we are currently on in our for loop
-        filtered_df <- filtered_df %>% dplyr::mutate(decimalLatitude = sp_geo[[2]],
-                                                     decimalLongitude = sp_geo[[1]],
-                                                     LatLong_CRS = latlong_CRS@projargs)  # Store the coordinate reference system PROJ string in the dataframe
-        coord_df <- dplyr::left_join(coord_df, filtered_df, by = "_UTMJOINCOL")
       }
-    }
+
+      current_datum <- zones_datums[[zone_datum_index, 2]]
+
+      utm_CRS <- sp::CRS(glue::glue("+proj=utm +zone={zone_num} +datum={current_datum}{north_south}"))  # Set coordinate reference system for incoming UTM data
+      filtered_df <- coord_df %>%
+        dplyr::filter((!!rlang::ensym(ZoneCol) == current_zone & !!rlang::ensym(DatumCol) == current_datum))
+      sp_utm <- sp::SpatialPoints(filtered_df %>%
+                                    dplyr::select({{EastingCol}}, {{NorthingCol}}) %>%
+                                    as.matrix(),
+                                  proj4string = utm_CRS)  # Convert UTM columns into a SpatialPoints object
+      sp_geo <- sp::spTransform(sp_utm, latlong_CRS) %>%  # Transform UTM to Lat/Long
+        tibble::as_tibble()
+
+      # Add lat/long columns back into the original dataframe
+      latlong <- tibble::tibble(`_UTMJOINCOL` = filtered_df$`_UTMJOINCOL`,
+                                decimalLatitude = sp_geo[[2]],
+                                decimalLongitude = sp_geo[[1]],
+                                LatLong_CRS = latlong_CRS@projargs)  # Store the coordinate reference system PROJ string in the dataframe
+
+
+      return(latlong)
+    }, simplify = FALSE)
   })
 
+  new_coords <- dplyr::bind_rows(new_coords)
+
   df <- dplyr::left_join(df,
-                         dplyr::select(coord_df, decimalLatitude, decimalLongitude, LatLong_CRS, `_UTMJOINCOL`),
+                         new_coords,
                          by = "_UTMJOINCOL") %>%
     dplyr::select(-`_UTMJOINCOL`)
 
