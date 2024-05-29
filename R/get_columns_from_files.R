@@ -1,18 +1,18 @@
 #' Retrieve all columns from each dataset and columns that occur more than once across those datasets
 #'
-#' @description `get_columns_from_files()` produces two dataframes: one that lists all columns from within each of the .csv's in a specified working directory and another that lists all columns which appear more than once across those .csv's
+#' @description `get_columns_from_files()` produces two dataframes: one that lists all columns from within     each of the .csv's in a specified working directory and another that lists all columns which appear more    than once across those .csv's.
 #'
-#' @details `get_columns_from_files()` can be used as an initial step in data processing, particularly if the goal of the data processing is to merge multiple files into one, larger flat file. The function allows the user to preview and list out what columns exist within any given number of .csv's in a format that is more digestible. If the user chooses, they can also find commonalities across the columns in those files, highlighting any columns that serve as key variables upon which dataframes can then be joined.
+#' @details `get_columns_from_files()` can be used as an initial step in data processing, particularly if      the goal of the data processing is to merge multiple files into one, larger flat file. The function         allows the user to preview and list out what columns exist within any given number of .csv's in a format    that is more digestible. If the user chooses, they can also find commonalities across the columns in        those files, highlighting any columns that serve as key variables upon which dataframes can then be         joined.
 #'
-#'@param wd String. Your specified working directory; points to the directory where the .csv files you want to work with live. I.e., "getwd()", "setwd("./data examples")"
+#' @param wd String. Your specified working directory; points to the directory where the .csv files you want    to work with live. I.e., `getwd()`, `setwd("./data examples")`.
 #'
-#'@param common Logical. Defaults to FALSE. In default status, the function returns a full dataframe of all columns within each of the files in your working directory. If set to TRUE, the function returns a single list of columns that occur more than once across all of your files.
+#' @param common Logical. Defaults to `FALSE`. In default status, the function returns a full dataframe of     all columns within each of the files in your working directory. If set to `TRUE`, the function returns a    single list of columns that occur more than once across all of your files.
 #'
-#'@return one of two dataframes. If common set to FALSE, returns a dataframe of all columns in the files within your working directory. If common set to TRUE, returns a list of common columns across your files.
+#' @return one of two dataframes. If common set to `FALSE`, returns a dataframe of all columns in the files    within your working directory. If common set to `TRUE`, returns a list of common columns across your        files.
 #'
-#'@export
+#' @export
 #'
-#'@examples
+#' @examples
 #' \dontrun{
 #' get_columns_from_files(wd = setwd("./data examples"), common = TRUE)
 #' }
