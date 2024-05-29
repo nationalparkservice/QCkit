@@ -1,3 +1,7 @@
+# QCkit v0.1.8
+2024-05-29
+* New funcion `get_columns_from_files` added. Function produces either 1) a dataframe of all column names within your files or 2) a list of common columns across your files. 
+
 # QCkit v0.1.7
 2024-04-17
 * Major updates to the DRR template including: using snake case instead of camel case for variables; updating Table 3 to only display filenames only when there are multiple files, fixed multiple issues with footnotes, added citations to NPSdataverse packages, added a section that prints the R code needed to download the data package and load it in to R.
