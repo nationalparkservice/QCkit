@@ -353,6 +353,11 @@ fuzz_location <- function(lat,
 #' of your dataframe. Note that some parameter names are not in snake_case but
 #' instead reflect DarwinCore naming conventions.
 #'
+#' This function uses tidy evaluation (i.e. you can provide column name arguments
+#' as strings or you can leave them unquoted). If you wish to store column names
+#' as strings in variables, you must enclose the variables in double curly braces
+#' when you pass them into the function. See code examples below.
+#'
 #' @param df - The dataframe with UTM coordinates you would like to convert.
 #' Input the name of your dataframe.
 #' @param EastingCol - The name of your Easting UTM column. You may input the name
@@ -372,6 +377,7 @@ fuzz_location <- function(lat,
 #' @examples
 #' \dontrun{
 #'
+#' # Using magrittr pipe (%>%) and unquoted column names
 #' my_dataframe %>%
 #' generate_ll_from_utm(
 #'   EastingCol = UTM_X,
@@ -380,6 +386,7 @@ fuzz_location <- function(lat,
 #'   DatumCol = Datum
 #' )
 #'
+#' # Providing column names as strings (in quotes)
 #' generate_ll_from_utm(
 #'   df = mydataframe,
 #'   EastingCol = "EastingCoords",
@@ -388,6 +395,23 @@ fuzz_location <- function(lat,
 #'   DatumCol = "datum",
 #'   latlong_datum = "WGS84"
 #' )
+#'
+#' # Column names stored as strings in separate variables
+#' easting <- "EastingCoords"
+#' northing <- "NorthingCoords"
+#' zonecol <- "zone"
+#' datumcol <- "datum"
+#' latlong_dat <- "WGS84"
+#'
+#' generate_ll_from_utm(
+#'   df = mydataframe,
+#'   EastingCol = {{easting}},  # enclose variables that store column names in {{}}
+#'   NorthingCol = {{northing}},
+#'   ZoneCol = {{zonecol}},
+#'   DatumCol = {{datumcol}},
+#'   latlong_datum = latlong_dat  # this isn't a column name so it doesn't need {{}}
+#' )
+#'
 #' }
 generate_ll_from_utm <- function(df,
                               EastingCol,
