@@ -428,12 +428,12 @@ generate_ll_from_utm <- function(df,
     dplyr::select(`_UTMJOINCOL`, {{EastingCol}}, {{NorthingCol}}, {{ZoneCol}}, {{DatumCol}})
 
   withr::with_envvar(c("PROJ_LIB" = ""), {  # This is a fix for the proj library bug in R (see pinned post "sf::st_read() of geojson not getting CRS" in IMData General Discussion).
-    # filter out rows that are missing UTM, zone, or datum
-    coord_df <- coord_df %>%
-      dplyr::filter(!is.na({{EastingCol}}) &
-                      !is.na({{NorthingCol}}) &
-                      !is.na({{ZoneCol}}) &
-                      !is.na({{DatumCol}}))
+      coord_df <- coord_df %>%
+        dplyr::filter(!is.na(!!rlang::ensym(EastingCol)) &
+                        !is.na(!!rlang::ensym(NorthingCol)) &
+                        !is.na(!!rlang::ensym(ZoneCol)) &
+                        !is.na(!!rlang::ensym(DatumCol)))
+
 
     na_row_count <- nrow(df) - nrow(coord_df)
     if (na_row_count > 0) {
