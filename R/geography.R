@@ -425,7 +425,11 @@ generate_ll_from_utm <- function(df,
 
   # Separate df with just coordinates. We'll filter out any NA rows.
   coord_df <- df %>%
-    dplyr::select(`_UTMJOINCOL`, {{EastingCol}}, {{NorthingCol}}, {{ZoneCol}}, {{DatumCol}})
+    dplyr::select(`_UTMJOINCOL`,
+                  {{EastingCol}},
+                  {{NorthingCol}},
+                  {{ZoneCol}},
+                  {{DatumCol}})
 
   withr::with_envvar(c("PROJ_LIB" = ""), {  # This is a fix for the proj library bug in R (see pinned post "sf::st_read() of geojson not getting CRS" in IMData General Discussion).
       coord_df <- coord_df %>%
@@ -437,14 +441,19 @@ generate_ll_from_utm <- function(df,
 
     na_row_count <- nrow(df) - nrow(coord_df)
     if (na_row_count > 0) {
-      warning(paste(na_row_count, "rows are missing UTM coordinates, zone, and/or datum information."), call. = FALSE)
+      warning(paste(
+        na_row_count,
+        "rows are missing UTM coordinates, zone, and/or datum information."),
+        call. = FALSE)
     }
 
     ## Set up CRS for lat/long data
-    latlong_CRS <- sp::CRS(glue::glue("+proj=longlat +datum={latlong_datum}"))  # CRS for our new lat/long values
+    latlong_CRS <- sp::CRS(glue::glue("+proj=longlat +datum={latlong_datum}"))
+    # CRS for our new lat/long values
 
     # Loop through each datum and zone in the data
-    zones_datums <- dplyr::select(coord_df, {{ZoneCol}}, {{DatumCol}}) %>%  # Get vector of zones present in data
+    zones_datums <- dplyr::select(coord_df, {{ZoneCol}}, {{DatumCol}}) %>%
+      # Get vector of zones present in data
       unique()
 
     new_coords <- sapply(1:nrow(zones_datums), function(zone_datum_index) {
@@ -454,7 +463,8 @@ generate_ll_from_utm <- function(df,
         zone_num <- current_zone
         north_south <- ""
       } else {
-        zone_num <- stringr::str_extract(current_zone, "\\d+")  # sp::CRS wants zone number only, e.g. 11, not 11N
+        zone_num <- stringr::str_extract(current_zone, "\\d+")
+        # sp::CRS wants zone number only, e.g. 11, not 11N
         zone_letter <- tolower(stringr::str_extract(current_zone, "[A-Za-z]"))
         if (!is.na(zone_letter) && zone_letter == "s") {
           north_south <- " +south"
@@ -469,17 +479,21 @@ generate_ll_from_utm <- function(df,
       filtered_df <- coord_df %>%
         dplyr::filter((!!rlang::ensym(ZoneCol) == current_zone & !!rlang::ensym(DatumCol) == current_datum))
       sp_utm <- sp::SpatialPoints(filtered_df %>%
-                                    dplyr::select({{EastingCol}}, {{NorthingCol}}) %>%
+                                    dplyr::select({{EastingCol}},
+                                                  {{NorthingCol}}) %>%
                                     as.matrix(),
-                                  proj4string = utm_CRS)  # Convert UTM columns into a SpatialPoints object
-      sp_geo <- sp::spTransform(sp_utm, latlong_CRS) %>%  # Transform UTM to Lat/Long
+                                  proj4string = utm_CRS)
+      # Convert UTM columns into a SpatialPoints object
+      sp_geo <- sp::spTransform(sp_utm, latlong_CRS) %>%
+        # Transform UTM to Lat/Long
         tibble::as_tibble()
 
       # Add lat/long columns back into the original dataframe
       latlong <- tibble::tibble(`_UTMJOINCOL` = filtered_df$`_UTMJOINCOL`,
                                 decimalLatitude = sp_geo[[2]],
                                 decimalLongitude = sp_geo[[1]],
-                                LatLong_CRS = latlong_CRS@projargs)  # Store the coordinate reference system PROJ string in the dataframe
+                                LatLong_CRS = latlong_CRS@projargs)
+      # Store the coordinate reference system PROJ string in the dataframe
 
 
       return(latlong)

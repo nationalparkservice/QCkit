@@ -1,3 +1,10 @@
+# QCkit v0.1.8 (not yet released)
+
+2024-06-27
+* bug fixes for `generate_ll_from_utm()`
+* add function `remove_empty_tables()` (and associated unit tests)
+* update documentation for `replace blanks()` to indicate it can replace blanks with more than just NA
+
 # QCkit v0.1.7
 2024-05-08
 * Updated the `replace_blanks()` function to accept any missing value code a user inputs (but it still defaults to NA).
