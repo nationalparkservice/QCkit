@@ -67,10 +67,16 @@ is not defined, the function will default to "NAD83". If there are missing coord
 your dataframe they will be preserved, however they will be moved to the end
 of your dataframe. Note that some parameter names are not in snake_case but
 instead reflect DarwinCore naming conventions.
+
+This function uses tidy evaluation (i.e. you can provide column name arguments
+as strings or you can leave them unquoted). If you wish to store column names
+as strings in variables, you must enclose the variables in double curly braces
+when you pass them into the function. See code examples below.
 }
 \examples{
 \dontrun{
 
+# Using magrittr pipe (\%>\%) and unquoted column names
 my_dataframe \%>\%
 generate_ll_from_utm(
   EastingCol = UTM_X,
@@ -79,6 +85,7 @@ generate_ll_from_utm(
   DatumCol = Datum
 )
 
+# Providing column names as strings (in quotes)
 generate_ll_from_utm(
   df = mydataframe,
   EastingCol = "EastingCoords",
@@ -87,5 +94,22 @@ generate_ll_from_utm(
   DatumCol = "datum",
   latlong_datum = "WGS84"
 )
+
+# Column names stored as strings in separate variables
+easting <- "EastingCoords"
+northing <- "NorthingCoords"
+zonecol <- "zone"
+datumcol <- "datum"
+latlong_dat <- "WGS84"
+
+generate_ll_from_utm(
+  df = mydataframe,
+  EastingCol = {{easting}},  # enclose variables that store column names in {{}}
+  NorthingCol = {{northing}},
+  ZoneCol = {{zonecol}},
+  DatumCol = {{datumcol}},
+  latlong_datum = latlong_dat  # this isn't a column name so it doesn't need {{}}
+)
+
 }
 }

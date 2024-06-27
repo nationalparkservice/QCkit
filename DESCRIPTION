@@ -59,7 +59,9 @@ Imports:
     tidyselect,
     glue,
     sp,
-    withr
+    withr,
+    cli,
+    purrr
 RoxygenNote: 7.3.1
 Suggests: 
     knitr,
