@@ -64,12 +64,12 @@ convert_datetime_format <- function(eml_format_string, convert_z = FALSE) {
     stringr::str_replace_all("MMM", "%b") %>%
     stringr::str_replace_all("MM", "%m") %>%
     stringr::str_replace_all("DD", "%d") %>%
-    stringr::str_replace_all("(?<![+-])((hh)|(HH))", "%H") %>%
-    stringr::str_replace_all("mm", "%M") %>%
+    stringr::str_replace_all("(?<![Hh+-])((hh)|(HH))", "%H") %>%
+    stringr::str_replace_all("(?<!([+-]hh:{0,1}))mm", "%M") %>%
     stringr::str_replace_all("(ss)|(SS)", "%S") %>%
     stringr::str_replace_all("(?<!%)M", "%m") %>%  # Replace M with %m, but leave %M alone
     stringr::str_replace_all("D", "%d") %>%
-    stringr::str_replace_all("[+-][Hh]{1,2}:?[Hh]{0,2}(?=$)", "%z")  # Replace UTC offset format string (e.g. -hh, -hhhh, -hh:hh) with %z. Note that R seems to only parse UTC offsets when in the format +/-hhhh.
+    stringr::str_replace_all("[+-][Hh]{1,2}:?[HhMm]{0,2}(?=$)", "%z")  # Replace UTC offset format string (e.g. -hh, -hhhh, -hh:hh) with %z. Note that R seems to only parse UTC offsets when in the format +/-hhhh.
   #stringr::str_replace_all("T", " ")
 
   if (convert_z) {
