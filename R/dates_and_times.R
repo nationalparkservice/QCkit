@@ -45,9 +45,9 @@ fix_utc_offset <- function(datetime_strings) {
 
 #' Convert EML date/time format string to one that R can parse
 #'
-#' @details `convert_datetime_format()` is not a sophisticated function. If the EML format string is not valid, it will happily and without complaint return an R format string that will break your code. You have been warned.  Note that UTC offset formats using a colon or only two digits will be parsed by this function, but if parsing datetime values from strings, you will also need to use `fix_utc_offset` to change the UTC offsets to the +/-hhhh format that R can read.
+#' @details `convert_datetime_format()` is not a sophisticated function. If the EML format string is not valid, it will happily and without complaint return an R format string that will break your code. You have been warned.  Note that UTC offset formats using a colon or only two digits will be parsed by this function, but if parsing datetime values from strings, you will also need to use `fix_utc_offset` to change the UTC offsets to the +/-hhmm format that R can read.
 #'
-#' @param eml_format_string A character vector of EML date/time format strings. This function understands the following codes: YYYY = four digit year, YY = two digit year, MMM = three letter month abbrev., MM = two digit month, DD = two digit day, hh or HH = 24 hour time, mm = minutes, ss or SS = seconds, +/-hhhh or +/-HHHH = UTC offset.
+#' @param eml_format_string A character vector of EML date/time format strings. This function understands the following codes: YYYY = four digit year, YY = two digit year, MMM = three letter month abbrev., MM = two digit month, DD = two digit day, hh or HH = 24 hour time, mm = minutes, ss or SS = seconds, +/-hhmm, +/-hh:mm, or +/-hh = UTC offset.
 #' @param convert_z Should a "Z" at the end of the format string (indicating UTC) be replaced by a "%z"? Only set to `TRUE` if you plan to use `fix_utc_offset` to change "Z" in datetime strings to "+0000".
 #'
 #' @return A character vector of date/time format strings that can be parsed by `readr` or `strptime`.
