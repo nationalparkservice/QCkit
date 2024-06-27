@@ -11,9 +11,9 @@
 #'                   item_b = mtcars,
 #'                   item_c = iris)
 #'
-#' tidy_list <- removeEmptyTables(test_list)
+#' tidy_list <- remove_empty_tables(test_list)
 #'
-removeEmptyTables <- function(df_list) {
+remove_empty_tables <- function(df_list) {
   non_empty_list <- purrr::compact(df_list)  # Remove empty dataframes
   tables_removed <- setdiff(names(df_list), names(non_empty_list))  # Get names of removed dataframes
 
