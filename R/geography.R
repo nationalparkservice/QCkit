@@ -103,7 +103,7 @@ return(in_park)
 #' Retrieve the polygon information for the park unit from NPS REST services
 #'
 #' @description `get_park_polygon()` retrieves a geoJSON string for a polygon of
-#'a park unit. This is not the official boundary.
+#'a park unit. This is not the official boundary. Note that the REST API call returns the default "convexHull". This is will work better or worse for some parks, depending on the park shape/geography/number of disjunct areas.
 #' #'
 #' @param unit_code is the four-character unit code as designated by NPS.
 #'
@@ -114,7 +114,7 @@ return(in_park)
 #' }
 get_park_polygon <- function(unit_code) {
   # get geography from NPS Rest Services
-  units_url <- paste0("https://irmaservices.nps.gov/v2/rest/unit/",
+  units_url <- paste0("https://irmaservices.nps.gov/Unit/v2/api/",
                       unit_code,
                       "/geography")
   xml <- httr::content(httr::GET(units_url))

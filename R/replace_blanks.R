@@ -69,7 +69,7 @@ replace_blanks <- function(directory = here::here(), missing_val_code = NA) {
   #extract just the file name
   my_path <- basename(my_path)
 
-  #give each dataframe a name basd on the filename where it originated
+  #give each dataframe a name based on the filename where it originated
   names(my_data) <- gsub(".csv", "", my_path)
 
   #replace all <NA> with the designated missing value code.
