@@ -1,5 +1,7 @@
 # QCkit v0.1.8 (not yet released)
 
+2024-06-28
+* Updated `get_park_polygon()` to use the new API (had been using a legacy API). Added documentation to specify that the function is getting the convexhull for the park, which may not work particularly well for some parks.
 2024-06-27
 * bug fixes for `generate_ll_from_utm()`
 * add function `remove_empty_tables()` (and associated unit tests)
