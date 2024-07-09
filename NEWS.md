@@ -1,5 +1,8 @@
 # QCkit v0.1.8 (not yet released)
 
+2024-07-09
+* Added function `get_user_email()`, which accesses NPS active directory via a powershell function to return the user's email address. Probably won't work for non-NPS users and probably won't work for non-windows users.
+
 2024-06-28
 * Updated `get_park_polygon()` to use the new API (had been using a legacy API). Added documentation to specify that the function is getting the convexhull for the park, which may not work particularly well for some parks.
 2024-06-27
