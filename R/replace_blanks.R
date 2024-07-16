@@ -113,6 +113,8 @@ replace_blanks <- function(directory = here::here(), missing_val_code = NA) {
 #' original file. If it is important to keep a copy of the original file, make
 #' a copy prior to running the function.
 #'
+#' WARNING: this function will replace any blank cells in your data with NA!
+#'
 #' @details Blank cells will be treated as NA.
 #'
 #' @param file_name String. The name of the file to inspect
