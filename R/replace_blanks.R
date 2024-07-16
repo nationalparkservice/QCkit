@@ -139,7 +139,8 @@ document_missing_values <- function(file_name,
                                              replace_value = NA) {
 
   #read in a dataframe:
-  df <- readr::read_csv(paste0(directory, "/", file_name))
+  df <- readr::read_csv(paste0(directory, "/", file_name),
+                        show_col_types = FALSE)
   #generate list of missing values
   missing_val_codes <- append(missing_val_codes, NA)
   missing_val_codes <- unique(missing_val_codes)
