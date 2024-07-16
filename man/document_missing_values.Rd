@@ -43,7 +43,7 @@ original file. If it is important to keep a copy of the original file, make
 a copy prior to running the function.
 }
 \details{
-blank cells will be treated as NA.
+Blank cells will be treated as NA.
 }
 \examples{
 \dontrun{
