@@ -113,11 +113,11 @@ a copy prior to running the function.</p>
 
 
 <dt>colname</dt>
-<dd><p>lifecycle::badge("experimental") String. The columns to inspect.</p></dd>
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="figures/lifecycle-experimental.svg" alt="[Experimental]"></a> String. The columns to inspect. CURRENTLY ONLY WORKS AS SET TO DEFAULT "NA".</p></dd>
 
 
 <dt>missing_val_codes</dt>
-<dd><p>String the missing value code or codes to search for.</p></dd>
+<dd><p>List. A list of strings containing the missing value code or codes to search for.</p></dd>
 
 
 <dt>replace_value</dt>
@@ -140,7 +140,7 @@ a copy prior to running the function.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="fu">document_missing_values</span><span class="op">(</span>file_name <span class="op">=</span> <span class="st">"mydata.csv"</span>,</span></span>
 <span class="r-in"><span>                        directory <span class="op">=</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                        colname <span class="op">=</span> <span class="cn">NA</span>,</span></span>
+<span class="r-in"><span>                        colname <span class="op">=</span> <span class="cn">NA</span>, <span class="co">#do not change during function development</span></span></span>
 <span class="r-in"><span>                        missing_val_codes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"missing"</span>, <span class="st">"blank"</span>, <span class="st">"no data"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                        replace_value <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span></span>
 <span class="r-in"><span>                        <span class="op">}</span></span></span>

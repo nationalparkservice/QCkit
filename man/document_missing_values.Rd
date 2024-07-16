@@ -17,9 +17,9 @@ document_missing_values(
 
 \item{directory}{String. Location of file to read/write. Defaults to the current working directory.}
 
-\item{colname}{lifecycle::badge("experimental") String. The columns to inspect.}
+\item{colname}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} String. The columns to inspect. CURRENTLY ONLY WORKS AS SET TO DEFAULT "NA".}
 
-\item{missing_val_codes}{String the missing value code or codes to search for.}
+\item{missing_val_codes}{List. A list of strings containing the missing value code or codes to search for.}
 
 \item{replace_value}{String. The value (singular) to replace multiple missing values with. Defaults to NA.}
 }
@@ -49,7 +49,7 @@ blank cells will be treated as NA.
 \dontrun{
 document_missing_values(file_name = "mydata.csv",
                         directory = here::here(),
-                        colname = NA,
+                        colname = NA, #do not change during function development
                         missing_val_codes = c("missing", "blank", "no data"),
                         replace_value = NA)
                         }
