@@ -41,6 +41,8 @@ the various/multiple reasons for why data is absent in the original column.
 The function will then write the new dataframe to a file, overwriting the
 original file. If it is important to keep a copy of the original file, make
 a copy prior to running the function.
+
+WARNING: this function will replace any blank cells in your data with NA!
 }
 \details{
 Blank cells will be treated as NA.
