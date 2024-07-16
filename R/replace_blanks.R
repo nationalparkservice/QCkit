@@ -98,7 +98,8 @@ replace_blanks <- function(directory = here::here(), missing_val_code = NA) {
 #' Handles multiple missing values
 #'
 #' @description
-#' lifecycle::badge("experimental")
+#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("questioning")`
 #' Given a file name (.csv only) and path, the function will search the
 #' columns for any that contain multiple user-specified missing value codes.
 #' For any column with multiple missing value codes, all the missing values
@@ -125,15 +126,10 @@ replace_blanks <- function(directory = here::here(), missing_val_code = NA) {
 #'
 #' @examples
 #' \dontrun{
-#' # search all columns in "mydata.csv" for any columns that have multiple
-#' # missing values (where multiple missing values include, "missing", "blank",
-#' # "no data", NA, and a blank cell ("")). Replace those values with NA. Make
-#' # a new column with the appropriate missing value codes listed as categorical
-#' # variables.
 #' document_missing_values(file_name = "mydata.csv",
 #'                         directory = here::here(),
 #'                         colname = NA,
-#'                         missing_val_codes = "missing", "blank", "no data"),
+#'                         missing_val_codes = c("missing", "blank", "no data"),
 #'                         replace_value = NA)
 #'                         }
 document_missing_values <- function(file_name,
