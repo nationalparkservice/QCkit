@@ -49,7 +49,6 @@ Imports:
     stringr,
     base,
     readr,
-    lifecycle,
     huxtable,
     crayon,
     data.table,
@@ -61,7 +60,8 @@ Imports:
     sp,
     withr,
     cli,
-    purrr
+    purrr,
+    lifecycle
 RoxygenNote: 7.3.1
 Suggests: 
     knitr,
