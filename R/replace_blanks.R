@@ -113,12 +113,12 @@ replace_blanks <- function(directory = here::here(), missing_val_code = NA) {
 #' original file. If it is important to keep a copy of the original file, make
 #' a copy prior to running the function.
 #'
-#' @details blank cells will be treated as NA.
+#' @details Blank cells will be treated as NA.
 #'
 #' @param file_name String. The name of the file to inspect
 #' @param directory String. Location of file to read/write. Defaults to the current working directory.
-#' @param colname lifecycle::badge("experimental") String. The columns to inspect.
-#' @param missing_val_codes String the missing value code or codes to search for.
+#' @param colname `r lifecycle::badge("experimental")` String. The columns to inspect. CURRENTLY ONLY WORKS AS SET TO DEFAULT "NA".
+#' @param missing_val_codes List. A list of strings containing the missing value code or codes to search for.
 #' @param replace_value String. The value (singular) to replace multiple missing values with. Defaults to NA.
 #'
 #' @return writes a new dataframe to file. Return invisible.
@@ -128,7 +128,7 @@ replace_blanks <- function(directory = here::here(), missing_val_code = NA) {
 #' \dontrun{
 #' document_missing_values(file_name = "mydata.csv",
 #'                         directory = here::here(),
-#'                         colname = NA,
+#'                         colname = NA, #do not change during function development
 #'                         missing_val_codes = c("missing", "blank", "no data"),
 #'                         replace_value = NA)
 #'                         }
