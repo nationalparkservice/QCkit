@@ -93,3 +93,87 @@ replace_blanks <- function(directory = here::here(), missing_val_code = NA) {
   }
   return(invisible())
 }
+
+
+#' Handles multiple missing values
+#'
+#' @description
+#' lifecycle::badge("experimental")
+#' Given a file name (.csv only) and path, the function will search the
+#' columns for any that contain multiple user-specified missing value codes.
+#' For any column with multiple missing value codes, all the missing values
+#' (including blanks) will be replaced with NA. A new column will be generated
+#' and, populated with the given missing value code from the origin column.
+#' Values that were not missing will be populated with "not_missing". The
+#' newly generate column of categorical variables can be used do describe
+#' the various/multiple reasons for why data is absent in the original column.
+#'
+#' The function will then write the new dataframe to a file, overwriting the
+#' original file. If it is important to keep a copy of the original file, make
+#' a copy prior to running the function.
+#'
+#' @details blank cells will be treated as NA.
+#'
+#' @param file_name String. The name of the file to inspect
+#' @param directory String. Location of file to read/write. Defaults to the current working directory.
+#' @param colname lifecycle::badge("experimental") String. The columns to inspect.
+#' @param missing_val_codes String the missing value code or codes to search for.
+#' @param replace_value String. The value (singular) to replace multiple missing values with. Defaults to NA.
+#'
+#' @return writes a new dataframe to file. Return invisible.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' # search all columns in "mydata.csv" for any columns that have multiple
+#' # missing values (where multiple missing values include, "missing", "blank",
+#' # "no data", NA, and a blank cell ("")). Replace those values with NA. Make
+#' # a new column with the appropriate missing value codes listed as categorical
+#' # variables.
+#' document_missing_values(file_name = "mydata.csv",
+#'                         directory = here::here(),
+#'                         colname = NA,
+#'                         missing_val_codes = "missing", "blank", "no data"),
+#'                         replace_value = NA)
+#'                         }
+document_missing_values <- function(file_name,
+                                             directory = here::here(),
+                                             colname = NA,
+                                             missing_val_codes = NA,
+                                             replace_value = NA) {
+
+  #read in a dataframe:
+  df <- readr::read_csv(paste0(directory, "/", file_name))
+  #generate list of missing values
+  missing_val_codes <- append(missing_val_codes, NA)
+  missing_val_codes <- unique(missing_val_codes)
+
+  data_names <- colnames(df)
+
+  if (is.na(colname)) {
+    y <- ncol(df)
+    for (i in 1:y) {
+      #if here are multiple missing value codes in a column:
+      if (sum(df[[data_names[i]]] %in% missing_val_codes) >
+                sum(is.na(df[[data_names[i]]]))) {
+        #generate new column of data:
+        df$x <- with(df,
+                     ifelse(df[[data_names[i]]] %in% missing_val_codes,
+                            df[[data_names[i]]], "not_missing"))
+        #replace old missing values with replacement value
+        df[[data_names[i]]] = ifelse(df[[data_names[i]]] %in%
+                                       missing_val_codes,
+                                     replace_value, df[[data_names[i]]])
+        #rename new column:
+        names(df)[names(df) == "x"] <- paste0("custom_",
+                                              data_names[i],
+                                              "_MissingValues")
+      }
+    }
+  }
+  #write the file back out:
+  readr::write_csv(df, paste0(directory, "/", file_name))
+
+  return(invisible)
+
+}
