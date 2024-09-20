@@ -49,7 +49,6 @@ globalVariables(c("any_of",
 #' This function probaby won't work for anyone outside of NPS and likely won't work for anyone who is not using a Windows machine. So build those prerequisites (NPS = FALSE) in when calling it from within other function.
 #'
 #' @return String. The user's email address.
-#' @export
 #' @keywords internal
 #' @noRd
 #'
