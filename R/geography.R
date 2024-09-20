@@ -60,6 +60,8 @@ return(in_park)
 #' @param park_units String. Or list of strings.
 #'
 #' @return sf dataframe
+#' @keywords internal
+#' @noRd
 #' @examples
 #' \dontrun{
 #' .get_unit_boundary("ROMO")

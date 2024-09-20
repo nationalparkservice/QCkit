@@ -50,6 +50,8 @@ globalVariables(c("any_of",
 #'
 #' @return String. The user's email address.
 #' @export
+#' @keywords internal
+#' @noRd
 #'
 #' @examples
 #' \dontrun{
