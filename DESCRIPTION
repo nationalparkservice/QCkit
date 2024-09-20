@@ -62,7 +62,7 @@ Imports:
     cli,
     purrr,
     lifecycle
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Suggests: 
     knitr,
     rmarkdown,
