@@ -179,7 +179,7 @@ the YAML header.
     acceptance criteria for each data quality flagged column in the same order
     as the you specified the columns.
 
--   `data_colunn_flagging`. Uses the input from `data_acceptance_criteria` to
+-   `data_column_flagging`. Uses the input from `data_acceptance_criteria` to
     generate a table summarizing the data quality flagging in the data package.
     If you set `data_acceptance_criteria` parameter `eval = FALSE`, also set
     `data_column_flagging` parameter to `eval = FALSE`. Update the first line
