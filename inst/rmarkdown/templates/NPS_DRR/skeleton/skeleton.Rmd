@@ -172,7 +172,7 @@ if(length(seq_along(unique_authors$author_names)) == 1){
     }
   }
    cat("#### ", curr$author_names, sep="")
-        if (is.na(curr$author_orcidD)) {
+        if (is.na(curr$author_orcid)) {
         }
         if (!is.na(curr$author_orcid)) {
           orc <- paste0(" ", curr$author_orcid, "")
@@ -220,7 +220,7 @@ if(length(seq_along(unique_authors$author_names)) > 1){
       cat("#### ", curr$author_names, " ", sep="")
         if (is.na(curr$author_orcid)) {
         }
-        if (!is.na(curr$author_orcidD)) {
+        if (!is.na(curr$author_orcid)) {
           orc <- paste0(" ", curr$author_orcid, " ")
           cat({{ orc }})
         }
@@ -258,7 +258,7 @@ if(length(seq_along(unique_authors$author_names)) > 1){
     }
     
     # if IS the Last author :
-    if(i == length(seq_along(unique_authors$author_namess))){
+    if(i == length(seq_along(unique_authors$author_names))){
       cat(curr$author_names, sep="")
         if (is.na(curr$author_orcid)) {
         }
