@@ -1,5 +1,8 @@
-# QCkit v0.1.8 (not yet released)
+# QCkit v1.0.1 (development version)
+2025-02-21
+* Add CONTRIBUTING.md file
 
+# QCkit v1.0.0 
 2024-07-16
 * Added experimental function `document_missing_values()`, which searches a file for multiple missing value codes, replaces them all with NA, and generates a new column with the missing value codes so that they can be properly documented in EML. This is a work-around for the fact that there is currently not a good way to get multiple missing value codes in a single column via EMLassemblyline. This function is still under development; expect substantial changes an improvements up to and including removing the function entirely.
 
