@@ -1,6 +1,9 @@
 # QCkit v1.0.1 (development version)
+2025-02-25
+* Updated `CONTRIBUTING.md`.
+
 2025-02-21
-* Add CONTRIBUTING.md file
+* Add `CONTRIBUTING.md` file
 
 # QCkit v1.0.0 
 2024-07-16
