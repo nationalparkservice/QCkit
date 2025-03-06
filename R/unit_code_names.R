@@ -21,7 +21,7 @@ unit_codes_to_names <- function(unit_code) {
   for (i in 1:length(seq_along(unit_code))) {
     #generate unit code specific URL for API request
     url <- paste0("https://irmaservices.nps.gov/Unit/v2/api/",
-                  unit_codest[i])
+                  unit_code[i])
     #request information from IRMA API
     req <- httr::GET(url)
     #get request status
@@ -40,7 +40,7 @@ unit_codes_to_names <- function(unit_code) {
     unit_names <- append(unit_names, park_name)
   }
   #turn the list into a dataframe (make it easier to add to a data file)
-  unit_names(data.frame(unit_names))
+  unit_names <- data.frame(unit_names)
   #return the data frame to the user
   return(unit_names)
 }
