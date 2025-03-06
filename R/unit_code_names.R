@@ -11,6 +11,7 @@
 #' \dontrun{
 #'  unit_codes_to_names("ROMO")
 #'  unit_codes_to_names(c("ROMO", "GRYN"))
+#'  }
 unit_codes_to_names <- function(unit_code) {
 
   #set up object to store full park names in
