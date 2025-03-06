@@ -1,4 +1,6 @@
 # QCkit v1.0.1 (development version)
+2025-03-06
+* Begin development of `unit_codes_to_names` function to translate NPS unit codes into full unit (park) names
 2025-02-25
 * Updated `CONTRIBUTING.md`.
 
