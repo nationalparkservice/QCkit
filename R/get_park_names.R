@@ -12,6 +12,7 @@
 #' @export
 #' @examples
 #' \dontrun{
+#'  get_park_names(exampleDF)
 #'  get_park_names(exampleDF, 2)
 #'  get_park_names(exampleDF, "parkCode")
 #'  }
