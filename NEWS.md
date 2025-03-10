@@ -1,4 +1,7 @@
 # QCkit v1.0.1 (development version)
+2025-03-10
+* Updated license to OSI-approved "Zero-Clause BSD" in support of JOSS submission.
+
 2025-03-06
 * Begin development of `unit_codes_to_names` function to translate NPS unit codes into full unit (park) names
 * Add basic unit test for `unit_codes_to_names`
