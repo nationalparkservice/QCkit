@@ -1,4 +1,7 @@
 # QCkit v1.0.1 (development version)
+2025-03-10
+* Added function `get_park_names()`, which adds a park name column to a data frame that has a unit code column, using a public IRMA API.
+
 2025-02-25
 * Updated `CONTRIBUTING.md`.
 
