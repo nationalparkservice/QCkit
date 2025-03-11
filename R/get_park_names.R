@@ -19,16 +19,14 @@
 #' get_park_names(exampleDF, "parkCode")
 #' get_park_names(exampleDF, "parkCode", no_names = "No park name found", many_names = "Multiple park names found")
 #' }
-
 get_park_names <- function(df,
                            unit_column = "Park_Code",
                            no_names = NA_character_,
                            many_names = NA_character_) {
-
-  #vector containing unit codes
+  # vector containing unit codes
   unit_code <- df[[unit_column]]
 
-  #vector that will get populated with unit names
+  # vector that will get populated with unit names
   unit_names <- NULL
 
   # vector that will get populated with codes with no corresponding unit names
@@ -37,21 +35,23 @@ get_park_names <- function(df,
   # vector that will get populated with codes with multiple corresponding unit names
   many_unit_names <- NULL
 
-  #copied from Rob's function
+  # copied from Rob's function
   for (i in 1:length(unit_code)) {
-    #generate unit code specific URL for API request
-    url <- paste0("https://irmaservices.nps.gov/Unit/v2/api/",
-                  unit_code[i])
-    #request information from IRMA API
+    # generate unit code specific URL for API request
+    url <- paste0(
+      "https://irmaservices.nps.gov/Unit/v2/api/",
+      unit_code[i]
+    )
+    # request information from IRMA API
     req <- httr::GET(url)
-    #get request status
+    # get request status
     status_code <- httr::stop_for_status(req)$status_code
-    #if API call fails, alert user and remind them to log on to VPN:
+    # if API call fails, alert user and remind them to log on to VPN:
     if (!status_code == 200) {
       stop("IRMA connection failed.")
     }
 
-    #translate API result into something more useful
+    # translate API result into something more useful
     ref_data <- jsonlite::fromJSON(httr::content(req, "text"))
 
     # if ref_data list is empty (no corresponding park name) assign park_name to no_names and add unit code to no_unit_names
@@ -67,7 +67,7 @@ get_park_names <- function(df,
       park_name <- ref_data$FullName
     }
 
-    #add the newest full unit (park) name to the growing list of names
+    # add the newest full unit (park) name to the growing list of names
     unit_names <- append(unit_names, park_name)
   }
 
