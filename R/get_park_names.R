@@ -14,9 +14,11 @@
 #' @export
 #' @examples
 #' \dontrun{
-#'  get_park_names(exampleDF, 2)
-#'  get_park_names(exampleDF, "parkCode")
-#'  }
+#' get_park_names(exampleDF)
+#' get_park_names(exampleDF, 2)
+#' get_park_names(exampleDF, "parkCode")
+#' get_park_names(exampleDF, "parkCode", no_names = "No park name found", many_names = "Multiple park names found")
+#' }
 
 get_park_names <- function(df, unit_column) {
 
