@@ -54,15 +54,15 @@ get_park_names <- function(df, unit_column = "Park_Code", no_names = NA_characte
     # translate API result into something more useful
     ref_data <- jsonlite::fromJSON(httr::content(req, "text"))
 
-    # if ref_data list is empty (no corresponding park name) assign park_name to NA and add unit code to na list
-    # else if ref_data corresponds to more than one park name, assign park_name to NA and add unit code to na list
+    # if ref_data list is empty (no corresponding park name) assign park_name to no_names and add unit code to no_unit_names
+    # else if ref_data corresponds to more than one park name, assign park_name to many_names and add unit code to many_unit_names
     # else assign park name to the full unit (park) name
     if (length(ref_data) == 0) {
-      park_name <- NA_character_
-      unit_codes_na <- append(unit_codes_na, unit_code[i])
-    } else if (length(ref_data[[1]]) != 1) {
-      park_name <- NA_character_
-      unit_codes_na <- append(unit_codes_na, unit_code[i])
+      park_name <- no_names
+      no_unit_names <- append(no_unit_names, unit_code[i])
+    } else if (nrow(ref_data) > 1) {
+      park_name <- many_names
+      many_unit_names <- append(many_unit_names, unit_code[i])
     } else {
       park_name <- ref_data$FullName
     }
@@ -73,14 +73,19 @@ get_park_names <- function(df, unit_column = "Park_Code", no_names = NA_characte
 
   # create new dataframe with unit name column
   df2 <- df %>%
-    mutate(parkName = unit_names) %>%
-    relocate(parkName, .after = unit_column)
+    dplyr::mutate(parkName = unit_names, .after = any_of(unit_column))
 
-  # warning message for park codes that weren't found
-  if (length(unit_codes_na > 0)) {
-    unit_codes_na <- as.character(unique(unit_codes_na))
-    unit_codes_str <- paste(unit_codes_na, collapse = ", ")
+  # warning message for park codes that resolved to no names
+  if (length(no_unit_names > 0)) {
+    no_unit_names <- as.character(unique(no_unit_names))
+    unit_codes_str <- paste(no_unit_names, collapse = ", ")
     print(paste("The following unit codes were not found:", unit_codes_str))
+  }
+  # warning message for park codes that resolved to multiple names
+  if (length(many_unit_names > 0)) {
+    many_unit_names <- as.character(unique(many_unit_names))
+    unit_codes_str_many <- paste(many_unit_names, collapse = ", ")
+    print(paste("The following unit codes resolved to multiple park names:", unit_codes_str_many))
   }
 
   return(df2)
