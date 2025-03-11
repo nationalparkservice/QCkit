@@ -81,14 +81,14 @@ get_park_names <- function(df,
   if (length(no_unit_names > 0)) {
     no_unit_names <- as.character(unique(no_unit_names))
     unit_codes_str <- paste(no_unit_names, collapse = ", ")
-    print(paste("The following unit codes were not found:", unit_codes_str))
+    message("The following unit codes were not found:", unit_codes_str)
   }
 
   # warning message for park codes that resolved to multiple names
   if (length(many_unit_names > 0)) {
     many_unit_names <- as.character(unique(many_unit_names))
     unit_codes_str_many <- paste(many_unit_names, collapse = ", ")
-    print(paste("The following unit codes resolved to multiple park names:", unit_codes_str_many))
+    message("The following unit codes resolved to multiple park names:", unit_codes_str_many)
   }
 
   return(df2)
