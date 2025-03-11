@@ -18,7 +18,9 @@
 #' get_park_names(exampleDF, 2)
 #' get_park_names(exampleDF, "parkCode")
 #' get_park_names(exampleDF, "parkCode", no_names = "No park name found", many_names = "Multiple park names found")
-#' }
+
+
+
 get_park_names <- function(df,
                            unit_column = "Park_Code",
                            no_names = NA_character_,
@@ -81,6 +83,7 @@ get_park_names <- function(df,
     unit_codes_str <- paste(no_unit_names, collapse = ", ")
     print(paste("The following unit codes were not found:", unit_codes_str))
   }
+
   # warning message for park codes that resolved to multiple names
   if (length(many_unit_names > 0)) {
     many_unit_names <- as.character(unique(many_unit_names))
