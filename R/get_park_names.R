@@ -71,10 +71,9 @@ get_park_names <- function(df,
     unit_names <- append(unit_names, park_name)
   }
 
-  #create new dataframe with unit name column
+  # create new dataframe with unit name column
   df2 <- df %>%
-    mutate(parkName = unit_names) %>%
-    relocate(parkName, .after = unit_column)
+    dplyr::mutate(parkName = unit_names, .after = any_of(unit_column))
 
   #warning message for park codes that weren't found
   if (length(unit_codes_na > 0)) {
