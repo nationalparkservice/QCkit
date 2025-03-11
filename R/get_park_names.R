@@ -6,7 +6,10 @@
 #' If some park codes are not found, prints a statement with the list of codes it could not recognize.
 #'
 #' @param df is a dataframe with a unit code column
-#' @param unit_column defaults to `Park_Code`, is the index number (int) or the name (char) of the column containing unit codes
+#' @param unit_column defaults to `"Park_Code"`, is the index number (int) or the name (char) of the column containing unit codes
+#' @param no_names defaults to `NA_character_`, populates the parkName column for rows where the unit code resolves to no park names
+#' @param many_names defaults to `NA_character_`, populates the parkName column for rows where the unit code resolves to multiple park names
+
 #'
 #' @returns the dataframe df with a new column parkName containing the expanded unit codes
 #' @export
@@ -15,19 +18,25 @@
 #' get_park_names(exampleDF)
 #' get_park_names(exampleDF, 2)
 #' get_park_names(exampleDF, "parkCode")
+#' get_park_names(exampleDF, "parkCode", no_names = "No park name found", many_names = "Multiple park names found")
 #' }
-get_park_names <- function(df, unit_column) {
+
+
+get_park_names <- function(df, unit_column = "Park_Code", no_names = NA_character_, many_names = NA_character_) {
   # vector containing unit codes
   unit_code <- df[[unit_column]]
 
   # vector that will get populated with unit names
   unit_names <- NULL
 
-  # vector that will get populated with not found unit codes
-  unit_codes_na <- NULL
+  # vector that will get populated with codes with no corresponding unit names
+  no_unit_names <- NULL
+
+  # vector that will get populated with codes with multiple corresponding unit names
+  many_unit_names <- NULL
 
   # copied from Rob's function
-  for (i in 1:length(unit_code)) {
+  for (i in 1:length(seq_along(unit_code))) {
     # generate unit code specific URL for API request
     url <- paste0(
       "https://irmaservices.nps.gov/Unit/v2/api/",
