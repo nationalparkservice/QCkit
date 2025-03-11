@@ -20,7 +20,10 @@
 #' get_park_names(exampleDF, "parkCode", no_names = "No park name found", many_names = "Multiple park names found")
 #' }
 
-get_park_names <- function(df, unit_column) {
+get_park_names <- function(df,
+                           unit_column = "Park_Code",
+                           no_names = NA_character_,
+                           many_names = NA_character_) {
 
   #vector containing unit codes
   unit_code <- df[[unit_column]]
