@@ -7,7 +7,9 @@
 #'
 #' @param df is a dataframe with a unit code column
 #' @param unit_column defaults to `Park_Code`, is the index number (int) or the name (char) of the column containing unit codes
-#'
+#' @param no_names defaults to `NA_character_`, populates the parkName column for rows where the unit code resolves to no park names
+#' @param many_names defaults to `NA_character_`, populates the parkName column for rows where the unit code resolves to multiple park names
+
 #' @returns the dataframe df with a new column parkName containing the expanded unit codes
 #' @export
 #' @examples
