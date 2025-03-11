@@ -18,6 +18,7 @@
 #' get_park_names(exampleDF, 2)
 #' get_park_names(exampleDF, "parkCode")
 #' get_park_names(exampleDF, "parkCode", no_names = "No park name found", many_names = "Multiple park names found")
+#' }
 
 
 
