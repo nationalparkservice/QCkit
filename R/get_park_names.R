@@ -31,8 +31,11 @@ get_park_names <- function(df,
   #vector that will get populated with unit names
   unit_names <- NULL
 
-  #vector that will get populated with not found unit codes
-  unit_codes_na <- NULL
+  # vector that will get populated with codes with no corresponding unit names
+  no_unit_names <- NULL
+
+  # vector that will get populated with codes with multiple corresponding unit names
+  many_unit_names <- NULL
 
   #copied from Rob's function
   for (i in 1:length(unit_code)) {
