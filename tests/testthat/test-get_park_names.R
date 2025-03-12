@@ -23,13 +23,13 @@ test_that("returned data frame has one added column", {
 # test that bad unit codes return NAs in parkName column
 test_that("bad codes return NAs in data frame", {
   x <- get_park_names(exampleDF)
-  expect_equal(filter(x, Park_Code %in% c("R", "ROO", "ROM", "ROMOO")), filter(x, is.na(parkName)))
+  expect_equal(dplyr::filter(x, Park_Code %in% c("R", "ROO", "ROM", "ROMOO")), dplyr::filter(x, is.na(parkName)))
 })
 
 # test that bad unit codes return NAs in parkName column
 test_that("bad codes return NAs in tibble", {
   x <- get_park_names(exampleTibble)
-  expect_equal(filter(x, Park_Code %in% c("R", "ROO", "ROM", "ROMOO")), filter(x, is.na(parkName)))
+  expect_equal(dplyr::filter(x, Park_Code %in% c("R", "ROO", "ROM", "ROMOO")), dplyr::filter(x, is.na(parkName)))
 })
 
 # test message for codes not found
