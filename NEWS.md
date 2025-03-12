@@ -1,4 +1,7 @@
 # QCkit v1.0.1 (development version)
+2025-03-12
+* Updated license to MIT which is JOSS, NPS, and R compatible!
+
 2025-03-10
 * Updated license to OSI-approved "Zero-Clause BSD" in support of JOSS submission.
 
