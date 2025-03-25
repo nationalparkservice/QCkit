@@ -52,8 +52,8 @@
 #' }
 replace_blanks <- function(directory = here::here(), missing_val_code = NA) {
   #get list of .csv file names
-  my_path <- list.files(path = directory, pattern="*.csv",
-                        full.names = TRUE)
+  my_path <- list.files(path = directory, pattern="*\\.csv",
+                        full.names = TRUE, ignore.case = TRUE)
 
   #import .csvs as dataframes; each dataframe is an item in the list "my_data"
   my_data <- lapply(my_path,

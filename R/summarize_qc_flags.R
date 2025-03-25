@@ -64,7 +64,7 @@ get_custom_flags <- function(directory = here::here(),
                                         "columns")) {
 
   fileList <- list.files(path = directory, pattern = "\\.csv$",
-                         full.names = TRUE)
+                         full.names = TRUE, ignore.case = TRUE)
 
 
   dfList <- suppressMessages(lapply(fileList, readr::read_csv))
@@ -275,7 +275,7 @@ get_dp_flags <- function(directory = here::here()) {
   lifecycle::deprecate_soft(when = "0.1.1", "get_dp_flags()", "get_custom_flags()")
 
   fileList <- list.files(path = directory, pattern = "\\.csv$",
-                         full.names = TRUE)
+                         full.names = TRUE, ignore.case = TRUE)
 
   dfList <- suppressMessages(sapply(fileList, readr::read_csv))
 
@@ -378,7 +378,7 @@ get_df_flags <- function(directory = here::here()) {
 
   # get list of .csv files in the specified directory
   fileList <- list.files(path = directory, pattern = "\\.csv$",
-                         full.names = TRUE)
+                         full.names = TRUE, ignore.case = TRUE)
 
   # import all data from all files
   dfList <- suppressMessages(sapply(fileList, readr::read_csv))
@@ -487,7 +487,7 @@ get_dc_flags <- function(directory = here::here()) {
   lifecycle::deprecate_soft(when = "0.1.1", "get_dc_flags()", "get_custom_flags()")
 
   fileList <- list.files(path = directory, pattern = "\\.csv$",
-                         full.names = TRUE)
+                         full.names = TRUE, ignore.case = TRUE)
 
   dfList <- suppressMessages(sapply(fileList, readr::read_csv))
 
