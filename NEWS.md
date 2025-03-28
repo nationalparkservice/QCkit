@@ -1,4 +1,8 @@
 # QCkit v1.0.1 (development version)
+
+## 2025-03-25
+  * fix bug that caused several functions to fail to detect certain .csv files
+
 2025-03-12
 * Updated license to MIT which is JOSS, NPS, and R compatible!
 
