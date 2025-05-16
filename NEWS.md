@@ -1,7 +1,11 @@
-# QCkit v1.0.1 (development version)
+# QCkit v1.0.2 (development version)
+## 2025-05-16
+* create_datastore_script now invisibly returns the DataStore reference URL
+
+# QCkit v1.0.1
 
 ## 2025-03-25
-  * fix bug that caused several functions to fail to detect certain .csv files
+* fix bug that caused several functions to fail to detect certain .csv files
 
 2025-03-12
 * Updated license to MIT which is JOSS, NPS, and R compatible!

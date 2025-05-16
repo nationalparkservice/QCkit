@@ -18,6 +18,8 @@
 #' @param force Logical. Defaults to FALSE. In the default status the function has a number of interactive components, such as searching DataStore for similarly titled References and asking if a new Reference is really what the user wants. When set to TRUE, all interactive components are turned off and the function will proceed unless it hits an error. Setting force = TRUE may be useful for scripting purposes.
 #' @param dev Logical. Defaults to FALSE. In the default status, the function generates and populates a new draft Script reference on the DataStore production server. If set to TRUE, the draft Script reference will be generated and populated on the DataStore development server. Setting dev = TRUE may be useful for testing the function without generating excessive references on the DataStore production server.
 #'
+#' @return Invisibly returns the URL to the DataStore draft reference that was created.
+#'
 #' @export
 #'
 #' @examples
@@ -370,4 +372,6 @@ create_datastore_script <- function(owner,
     }
     cat(crayon::blue$bold(ds_ref_url))
   }
+
+  return(invisible(ds_ref_url))
 }
