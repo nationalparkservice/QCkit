@@ -23,6 +23,9 @@ create_datastore_script(
 
 \item{dev}{Logical. Defaults to FALSE. In the default status, the function generates and populates a new draft Script reference on the DataStore production server. If set to TRUE, the draft Script reference will be generated and populated on the DataStore development server. Setting dev = TRUE may be useful for testing the function without generating excessive references on the DataStore production server.}
 }
+\value{
+Invisibly returns the URL to the DataStore draft reference that was created.
+}
 \description{
 Given a GitHub owner ("nationalparkservice") and public repo ("EMLeditor"), the function uses the GitHub API to access the latest release version on GitHub and generate a corresponding draft Script reference on DataStore.
 
