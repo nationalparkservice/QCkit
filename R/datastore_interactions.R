@@ -373,5 +373,5 @@ create_datastore_script <- function(owner,
     cat(crayon::blue$bold(ds_ref_url))
   }
 
-  return(invisible(ds_ref_url))
+  invisible(ds_ref_url)
 }
