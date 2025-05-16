@@ -356,20 +356,23 @@ create_datastore_script <- function(owner,
   json <- httr::content(req, "text")
   rjson <- jsonlite::fromJSON(json)
 
+  # make reference URL
+  if (dev == TRUE) {
+    ds_ref_url <- paste0(
+      "https://irmadev.nps.gov/DataStore/Reference/Profile/",
+      ds_ref)
+  } else {
+    ds_ref_url <- paste0("https://irma.nps.gov/DataStore/Reference/Profile/",
+                         ds_ref)
+  }
+
   if (force == FALSE) {
     cat("Your reference has been set to unrestricted with no sensitivity.\n")
     cat("Your reference has been set to \"Operational\" quality.\n")
     cat("Unless you have a documented reason to do so, please leave the reference public.\n")
 
     cat("Your draft reference can be accessed at:\n")
-    if (dev == TRUE) {
-      ds_ref_url <- paste0(
-        "https://irmadev.nps.gov/DataStore/Reference/Profile/",
-        ds_ref)
-    } else {
-      ds_ref_url <- paste0("https://irma.nps.gov/DataStore/Reference/Profile/",
-                  ds_ref)
-    }
+
     cat(crayon::blue$bold(ds_ref_url))
   }
 
