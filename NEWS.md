@@ -1,4 +1,4 @@
-# QCkit v1.0.2 (development version)
+# QCkit v1.1.0
 ## 2025-05-16
 * create_datastore_script now invisibly returns the DataStore reference URL
 
