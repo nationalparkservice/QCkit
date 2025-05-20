@@ -17,6 +17,8 @@
 #' @param path String. The location where the release .zip from GitHub should be downloaded to (and uploaded from). Defaults to the working directory of the R Project (i.e. `here::here()`).
 #' @param force Logical. Defaults to FALSE. In the default status the function has a number of interactive components, such as searching DataStore for similarly titled References and asking if a new Reference is really what the user wants. When set to TRUE, all interactive components are turned off and the function will proceed unless it hits an error. Setting force = TRUE may be useful for scripting purposes.
 #' @param dev Logical. Defaults to FALSE. In the default status, the function generates and populates a new draft Script reference on the DataStore production server. If set to TRUE, the draft Script reference will be generated and populated on the DataStore development server. Setting dev = TRUE may be useful for testing the function without generating excessive references on the DataStore production server.
+#' @param chunk_size_mb The "chunk" size to break the file into for upload. If your network is slow and your uploads are failing, try decreasing this number (e.g. 0.5 or 0.25).
+#' @param retry How many times to retry uploading a file chunk if it fails on the first try.
 #'
 #' @return Invisibly returns the URL to the DataStore draft reference that was created.
 #'
@@ -30,7 +32,9 @@ create_datastore_script <- function(owner,
                                     repo,
                                     path = here::here(),
                                     force = FALSE,
-                                    dev = FALSE) {
+                                    dev = FALSE,
+                                    chunk_size_mb = 1,
+                                    retry = 1) {
   gh_url <- paste0("https://api.github.com/repos/",
                    owner,
                    "/",
@@ -91,7 +95,7 @@ create_datastore_script <- function(owner,
             new_ref_title, "?", sep = "")
         var1 <- readline(prompt = cat("\n\n1: Yes\n2: No\n\n"))
         if (var1 == 2) {
-          cat("Your have not generated a new DataStore refernce.")
+          cat("You have not generated a new DataStore reference.")
           return()
         }
       }
@@ -178,39 +182,91 @@ create_datastore_script <- function(owner,
     cat("A draft reference has been created on DataStore.\n")
   }
 
-  #check for files that are too big!
-  if (file.size(download_file_path) > 33554432) {
-    #warn for each file >32Mb
-    if (force == FALSE) {
-    cat(crayon::blue$bold(file_name),
-        " is greater than 32Mb and cannot be uploaded with this funcion.\n",
-        "please use the DataStore website to upload your files manually.",
-        sep = "")
-      }
-    stop()
-  }
-
   #use reference id to put the file:
   if (dev == TRUE) {
-    api_url <- paste0(.QC_ds_dev_api(), "Reference/", ds_ref, "/UploadFile")
+    api_url <- .QC_ds_dev_api()
   } else {
-    api_url <- paste0(.QC_ds_secure_api(), "Reference/", ds_ref, "/UploadFile")
+    api_url <- .QC_ds_secure_api()
   }
 
-  #upload the zip file
-  req <- httr::POST(
-    url = api_url,
-    httr::add_headers('Content-Type' = 'multipart/form-data'),
-    httr::authenticate(":", "", "ntlm"),
-    body = list(addressFile = httr::upload_file(download_file_path)),
-    encode = "multipart",
-    httr::progress(type = "up", con = ""))
+# ----- Begin code copied from DataStore API wrapper -----
 
-  status_code <- httr::stop_for_status(req)$status_code
-  if (status_code != 201) {
-    stop("ERROR: DataStore connection failed. Your file was not uploaded.")
+  # Get a token, which we need for a multi-chunk upload
+  upload_token <- httr2::request(api_url) |>
+    httr2::req_options(httpauth = 4L, userpwd = ":::") |>
+    httr2::req_url_path_append("Reference", ds_ref, "UploadFile", "TokenRequest") |>
+    httr2::req_body_json(list(Name = file_name),
+                         type = "application/json") |>
+    httr2::req_error(is_error = \(resp) FALSE) |>
+    httr2::req_perform()
+
+  upload_url <- upload_token$headers$Location
+  file_size_bytes <- file.size(download_file_path)
+  chunk_size_bytes <- round(chunk_size_mb * 1024 * 1024)
+  n_chunks <- ceiling(file_size_bytes/chunk_size_bytes)
+
+  # Open file connection in binary mode
+  file_con <- file(download_file_path, "rb")
+
+  # Initialize variables and progress bar to track upload progress
+  status <- NA
+  total_bytes <- 0
+  cli::cli_progress_bar("Uploading {file_name}", total = n_chunks)
+
+  # Upload one chunk at a time
+  for (i in 0:(n_chunks - 1)) {
+
+    # Starting byte and ending byte for this chunk
+    start <- i * chunk_size_bytes
+    end <- start + chunk_size_bytes - 1
+
+    # If we've exceeded the file size, reset ending byte
+    if (end >= file_size_bytes) {
+      end <- file_size_bytes - 1
+    }
+
+    n_bytes <- length(start:end)  # this should be chunk_size_bytes except on the last iteration
+    total_bytes <- total_bytes + n_bytes  # total bytes uploaded so far
+
+    # Reset the number of retries for each new chunk
+    n_retries <- retry
+
+    # Upload a single chunk. Potentially try again if it fails (retry > 0)
+    while (n_retries >= 0) {
+      upload_resp <- httr2::request(upload_url) |>
+        httr2::req_method("PUT") |>
+        httr2::req_headers(`Content-Length` = n_bytes,
+                           `Content-Range` = glue::glue("bytes {start}-{end}/{file_size_bytes}")) |>
+        httr2::req_body_raw(readBin(file_con, raw(), n = n_bytes)) |>
+        httr2::req_options(httpauth = 4L, userpwd = ":::") |>
+        httr2::req_error(is_error = \(resp) FALSE) |>
+        httr2::req_perform()
+
+      if (!httr2::resp_is_error(upload_resp) || httr2::resp_status(upload_resp) == 410) {
+        # If upload is successful, or if error is due to token problem, don't retry
+        n_retries <- -1
+      } else {
+        # Decrement retries remaining
+        n_retries <- n_retries - 1
+      }
+    }
+
+    # Throw an error if the chunk ultimately fails
+    if (httr2::resp_status(upload_resp) == 410) {
+      cli::cli_abort("Your upload token is invalid or has expired. Please try again. If the problem persists, contact the package maintainer or the DataStore helpdesk.")
+    } else if (httr2::resp_is_error(upload_resp)) {
+      cli::cli_abort("File upload was unsuccessful. Please try again. If the problem persists, contact the package maintainer or the DataStore helpdesk.")
+    }
+
+    cli::cli_progress_update()
   }
-  ds_resource_url <- req$headers$location
+  cli::cli_progress_done()
+
+  close(file_con)
+
+# ------ End code copied from DataStore API wrapper -----
+
+  ds_resource_url <- upload_resp$headers$location
     if (force == FALSE) {
       cat("Your file, ", crayon::blue$bold(file_name),
           ", has been uploaded to:\n", sep = "")
@@ -315,9 +371,9 @@ create_datastore_script <- function(owner,
 
   if (force == FALSE) {
     if (length(seq_along(rjson$names)) < 1) {
-      cat("The ", repo, "repository at github.com/",
-          repo, "does not have any topics.\n", sep = "")
-      cat("No keywords will be added to the DataStore reference.")
+      cat("The ", repo, " repository at github.com/",
+          repo, " does not have any topics.\n", sep = "")
+      cat("No keywords will be added to the DataStore reference.\n")
     }
   }
 

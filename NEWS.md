@@ -1,4 +1,8 @@
 # QCkit v1.1.0
+## 2025-05-20
+* create_datastore_script modified to allow upload of large (>32mb) repos
+
+# QCkit v1.1.0
 ## 2025-05-16
 * create_datastore_script now invisibly returns the DataStore reference URL
 
