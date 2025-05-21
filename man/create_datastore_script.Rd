@@ -9,7 +9,9 @@ create_datastore_script(
   repo,
   path = here::here(),
   force = FALSE,
-  dev = FALSE
+  dev = FALSE,
+  chunk_size_mb = 1,
+  retry = 1
 )
 }
 \arguments{
@@ -22,6 +24,10 @@ create_datastore_script(
 \item{force}{Logical. Defaults to FALSE. In the default status the function has a number of interactive components, such as searching DataStore for similarly titled References and asking if a new Reference is really what the user wants. When set to TRUE, all interactive components are turned off and the function will proceed unless it hits an error. Setting force = TRUE may be useful for scripting purposes.}
 
 \item{dev}{Logical. Defaults to FALSE. In the default status, the function generates and populates a new draft Script reference on the DataStore production server. If set to TRUE, the draft Script reference will be generated and populated on the DataStore development server. Setting dev = TRUE may be useful for testing the function without generating excessive references on the DataStore production server.}
+
+\item{chunk_size_mb}{The "chunk" size to break the file into for upload. If your network is slow and your uploads are failing, try decreasing this number (e.g. 0.5 or 0.25).}
+
+\item{retry}{How many times to retry uploading a file chunk if it fails on the first try.}
 }
 \value{
 Invisibly returns the URL to the DataStore draft reference that was created.
