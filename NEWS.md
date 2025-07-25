@@ -1,4 +1,8 @@
-# QCkit v1.1.0
+# QCkit v1.2.1
+## 2025-05-22
+* fix minor bug in create_datastore_script
+
+# QCkit v1.2.0
 ## 2025-05-20
 * create_datastore_script modified to allow upload of large (>32mb) repos
 

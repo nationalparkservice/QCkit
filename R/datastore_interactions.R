@@ -211,7 +211,8 @@ create_datastore_script <- function(owner,
   # Initialize variables and progress bar to track upload progress
   status <- NA
   total_bytes <- 0
-  cli::cli_progress_bar("Uploading {file_name}", total = n_chunks)
+  progress_bar_msg <- paste("Uploading", file_name)
+  cli::cli_progress_bar(progress_bar_msg, total = n_chunks)
 
   # Upload one chunk at a time
   for (i in 0:(n_chunks - 1)) {
