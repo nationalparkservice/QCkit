@@ -1,4 +1,7 @@
 # QCkit v1.1.0
+## 2025-07-25
+* add function `get_user_orcid`, which will look up a users orcid using active directory. 
+
 ## 2025-05-16
 * create_datastore_script now invisibly returns the DataStore reference URL
 
