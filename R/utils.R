@@ -69,3 +69,34 @@ get_user_email <- function() {
 
   return(email_address)
 }
+
+#' Returns the user's ORCID ID from active directory
+#'
+#' @description
+#' This is a function to grab a users ORCID from Active Directory. Requires VPN to access AD. If the user does not have an ORCID, returns "NA".
+#'
+#'
+#' @returns Sting. The user's ORCID ID
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' orcid <- get_user_orcid()
+#' }
+get_user_orcid <- function() {
+  powershell_command <- '([adsisearcher]\\"(samaccountname=$env:USERNAME)\\").FindAll().Properties'
+
+  AD_output <- system2("powershell",
+                  args = c("-Command",
+                           powershell_command),
+                  stdout = TRUE)
+  #get extensionAttribute2 (holds orcid)
+  orcid <- AD_output[which(AD_output %>%
+                             stringr::str_detect("extensionattribute2"))]
+  # extract orcid
+  orcid <- stringr::str_extract(orcid, "\\{.*?\\}")
+  # remove curly braces:
+  orcid <- stringr::str_remove_all(orcid, "[{}]")
+
+  return(orcid)
+}
