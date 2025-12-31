@@ -1,4 +1,7 @@
 # QCkit v1.2.1
+## 2025-12-31
+  * Updated DataStore APIs to hit v8 API instead of now deprecated v7 API endponts
+  
 ## 2025-05-22
 * fix minor bug in create_datastore_script
 

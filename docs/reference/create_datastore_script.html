@@ -17,7 +17,7 @@ If the Reference is a version of an older reference, the user will have to acces
 
     <a class="navbar-brand me-2" href="../index.html">QCkit</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,7 +65,9 @@ If the Reference is a version of an older reference, the user will have to acces
 <span>  <span class="va">repo</span>,</span>
 <span>  path <span class="op">=</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  force <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  dev <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  dev <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  chunk_size_mb <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  retry <span class="op">=</span> <span class="fl">1</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -91,6 +93,14 @@ If the Reference is a version of an older reference, the user will have to acces
 
 <dt id="arg-dev">dev<a class="anchor" aria-label="anchor" href="#arg-dev"></a></dt>
 <dd><p>Logical. Defaults to FALSE. In the default status, the function generates and populates a new draft Script reference on the DataStore production server. If set to TRUE, the draft Script reference will be generated and populated on the DataStore development server. Setting dev = TRUE may be useful for testing the function without generating excessive references on the DataStore production server.</p></dd>
+
+
+<dt id="arg-chunk-size-mb">chunk_size_mb<a class="anchor" aria-label="anchor" href="#arg-chunk-size-mb"></a></dt>
+<dd><p>The "chunk" size to break the file into for upload. If your network is slow and your uploads are failing, try decreasing this number (e.g. 0.5 or 0.25).</p></dd>
+
+
+<dt id="arg-retry">retry<a class="anchor" aria-label="anchor" href="#arg-retry"></a></dt>
+<dd><p>How many times to retry uploading a file chunk if it fails on the first try.</p></dd>
 
 </dl></div>
     <div class="section level2">
