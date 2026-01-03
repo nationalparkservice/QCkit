@@ -383,12 +383,11 @@ create_datastore_script <- function(owner,
   mylist <- list(internal = FALSE,
                  filesInternal = FALSE,
                  FileRestricted = FALSE,
-                 sensitivity = "Not Sensitive",
-                 distribution = "No Restriction",
-                 quality = "Operational",
-                 additionalUserDefined = "",
-                 noDataMgrEdit = FALSE,
-                 linksRestricted = FALSE)
+                 additionalConstraints = "none",
+                 legalAuthority = list("none"),
+                 otherAuthority = "No Restriction",
+                 justification = "none",
+                 contactEmail = "none")
   bdy <- jsonlite::toJSON(mylist, pretty = TRUE, auto_unbox = TRUE)
 
   if (dev == TRUE) {
@@ -399,7 +398,7 @@ create_datastore_script <- function(owner,
                        ds_ref, "/AccessConstraints")
   }
 
-  #create the draft reference:
+  #set reference to public:
   req <- httr::PUT(post_url,
                    httr::authenticate(":", "", "ntlm"),
                    httr::add_headers('Content-Type' = 'application/json'),
