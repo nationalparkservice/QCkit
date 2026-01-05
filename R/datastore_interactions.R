@@ -131,9 +131,9 @@ create_datastore_script <- function(owner,
         httr::write_disk(download_file_path,
         overwrite = TRUE))))))
   if (force == FALSE) {
-    cat("Writing: ",
+    cat("Downloading and Writing: ",
         crayon::blue$bold(download_file_path),
-        ".\n", sep = "")
+        ".\n\n", sep = "")
   }
 
   #generate json body for rest api call to create the reference:
@@ -179,7 +179,7 @@ create_datastore_script <- function(owner,
   }
   #inform user a new reference has been generated:
   if (force == FALSE) {
-    cat("A draft reference has been created on DataStore.\n")
+    cat("A draft reference has been created on DataStore.\n\n")
   }
 
   #use reference id to put the file:
@@ -271,7 +271,7 @@ create_datastore_script <- function(owner,
     if (force == FALSE) {
       cat("Your file, ", crayon::blue$bold(file_name),
           ", has been uploaded to:\n", sep = "")
-      cat(ds_resource_url, "\n", sep = "")
+      cat(ds_resource_url, "\n\n", sep = "")
   }
   #add a web link:
   #release url:
@@ -312,7 +312,7 @@ create_datastore_script <- function(owner,
   }
   if (force == FALSE) {
     cat("The following web link has been added to your Script Reference: \n")
-    cat(weblink, "\n", sep = "")
+    cat(weblink, "\n\n", sep = "")
   }
 
   #add keywords
@@ -367,6 +367,7 @@ create_datastore_script <- function(owner,
     if (force == FALSE) {
       cat("Your DataStore Reference now has the following keywords:\n")
       print(rjson_kw)
+      cat("\n")
     }
   }
 
@@ -424,8 +425,7 @@ create_datastore_script <- function(owner,
 
   if (force == FALSE) {
     cat("Your reference has been set to unrestricted with no sensitivity.\n")
-    cat("Your reference has been set to \"Operational\" quality.\n")
-    cat("Unless you have a documented reason to do so, please leave the reference public.\n")
+    cat("Unless you have a documented reason to do so, please leave the reference public.\n\n")
 
     cat("Your draft reference can be accessed at:\n")
 
