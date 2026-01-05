@@ -428,8 +428,8 @@ create_datastore_script <- function(owner,
     cat("Unless you have a documented reason to do so, please leave the reference public.\n\n")
 
     cat("Your draft reference can be accessed at:\n")
-
-    cat(crayon::blue$bold(ds_ref_url))
+    ds_ref_url <- utils::URLencode(ds_ref_url)
+    cli::cli_text("{.url {ds_ref_url}}")
   }
 
   invisible(ds_ref_url)
