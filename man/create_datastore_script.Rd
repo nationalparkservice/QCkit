@@ -10,6 +10,7 @@ create_datastore_script(
   path = here::here(),
   force = FALSE,
   dev = FALSE,
+  for_or_by_NPS = TRUE,
   chunk_size_mb = 1,
   retry = 1
 )
@@ -25,6 +26,8 @@ create_datastore_script(
 
 \item{dev}{Logical. Defaults to FALSE. In the default status, the function generates and populates a new draft Script reference on the DataStore production server. If set to TRUE, the draft Script reference will be generated and populated on the DataStore development server. Setting dev = TRUE may be useful for testing the function without generating excessive references on the DataStore production server.}
 
+\item{for_or_by_NPS}{Logical. Was the code, script, or software created either for or by NPS? Defaults to TRUE.}
+
 \item{chunk_size_mb}{The "chunk" size to break the file into for upload. If your network is slow and your uploads are failing, try decreasing this number (e.g. 0.5 or 0.25).}
 
 \item{retry}{How many times to retry uploading a file chunk if it fails on the first try.}
@@ -33,13 +36,21 @@ create_datastore_script(
 Invisibly returns the URL to the DataStore draft reference that was created.
 }
 \description{
-Given a GitHub owner ("nationalparkservice") and public repo ("EMLeditor"), the function uses the GitHub API to access the latest release version on GitHub and generate a corresponding draft Script reference on DataStore.
+Given a GitHub owner ("nationalparkservice") and public repo ("EMLeditor"), the function uses the GitHub API to access the latest release version on GitHub and generate a corresponding draft public Script reference on DataStore.
 
 WARNING: if you are not an author of the repo on GitHub, you should probably NOT be the one adding it to DataStore unless you have very good reason. If you want to cite a GitHub release/repo and need a DOI, contact the repo maintainer and suggest they use this function to put it on DataStore for you.
 
-It searches DataStore for references with a similar title (where the title is repo + release tag). If \code{force = FALSE} and there are similarly titled references, the function will return a list of them and ask if the user really wants a new DataStore reference generated. Assuming yes (or if there are no existing DataStore references with a similar title or \code{force = TRUE}), the function will: 1) download the .zip of the latest GitHub release for the repo, 2) initiate a draft reference on DataStore, 3) give the draft reference a title (repo + release tag), 4) upload the .zip from GitHub 5) add a web link to the release on GitHub.
+The function searches DataStore for references with a similar title (where the title is repo + release tag). If \code{force = FALSE} and there are similarly titled references, the function will return a list of them and ask if the user really wants a new DataStore reference generated. Assuming yes (or if there are no existing DataStore references with a similar title or if \code{force = TRUE}), the function will:
+\enumerate{
+\item download the .zip of the latest GitHub release for the repo,
+\item initiate a draft reference on DataStore,
+\item give the draft reference a title (repo + release tag),
+\item upload the .zip from GitHub
+\item add a web link to the release on GitHub.
+\item add the items listed under GitHub repo "Topics" as keywords to the DataStore Script reference
+}
 
-\code{create_datastore_script()} will also access the keywords from your GitHub repo ("Topics") and add them to the draft references as keywords. It will automatically set your reference and all the files and links to public, allow data managers to edit the reference, and set the quality to "Operational". Unless you have good reason backed by a policy that specifically includes information from your release, please do not change these settings (and perhaps reconsider using public github repositories).
+\code{create_datastore_script()} will also access the keywords from your GitHub repo ("Topics") and add them to the draft references as keywords. It will automatically set your reference and all the files and links to public, allow data managers to edit the reference.
 
 The user will still need to go access the draft Script reference on DataStore to fill in the remaining fields (which are not accessible via API and so cannot be automated through this function) and activate the reference (thereby generating and registering a citeable DOI).
 
