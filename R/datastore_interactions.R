@@ -37,12 +37,19 @@
 #' }
 create_datastore_script <- function(owner,
                                     repo,
+                                    library = c(NULL, "R", "python"),
                                     path = here::here(),
                                     force = FALSE,
                                     dev = FALSE,
                                     for_or_by_NPS = TRUE,
                                     chunk_size_mb = 1,
                                     retry = 1) {
+
+
+
+  #check "library" for valid values:
+  library <- match.arg(library)
+
   gh_url <- paste0("https://api.github.com/repos/",
                    owner,
                    "/",
@@ -416,6 +423,56 @@ create_datastore_script <- function(owner,
   status_code <- httr::stop_for_status(req)$status_code
   if (!status_code == 200) {
     stop("ERROR: DataStore connection failed. Are you logged in to the VPN?\n")
+  }
+
+  # get and use R DESCRIPTION file:
+  if (library == "R") {
+
+    descript_url <- paste0("https://raw.githubusercontent.com/",
+                           owner, "/",
+                           repo, "/",
+                           "main/DESCRIPTION")
+
+    #create file name:
+    file_name <- paste0(repo, "_", gh_req_rjson$tag_name, "_DESCRIPTION")
+    #create file path
+    download_file_path <- paste0("releases/", file_name)
+
+    #download the file (.zip) from github:
+    invisible(capture.output(
+      suppressMessages(
+        httr::content(
+          httr::GET(descript_url,
+                    httr::progress(),
+                    httr::write_disk(download_file_path,
+                                     overwrite = TRUE))))))
+
+    }
+
+
+    descript_url <- paste0("https://api.github.com/repos/",
+                           owner, "/",
+                           repo, "/",
+                           "contents/",
+                           "DESCRIPTION")
+
+    req_descript <- httr::GET(descript_url,
+                              httr::add_headers('Accept' = 'application/vnd.github+json'))
+
+    status_code <- httr::stop_for_status(req_descript)$status_code
+
+    #if API call fails, alert user and remind them to log on to VPN:
+    if (!status_code == 200) {
+      stop("ERROR: GitHub connection failed. Are you connected to the internet?")
+    }
+
+    #Make the json R friendly:
+    descript_req_json <- httr::content(req_descript, "text")
+    descript_req_rjson <- jsonlite::fromJSON(descript_req_json)
+
+
+    repos/{owner}/{repo}/contents/{path}
+
   }
 
   #set bibliography patch URL
