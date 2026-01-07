@@ -446,34 +446,30 @@ create_datastore_script <- function(owner,
                     httr::progress(),
                     httr::write_disk(download_file_path,
                                      overwrite = TRUE))))))
+    #read in the DESCRIPTION file - add a trycatch for 404notfound:
+    #Warning message:
+    #  In readLines(file) :
+    #  incomplete final line found on 'releases/test_DESCRIPTION2'
+    desc2 <- tryCatch(description$new(file = paste0("releases/", file_name)),
+                      error = function(e){},
+                      warning = function(w){
+                        msg <- paste0("Warning: your DESCRIPTION file is ",
+                                      "missing or malformatted. Some ",
+                                      "DataStore fields could not be ",
+                                      "automatically entered. Are you sure ",
+                                      "the repo contains a valid R package?")
+                        cat(msg)
+
+                      })
+
+    desc2 <- description$new(file = paste0("releases/", file_name))
+
+    #get authors:
+    authors <- desc2$get_author("aut")
+
+    #
 
     }
-
-
-    descript_url <- paste0("https://api.github.com/repos/",
-                           owner, "/",
-                           repo, "/",
-                           "contents/",
-                           "DESCRIPTION")
-
-    req_descript <- httr::GET(descript_url,
-                              httr::add_headers('Accept' = 'application/vnd.github+json'))
-
-    status_code <- httr::stop_for_status(req_descript)$status_code
-
-    #if API call fails, alert user and remind them to log on to VPN:
-    if (!status_code == 200) {
-      stop("ERROR: GitHub connection failed. Are you connected to the internet?")
-    }
-
-    #Make the json R friendly:
-    descript_req_json <- httr::content(req_descript, "text")
-    descript_req_rjson <- jsonlite::fromJSON(descript_req_json)
-
-
-    repos/{owner}/{repo}/contents/{path}
-
-  }
 
   #set bibliography patch URL
   if (dev == TRUE) {
