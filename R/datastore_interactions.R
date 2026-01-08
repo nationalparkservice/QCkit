@@ -431,7 +431,7 @@ create_datastore_script <- function(owner,
     descript_url <- paste0("https://raw.githubusercontent.com/",
                            owner, "/",
                            repo, "/",
-                           "main/DESCRIPTION")
+                           "master/DESCRIPTION")
 
     #create file name:
     file_name <- paste0(repo, "_", gh_req_rjson$tag_name, "_DESCRIPTION")
@@ -461,7 +461,40 @@ create_datastore_script <- function(owner,
                       })
 
     if (!is.null(desc2)) {
+
+      #create authors (contact1)
       authors <- desc2$get_author("aut")
+      mylist <- list()
+      for (i in 1:length(authors)) {
+        aut <- list(title = NULL,
+                           primaryName = authors[i]$family,
+                           firstName = authors[i]$given,
+                           middleName = NULL,
+                           suffix = NULL,
+                           affiliation = NULL,
+                           isCorporate = NULL,
+                           ORCID = authors[i]$comment[[1]])
+        mylist <- append(mylist, list(aut))
+      }
+
+      contact1 <- jsonlite::toJSON(mylist, pretty = TRUE, auto_unbox = TRUE)
+
+      #create contacts (contact2)
+      contacts <- desc2$get_author("cre")
+      mylist <- list()
+      for (i in 1:length(contacts)) {
+        con <- list(title = NULL,
+                    primaryName = contacts[i]$family,
+                    firstName = contacts[i]$given,
+                    middleName = NULL,
+                    suffix = NULL,
+                    affiliation = NULL,
+                    isCorporate = NULL,
+                    ORCID = contacts[i]$comment[[1]])
+        mylist <- append(mylist, list(con))
+      }
+
+      contact2 <- jsonlite::toJSON(mylist, pretty = TRUE, auto_unbox = TRUE)
 
 
     #
