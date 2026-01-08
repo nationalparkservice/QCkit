@@ -446,12 +446,11 @@ create_datastore_script <- function(owner,
                     httr::progress(),
                     httr::write_disk(download_file_path,
                                      overwrite = TRUE))))))
-    #read in the DESCRIPTION file - add a trycatch for 404notfound:
-    #Warning message:
-    #  In readLines(file) :
-    #  incomplete final line found on 'releases/test_DESCRIPTION2'
+    #read in the DESCRIPTION file
+    # missing or
     desc2 <- tryCatch(description$new(file = paste0("releases/", file_name)),
                       error = function(e){},
+                      #warnings for bad or missing DESCRIPTION files
                       warning = function(w){
                         msg <- paste0("Warning: your DESCRIPTION file is ",
                                       "missing or malformatted. Some ",
@@ -459,13 +458,11 @@ create_datastore_script <- function(owner,
                                       "automatically entered. Are you sure ",
                                       "the repo contains a valid R package?")
                         cat(msg)
-
                       })
 
-    desc2 <- description$new(file = paste0("releases/", file_name))
+    if (!is.null(desc2)) {
+      authors <- desc2$get_author("aut")
 
-    #get authors:
-    authors <- desc2$get_author("aut")
 
     #
 
