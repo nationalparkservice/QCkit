@@ -20,6 +20,7 @@
 #'
 #' @param owner String. The owner of the account where the GitHub repo resides. For example, "nationalparkservice"
 #' @param repo String. The repo with a release that should be turned into a DataStore Script reference. For example, "EMLeditor"
+#' @param lib_type String. Can be one of three values: generic_script, R, or python. Defaults to "generic_script".
 #' @param path String. The location where the release .zip from GitHub should be downloaded to (and uploaded from). Defaults to the working directory of the R Project (i.e. `here::here()`).
 #' @param force Logical. Defaults to FALSE. In the default status the function has a number of interactive components, such as searching DataStore for similarly titled References and asking if a new Reference is really what the user wants. When set to TRUE, all interactive components are turned off and the function will proceed unless it hits an error. Setting force = TRUE may be useful for scripting purposes.
 #' @param dev Logical. Defaults to FALSE. In the default status, the function generates and populates a new draft Script reference on the DataStore production server. If set to TRUE, the draft Script reference will be generated and populated on the DataStore development server. Setting dev = TRUE may be useful for testing the function without generating excessive references on the DataStore production server.
