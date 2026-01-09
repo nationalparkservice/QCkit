@@ -1,4 +1,7 @@
 # QCkit v1.2.1
+## 2025-01-09
+  * `create_datastore_script` now has a new parameter, lib_type. If "R" is specified it will pull as much info as it can from the DESCRIPTION file of an R package and use that info to fill out the Core Bibliography tab on the reference landing page.
+  
 ## 2025-01-06
   * Add ability to set the Origination flag in DataStore via the `create_datastore_script` function. Defaults to TRUE.
   
