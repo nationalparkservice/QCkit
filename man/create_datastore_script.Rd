@@ -7,6 +7,7 @@
 create_datastore_script(
   owner,
   repo,
+  lib_type = c("generic_script", "R", "python"),
   path = here::here(),
   force = FALSE,
   dev = FALSE,
@@ -19,6 +20,8 @@ create_datastore_script(
 \item{owner}{String. The owner of the account where the GitHub repo resides. For example, "nationalparkservice"}
 
 \item{repo}{String. The repo with a release that should be turned into a DataStore Script reference. For example, "EMLeditor"}
+
+\item{lib_type}{String. Can be one of three values: generic_script, R, or python. Defaults to "generic_script".}
 
 \item{path}{String. The location where the release .zip from GitHub should be downloaded to (and uploaded from). Defaults to the working directory of the R Project (i.e. \code{here::here()}).}
 
@@ -48,11 +51,12 @@ The function searches DataStore for references with a similar title (where the t
 \item upload the .zip from GitHub
 \item add a web link to the release on GitHub.
 \item add the items listed under GitHub repo "Topics" as keywords to the DataStore Script reference
-}
-
-\code{create_datastore_script()} will also access the keywords from your GitHub repo ("Topics") and add them to the draft references as keywords. It will automatically set your reference and all the files and links to public, allow data managers to edit the reference.
-
+\item Set for or by NPS flag
+\item Set the issued date
+\item If you indicate it is an R package, the authors, steward, description, and other fields will be filled out on the Core tab
+#'
 The user will still need to go access the draft Script reference on DataStore to fill in the remaining fields (which are not accessible via API and so cannot be automated through this function) and activate the reference (thereby generating and registering a citeable DOI).
+}
 
 If the Reference is a version of an older reference, the user will have to access the older version and indicate that it is an older version of the current Reference. The user will also have to manually add the new Reference to a Project for the repo, if desired.
 }
