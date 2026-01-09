@@ -425,6 +425,34 @@ create_datastore_script <- function(owner,
     stop("ERROR: DataStore connection failed. Are you logged in to the VPN?\n")
   }
 
+  #set bibliography patch URL
+  if (dev == TRUE) {
+    patch_url <- paste0(.QC_ds_dev_api(),
+                        "Reference/",
+                        ds_ref,
+                        "/Bibliography")
+  } else {
+    patch_url <- paste0(.QC_ds_secure_api(),
+                        "Reference/",
+                        ds_ref,
+                        "/Bibliography")
+  }
+
+  #Set for or by NPS:
+  NPS_origination <- list(isAgencyOriginated = for_or_by_NPS)
+  bdy <- jsonlite::toJSON(NPS_origination, pretty = TRUE, auto_unbox = TRUE)
+
+  NPS_req <- httr::PATCH(patch_url,
+                     httr::authenticate(":", "", "ntlm"),
+                     httr::add_headers('Content-Type' = 'application/json'),
+                     body = bdy)
+
+  #check status code; suggest logging in to VPN if errors occur:
+  status_code <- httr::stop_for_status(NPS_req)$status_code
+  if (!status_code == 200) {
+    stop("ERROR: DataStore connection failed. Are you logged in to the VPN?\n")
+  }
+
   # get and use R DESCRIPTION file:
   if (library == "R") {
 
@@ -467,17 +495,18 @@ create_datastore_script <- function(owner,
       mylist <- list()
       for (i in 1:length(authors)) {
         aut <- list(title = NULL,
-                           primaryName = authors[i]$family,
-                           firstName = authors[i]$given,
-                           middleName = NULL,
-                           suffix = NULL,
-                           affiliation = NULL,
-                           isCorporate = NULL,
-                           ORCID = authors[i]$comment[[1]])
+                    primaryName = authors[i]$family,
+                    firstName = authors[i]$given,
+                    middleName = NULL,
+                    suffix = NULL,
+                    affiliation = NULL,
+                    isCorporate = FALSE,
+                    ORCID = authors[i]$comment[[1]])
         mylist <- append(mylist, list(aut))
       }
+      contact1 <- mylist
 
-      contact1 <- jsonlite::toJSON(mylist, pretty = TRUE, auto_unbox = TRUE)
+      #contact1 <- jsonlite::toJSON(mylist, pretty = TRUE, auto_unbox = TRUE)
 
       #create contacts (contact2)
       contacts <- desc2$get_author("cre")
@@ -489,44 +518,29 @@ create_datastore_script <- function(owner,
                     middleName = NULL,
                     suffix = NULL,
                     affiliation = NULL,
-                    isCorporate = NULL,
+                    isCorporate = FALSE,
                     ORCID = contacts[i]$comment[[1]])
         mylist <- append(mylist, list(con))
       }
+      contact2 <- mylist
+      #contact2 <- jsonlite::toJSON(mylist, pretty = TRUE, auto_unbox = TRUE)
 
-      contact2 <- jsonlite::toJSON(mylist, pretty = TRUE, auto_unbox = TRUE)
+      bdy <- list(contacts1 = contact1,
+                  contacts2 = contact2)
 
+      bdy <- jsonlite::toJSON(bdy, pretty = TRUE, null = "null", auto_unbox = TRUE)
 
-    #
+      contacts_req <- httr::PATCH(patch_url,
+                             httr::authenticate(":", "", "ntlm"),
+                             httr::add_headers('Content-Type' = 'application/json'),
+                             body = bdy)
 
+      #check status code; suggest logging in to VPN if errors occur:
+      status_code <- httr::stop_for_status(contacts_req)$status_code
+      if (!status_code == 200) {
+        stop("ERROR: DataStore connection failed. Are you logged in to the VPN?\n")
+      }
     }
-
-  #set bibliography patch URL
-  if (dev == TRUE) {
-    patch_url <- paste0(.QC_ds_dev_api(),
-                        "Reference/",
-                        ds_ref,
-                        "/Bibliography")
-  } else {
-    patch_url <- paste0(.QC_ds_secure_api(),
-                        "Reference/",
-                        ds_ref,
-                        "/Bibliography")
-  }
-
-  #Set for or by NPS:
-  NPS_origination <- list(isAgencyOriginated = for_or_by_NPS)
-  bdy <- jsonlite::toJSON(NPS_origination, pretty = TRUE, auto_unbox = TRUE)
-
-  NPS_req <- httr::PATCH(patch_url,
-                     httr::authenticate(":", "", "ntlm"),
-                     httr::add_headers('Content-Type' = 'application/json'),
-                     body = bdy)
-
-  #check status code; suggest logging in to VPN if errors occur:
-  status_code <- httr::stop_for_status(NPS_req)$status_code
-  if (!status_code == 200) {
-    stop("ERROR: DataStore connection failed. Are you logged in to the VPN?\n")
   }
 
 
