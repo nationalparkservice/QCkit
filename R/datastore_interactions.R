@@ -37,7 +37,9 @@
 #' }
 create_datastore_script <- function(owner,
                                     repo,
-                                    library = c(NULL, "R", "python"),
+                                    lib_type = c("generic_script",
+                                                 "R",
+                                                 "python"),
                                     path = here::here(),
                                     force = FALSE,
                                     dev = FALSE,
@@ -45,10 +47,8 @@ create_datastore_script <- function(owner,
                                     chunk_size_mb = 1,
                                     retry = 1) {
 
-
-
-  #check "library" for valid values:
-  library <- match.arg(library)
+  #check "lib_type" for valid values; if no value supplied defaults to "generic_script":
+  lib_type <- match.arg(lib_type)
 
   gh_url <- paste0("https://api.github.com/repos/",
                    owner,
@@ -112,7 +112,7 @@ create_datastore_script <- function(owner,
         var1 <- readline(prompt = cat("\n\n1: Yes\n2: No\n\n"))
         if (var1 == 2) {
           cat("You have not generated a new DataStore reference.")
-          return()
+          return(invisible(NULL))
         }
       }
     }
@@ -439,9 +439,14 @@ create_datastore_script <- function(owner,
                         "/Bibliography")
   }
 
-  #Set for or by NPS:
-  NPS_origination <- list(isAgencyOriginated = for_or_by_NPS)
-  bdy <- jsonlite::toJSON(NPS_origination, pretty = TRUE, auto_unbox = TRUE)
+  #Set issuedDate & Agency originated:
+  date <- list(year = format(Sys.time(), "%Y"),
+               month = format(Sys.time(), "%m"),
+               day = format(Sys.time(), "%d"))
+  bdy <- list(issuedDate = date,
+              isAgencyOriginated = for_or_by_NPS)
+
+  bdy <- jsonlite::toJSON(bdy, pretty = TRUE, auto_unbox = TRUE)
 
   NPS_req <- httr::PATCH(patch_url,
                      httr::authenticate(":", "", "ntlm"),
@@ -455,7 +460,7 @@ create_datastore_script <- function(owner,
   }
 
   # get and use R DESCRIPTION file:
-  if (library == "R") {
+  if (lib_type == "R") {
 
     descript_url <- paste0("https://raw.githubusercontent.com/",
                            owner, "/",
@@ -527,14 +532,8 @@ create_datastore_script <- function(owner,
       }
 
       package_descript <- desc2$get("Description")[[1]]
-      #abstract <- list(abstract = package_descript)
 
-      date <- list(year = format(Sys.time(), "%Y"),
-                   month = format(Sys.time(), "%m"),
-                   day = format(Sys.time(), "%d"))
-
-      bdy <- list(issuedDate = date,
-                  abstract = package_descript,
+      bdy <- list(abstract = package_descript,
                   contacts1 = contact1,
                   contacts2 = contact2)
 
