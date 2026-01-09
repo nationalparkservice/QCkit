@@ -476,7 +476,8 @@ create_datastore_script <- function(owner,
                                      overwrite = TRUE))))))
     #read in the DESCRIPTION file
     # missing or
-    desc2 <- tryCatch(description$new(file = paste0("releases/", file_name)),
+    desc2 <- tryCatch(desc::description$new(file = paste0("releases/",
+                                                          file_name)),
                       error = function(e){},
                       #warnings for bad or missing DESCRIPTION files
                       warning = function(w){
@@ -492,7 +493,7 @@ create_datastore_script <- function(owner,
 
       #create authors (contact1)
       authors <- desc2$get_author("aut")
-      mylist <- list()
+      contact1 <- list()
       for (i in 1:length(authors)) {
         aut <- list(title = NULL,
                     primaryName = authors[i]$family,
@@ -502,15 +503,12 @@ create_datastore_script <- function(owner,
                     affiliation = NULL,
                     isCorporate = FALSE,
                     ORCID = authors[i]$comment[[1]])
-        mylist <- append(mylist, list(aut))
+        contact1 <- append(contact1, list(aut))
       }
-      contact1 <- mylist
-
-      #contact1 <- jsonlite::toJSON(mylist, pretty = TRUE, auto_unbox = TRUE)
 
       #create contacts (contact2)
       contacts <- desc2$get_author("cre")
-      mylist <- list()
+      contact2 <- list()
       for (i in 1:length(contacts)) {
         con <- list(title = NULL,
                     primaryName = contacts[i]$family,
@@ -520,12 +518,14 @@ create_datastore_script <- function(owner,
                     affiliation = NULL,
                     isCorporate = FALSE,
                     ORCID = contacts[i]$comment[[1]])
-        mylist <- append(mylist, list(con))
+        contact2 <- append(contact2, list(con))
       }
-      contact2 <- mylist
-      #contact2 <- jsonlite::toJSON(mylist, pretty = TRUE, auto_unbox = TRUE)
 
-      bdy <- list(contacts1 = contact1,
+      package_descript <- desc2$get("Description")[[1]]
+      abstract <- list(abstract = package_descript)
+
+      bdy <- list(abstract = abstract,
+                  contacts1 = contact1,
                   contacts2 = contact2)
 
       bdy <- jsonlite::toJSON(bdy, pretty = TRUE, null = "null", auto_unbox = TRUE)
