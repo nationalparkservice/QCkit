@@ -79,18 +79,18 @@ create_datastore_script <- function(owner,
 
   #quick search of DataStore for the string "dynamic title"
   post_url <- paste0(.QC_ds_secure_api(), "QuickSearch?q=", dynamic_title)
-  req <- httr::GET(post_url,
+  req_search <- httr::GET(post_url,
                    httr::authenticate(":", "", "ntlm"),
                    httr::add_headers('accept' = 'application/json'))
 
   #check status code; suggest logging in to VPN if errors occur:
-  status_code <- httr::stop_for_status(req)$status_code
+  status_code <- httr::stop_for_status(req_search)$status_code
   if (!status_code == 200) {
     stop("ERROR: DataStore connection failed. Are you logged in to the VPN?\n")
   }
 
   #get search results and turn into a dataframe:
-  json <- httr::content(req, "text")
+  json <- httr::content(req_search, "text")
   rjson <- jsonlite::fromJSON(json)
   items <- as.data.frame(rjson$items)
 
@@ -101,11 +101,12 @@ create_datastore_script <- function(owner,
       if (length(seq_along(matches$title) > 0)) {
         cat("One or more DataStore references with title containing: ",
             new_ref_title,
-            " already exists:", sep = "")
+            " already exists:\n", sep = "")
         cat("Reference ID: ",
             matches$referenceId,
             "; Title: ",
-            matches$title, sep = "")
+            matches$title,
+            "\n\n", sep = "")
         cat("Are you sure you want to create a new draft reference for ",
             new_ref_title, "?", sep = "")
         var1 <- readline(prompt = cat("\n\n1: Yes\n2: No\n\n"))
@@ -169,17 +170,17 @@ create_datastore_script <- function(owner,
   }
 
   #create the draft reference:
-  req <- httr::POST(post_url,
+  req_draft <- httr::POST(post_url,
                     httr::authenticate(":", "", "ntlm"),
                     httr::add_headers('Content-Type' = 'application/json'),
                     body = bdy)
   #check status code; suggest logging in to VPN if errors occur:
-  status_code <- httr::stop_for_status(req)$status_code
+  status_code <- httr::stop_for_status(req_draft)$status_code
   if (!status_code == 200) {
     stop("ERROR: DataStore connection failed. Are you logged in to the VPN?\n")
   }
   #get newly created reference id:
-  json <- httr::content(req, "text")
+  json <- httr::content(req_draft, "text")
   rjson <- jsonlite::fromJSON(json)
   ds_ref <- rjson$referenceCode
 
@@ -315,13 +316,13 @@ create_datastore_script <- function(owner,
   }
 
   #upload the weblink:
-  req <- httr::POST(
+  req_weblink <- httr::POST(
     url = api_url,
     httr::add_headers('Content-Type' = 'application/json'),
     httr::authenticate(":", "", "ntlm"),
     body = bdy)
 
-  status_code <- httr::stop_for_status(req)$status_code
+  status_code <- httr::stop_for_status(req_weblink)$status_code
   if (status_code != 200) {
     stop("ERROR: DataStore connection failed. Your web link was not added.")
   }
@@ -415,12 +416,12 @@ create_datastore_script <- function(owner,
   }
 
   #set reference to public:
-  req <- httr::PUT(post_url,
+  req_public <- httr::PUT(post_url,
                    httr::authenticate(":", "", "ntlm"),
                    httr::add_headers('Content-Type' = 'application/json'),
                    body = bdy)
   #check status code; suggest logging in to VPN if errors occur:
-  status_code <- httr::stop_for_status(req)$status_code
+  status_code <- httr::stop_for_status(req_public)$status_code
   if (!status_code == 200) {
     stop("ERROR: DataStore connection failed. Are you logged in to the VPN?\n")
   }
@@ -474,8 +475,7 @@ create_datastore_script <- function(owner,
                     httr::progress(),
                     httr::write_disk(download_file_path,
                                      overwrite = TRUE))))))
-    #read in the DESCRIPTION file
-    # missing or
+  #  read in the DESCRIPTION file
     desc2 <- tryCatch(desc::description$new(file = paste0("releases/",
                                                           file_name)),
                       error = function(e){},
@@ -492,39 +492,44 @@ create_datastore_script <- function(owner,
     if (!is.null(desc2)) {
 
       #create authors (contact1)
+      #authors <- desc::desc_get_author("aut",
+      #                                 file = paste0("releases/", file_name))
       authors <- desc2$get_author("aut")
-      contact1 <- list()
-      for (i in 1:length(authors)) {
-        aut <- list(title = NULL,
-                    primaryName = authors[i]$family,
-                    firstName = authors[i]$given,
-                    middleName = NULL,
-                    suffix = NULL,
-                    affiliation = NULL,
-                    isCorporate = FALSE,
-                    ORCID = authors[i]$comment[[1]])
-        contact1 <- append(contact1, list(aut))
-      }
+      #if(!is.null(authors)) {
+        aut_list <- list()
+        for (i in 1:length(seq_along(authors))) {
+          aut <- list(title = NULL,
+                      primaryName = authors[[i]]$family,
+                      firstName = authors[[i]]$given,
+                      middleName = NULL,
+                      suffix = NULL,
+                      affiliation = NULL,
+                      isCorporate = FALSE,
+                      ORCID = authors[[i]]$comment[[1]])
+          aut_list <- append(aut_list, list(aut))
+        }
+        contact1 <- aut_list
 
-      #create contacts (contact2)
-      contacts <- desc2$get_author("cre")
-      contact2 <- list()
-      for (i in 1:length(contacts)) {
-        con <- list(title = NULL,
-                    primaryName = contacts[i]$family,
-                    firstName = contacts[i]$given,
+        #create contacts (contact2)
+        contacts <- desc2$get_author("cre")
+        contact2 <- list()
+        for (i in 1:length(contacts)) {
+          con <- list(title = NULL,
+                    primaryName = contacts[[i]]$family,
+                    firstName = contacts[[i]]$given,
                     middleName = NULL,
                     suffix = NULL,
                     affiliation = NULL,
                     isCorporate = FALSE,
-                    ORCID = contacts[i]$comment[[1]])
-        contact2 <- append(contact2, list(con))
+                    ORCID = contacts[[i]]$comment[[1]])
+          contact2 <- append(contact2, list(con))
+        }
       }
 
       package_descript <- desc2$get("Description")[[1]]
-      abstract <- list(abstract = package_descript)
+      #abstract <- list(abstract = package_descript)
 
-      bdy <- list(abstract = abstract,
+      bdy <- list(abstract = package_descript,
                   contacts1 = contact1,
                   contacts2 = contact2)
 
@@ -541,7 +546,7 @@ create_datastore_script <- function(owner,
         stop("ERROR: DataStore connection failed. Are you logged in to the VPN?\n")
       }
     }
-  }
+
 
 
   # make reference URL
