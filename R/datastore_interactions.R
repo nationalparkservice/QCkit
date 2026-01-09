@@ -11,9 +11,10 @@
 #' 4) upload the .zip from GitHub
 #' 5) add a web link to the release on GitHub.
 #' 6) add the items listed under GitHub repo "Topics" as keywords to the DataStore Script reference
-#'
-#' `create_datastore_script()` will also access the keywords from your GitHub repo ("Topics") and add them to the draft references as keywords. It will automatically set your reference and all the files and links to public, allow data managers to edit the reference.
-#'
+#' 7) Set for or by NPS flag
+#' 8) Set the issued date
+#' 9) If you indicate it is an R package, the authors, steward, description, and other fields will be filled out on the Core tab
+#'#'
 #' The user will still need to go access the draft Script reference on DataStore to fill in the remaining fields (which are not accessible via API and so cannot be automated through this function) and activate the reference (thereby generating and registering a citeable DOI).
 #'
 #' If the Reference is a version of an older reference, the user will have to access the older version and indicate that it is an older version of the current Reference. The user will also have to manually add the new Reference to a Project for the repo, if desired.
@@ -534,7 +535,8 @@ create_datastore_script <- function(owner,
 
       package_descript <- desc2$get("Description")[[1]]
 
-      bdy <- list(abstract = package_descript,
+      bdy <- list(miscellaneousCode = "R",
+                  abstract = package_descript,
                   contacts1 = contact1,
                   contacts2 = contact2)
 
