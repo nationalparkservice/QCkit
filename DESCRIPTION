@@ -62,7 +62,8 @@ Imports:
     cli,
     purrr,
     lifecycle,
-    httr2
+    httr2,
+    desc
 RoxygenNote: 7.3.2
 Suggests: 
     knitr,
