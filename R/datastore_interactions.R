@@ -529,7 +529,12 @@ create_datastore_script <- function(owner,
       package_descript <- desc2$get("Description")[[1]]
       #abstract <- list(abstract = package_descript)
 
-      bdy <- list(abstract = package_descript,
+      date <- list(year = format(Sys.time(), "%Y"),
+                   month = format(Sys.time(), "%m"),
+                   day = format(Sys.time(), "%d"))
+
+      bdy <- list(issuedDate = date,
+                  abstract = package_descript,
                   contacts1 = contact1,
                   contacts2 = contact2)
 
