@@ -78,14 +78,15 @@ get_elevation <- function(df,
       if (req$status_code == 200) {
         gh_req_json <- suppressMessages(httr::content(req, "text"))
         # if something else went wrong - likely coordinates outside USA.
-        if (gh_req_json == "Invalid or missing input parameters."){
+        if (gh_req_json == "Invalid or missing input parameters." |
+            grepl("Call failed", gh_req_json)){
           if (force == FALSE){
             cat("Invalid input. NAs generated. Are your coordinates inside the US?")
           }
           elev <- append(elev, NA)
         } else {
         # everything checks out, add elevation to df
-        elevation <- httr::content(req)$value
+        elevation <- as.numeric(httr::content(req)$value)
         elev <- append(elev, elevation)
         }
       } else {
