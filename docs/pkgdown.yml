@@ -1,11 +1,11 @@
 pandoc: 3.6.3
-pkgdown: 2.1.1
+pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
   articles/DRR_Purpose_and_Scope: DRR_Purpose_and_Scope.html
   articles/Starting-a-DRR: Starting-a-DRR.html
   articles/Using-the-DRR-Template: Using-the-DRR-Template.html
-last_built: 2026-01-09T22:30Z
+last_built: 2026-02-26T19:15Z
 urls:
   reference: https://nationalparkservice.github.io/QCkit/reference
   article: https://nationalparkservice.github.io/QCkit/articles
