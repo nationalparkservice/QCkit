@@ -289,7 +289,11 @@ create_datastore_script <- function(owner,
     if (force == FALSE) {
       cat("Your file, ", crayon::blue$bold(file_name),
           ", has been uploaded to:\n", sep = "")
-      cat(ds_resource_url, "\n\n", sep = "")
+
+
+      #### ds_resource_url is not a good url; needs fixing
+
+            cat(ds_resource_url, "\n\n", sep = "")
   }
   #add a web link:
   #release url:
