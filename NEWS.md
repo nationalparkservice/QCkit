@@ -1,4 +1,7 @@
 # QCkit v1.2.1
+## 2026-02-26
+  * update `get_elevation` to handle unpredictable API responses for invalid lat/long values.
+
 ## 2025-01-09
   * `create_datastore_script` now has a new parameter, lib_type. If "R" is specified it will pull as much info as it can from the DESCRIPTION file of an R package and use that info to fill out the Core Bibliography tab on the reference landing page.
   
