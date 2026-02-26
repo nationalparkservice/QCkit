@@ -12,7 +12,7 @@ test_that("get_custom_flags outputs 2 data frames when output = all", {
 
 test_that("get_custom_flags outputs correct column names for files", {
   x <- get_custom_flags(directory = dir, output = "files")
-  expect_equal(names(x), c("File Name", "A", "AE", "P",  "R", "% Accepted"))
+  expect_equal(names(x), c("File Name", "A", "AE", "R",  "P", "% Accepted"))
 })
 
 test_that("get_custom_flags outputs correct column names for columns", {
